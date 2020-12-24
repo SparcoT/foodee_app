@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class AppEnv {
+abstract class AppEnv {
   static const isDev = kDebugMode;
 
   /// TODO: Add App Url here;

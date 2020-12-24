@@ -9,7 +9,7 @@ class AppPage {
   static const home = AppPage._('/');
 }
 
-class AppNavigation {
+abstract class AppNavigation {
   static Future<void> to(BuildContext context, Widget page) {
     return Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) => page,

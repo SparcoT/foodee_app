@@ -4,10 +4,10 @@ import 'package:foodee/src/services/mixins/notifications_service_mixin.dart';
 
 abstract class AppServices with NotificationsServiceMixin {
   /// Determines whether [initialize] has been called or not;
-  static bool _initialized;
+  static var _initialized = false;
 
   /// Determines whether [bindUiContext] has been called or not;
-  static bool _boundToUi;
+  static var _boundToUi = false;
 
   /// Initiates base services.
   ///
