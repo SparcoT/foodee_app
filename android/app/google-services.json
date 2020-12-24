@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "721440636230",
+    "project_id": "foodee-7fdb3",
+    "storage_bucket": "foodee-7fdb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721440636230:android:af3963cc645281e8433947",
+        "android_client_info": {
+          "package_name": "com.sparco.foodee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721440636230-66jo6p33k58e40mj4u9q2ikke3njd74k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sparco.foodee",
+            "certificate_hash": "e24211a2cdcf9fcfd3984e95853734118c87254c"
+          }
+        },
+        {
+          "client_id": "721440636230-ht9vohnm3o771t0m60tvs5pcf1s8sg46.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4xc8W6-SaT2wwnTpRKSo3PSiIzHHb6fw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721440636230-ht9vohnm3o771t0m60tvs5pcf1s8sg46.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
