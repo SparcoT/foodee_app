@@ -1,3 +1,23 @@
 {
-  "@@locale": "en"
-}
+  "@@locale": "en",
+  "appTitle": "Foodee",
+  "@appTitle": {},
+  "signIn": "Sign in",
+  "@signIn": {},
+  "signUpNow": "Sign Up Now",
+  "@signUpNow": {},
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {},
+  "signUp": "SIGNUP",
+  "@signUp": {},
+  "confirmationEmail": "Confirmation Email",
+  "@confirmationEmail": {},
+
+  "userName": "Username",
+  "@userName": {},
+  "email": "Your Email",
+  "@email": {},
+  "password": "Your Password",
+  "@password": {},
+  "dnt_have_acc": "Don't have an account? ",
+  "@dnt_have_acc": {}}

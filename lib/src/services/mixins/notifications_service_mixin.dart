@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:foodee/src/services/services.dart';
 
 typedef NotificationHandler = FutureOr<void> Function(
   BuildContext,
@@ -15,9 +16,6 @@ mixin NotificationsServiceMixin {
 
   static void initialize() => _instance = _NotificationsService();
 
-  static void bindUiContext(BuildContext context) =>
-      _instance._context = context;
-
   _NotificationsService get notifications {
     if (_instance != null) return _instance;
 
@@ -27,19 +25,21 @@ mixin NotificationsServiceMixin {
 }
 
 class _NotificationsService {
-  BuildContext _context;
   NotificationHandler _appOpenHandler;
   Set<NotificationHandler> _messageHandlers;
 
-  _NotificationsService([this._context]) {
+  _NotificationsService() {
     FirebaseMessaging.onMessage.listen((event) {
-      if (_context == null) print('This Service has not been bound to Ui-Context');
-      _messageHandlers.forEach((element) => element?.call(_context, event));
+      _messageHandlers.forEach(
+        (element) => element?.call(
+          AppServices.context,
+          event,
+        ),
+      );
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      if (_context == null) print('This Service has not been bound to Ui-Context');
-      _appOpenHandler?.call(_context, event);
+      _appOpenHandler?.call(AppServices.context, event);
     });
   }
 

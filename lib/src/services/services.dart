@@ -1,8 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:foodee/src/services/mixins/notifications_service_mixin.dart';
 
-abstract class AppServices with NotificationsServiceMixin {
+import 'mixins/auth_mixin.dart';
+import 'mixins/notifications_service_mixin.dart';
+
+class AppServices with NotificationsServiceMixin, AuthServiceMixin {
+  static BuildContext _context;
+  static BuildContext get context {
+    if (_context == null) print('[AppServices] is not yet bound to UI');
+    return _context;
+  }
+
   /// Determines whether [initialize] has been called or not;
   static var _initialized = false;
 
@@ -38,7 +46,7 @@ abstract class AppServices with NotificationsServiceMixin {
       return;
     }
 
-    NotificationsServiceMixin.bindUiContext(context);
+    _context = context;
     _boundToUi = true;
   }
 }
