@@ -1,6 +1,15 @@
 abstract class AppAssets {
   static const _iconsDir = 'assets/icons';
-  static const _imagesDir = 'assets/images';
+  // static const _imagesDir = 'assets/images';
+  // static const _fontDir = 'assets/fonts';
 
-  /// TODO: Use path as '$_iconsDir/name-of-icon' or '$_imagesDir/name-of-image'
+  static const favoriteEmpty = '$_iconsDir/favourite-empty.png';
+  static const favoriteRed = '$_iconsDir/favourite-red.png';
+  static const chat = '$_iconsDir/chat.png';
+  static const more = '$_iconsDir/more.png';
+  static const homeDark = '$_iconsDir/Home_dark.svg';
+  static const homeLight = '$_iconsDir/Home_light.svg';
+  static const searchDark = '$_iconsDir/Search_dark.svg';
+  static const searchLight = '$_iconsDir/Search_light.svg';
+  static const camera = '$_iconsDir/shutter.png';
 }
