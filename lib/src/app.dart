@@ -26,6 +26,7 @@ class App extends StatelessWidget {
     return Theme(
       data: AppTheme.data,
       child: CupertinoApp(
+        debugShowCheckedModeBanner: false,
         title: name,
         routes: AppNavigation.routes,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
