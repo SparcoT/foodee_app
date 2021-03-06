@@ -1,0 +1,12 @@
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <title>Home</title>
+    <rect class="cls-1" width="24" height="24" fill="#fff" opacity="0" />
+    <g id="Home">
+        <line class="cls-2" x1="14.71978" y1="15.00368" x2="9.28022" y2="15.00368" stroke="#030835"
+            stroke-linejoin="round" />
+        <path class="cls-3" fill="none" stroke="#030835" stroke-linecap="round" stroke-width="1.5px"
+            stroke-miterlimit="10"
+            d="M100.28571,274.70685h-10a5,5,0,0,1-5-5v-5.00916a5,5,0,0,1,1.601-3.667l5.6798-5.2648a4,4,0,0,1,5.43845,0l5.67981,5.2648a5,5,0,0,1,1.601,3.667v5.00916A5,5,0,0,1,100.28571,274.70685Z"
+            transform="translate(-83.28571 -252.70317)" />
+    </g>
+</svg>
