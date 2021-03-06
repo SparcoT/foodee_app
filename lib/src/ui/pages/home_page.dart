@@ -49,9 +49,11 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        trailing: IconButton(
-          icon: Icon(CupertinoIcons.bell),
-          onPressed: () {},
+        trailing: Material(
+          child: IconButton(
+            icon: Icon(CupertinoIcons.bell),
+            onPressed: () {},
+          ),
         ),
       ),
       body: PostView(),
