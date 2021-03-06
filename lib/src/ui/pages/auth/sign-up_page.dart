@@ -24,8 +24,8 @@ class SignUpPage extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            AppTheme.primaryColor.shade400,
-            AppTheme.primaryColor.shade900
+            AppTheme.primaryColor,
+            AppTheme.primaryColor
           ],
         ),
       ),
@@ -40,7 +40,7 @@ class SignUpPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  logo(imgPath: "assets/images/couple4.png"),
+                  // logo(imgPath: "assets/images/couple4.png"),
                   appTitle(),
                   description(),
                   Padding(
