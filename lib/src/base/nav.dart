@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foodee/src/data/data.dart';
 import 'package:foodee/src/ui/pages/auth/sign-in_page.dart';
+import 'package:foodee/src/ui/pages/chat/chat_page.dart';
 import 'package:foodee/src/ui/pages/driver-searching_page.dart';
+import 'package:foodee/src/ui/pages/home_page.dart';
+import 'package:foodee/src/ui/pages/posts/create-post_page.dart';
 
 class AppPage {
   final String _name;
@@ -37,8 +40,8 @@ abstract class AppNavigation {
       .popUntil((route) => route.settings.name == AppPage.home._name);
 
   static final routes = <String, WidgetBuilder>{
-    AppPage.home._name: (context) => DriverSearchingPage(),
-        // AppData.auth.isAuthenticated ? FoodeeHomePage() : SignInPage()
+    AppPage.home._name: (context) =>
+        AppData.auth.isAuthenticated ? Container() : HomePage()
     // SignInPage()
   };
 }

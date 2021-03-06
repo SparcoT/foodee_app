@@ -4,7 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 abstract class AppTheme {
   static final secondaryTextTheme = GoogleFonts.pacifico();
 
-  static const primaryColor = Colors.brown;
+  static const primaryColor = Color(0xff7C37A6);
+  static const secondaryColor = Color(0xff323232);
   static final primaryButtonTheme = TextButton.styleFrom(
     shape: StadiumBorder(),
     primary: primaryColor,
