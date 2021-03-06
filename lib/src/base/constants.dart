@@ -1,0 +1,1 @@
+const kPostTag = 'PostWidget';
