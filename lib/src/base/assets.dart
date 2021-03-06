@@ -12,4 +12,6 @@ abstract class AppAssets {
   static const searchDark = '$_iconsDir/Search_dark.svg';
   static const searchLight = '$_iconsDir/Search_light.svg';
   static const camera = '$_iconsDir/shutter.png';
+  static const send = '$_iconsDir/Send.svg';
+  static const doubleArrow = '$_iconsDir/arrow_up.png';
 }
