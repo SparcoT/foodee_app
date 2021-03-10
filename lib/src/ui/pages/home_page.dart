@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:foodee/src/base/assets.dart';
+import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/ui/views/firiends-chat_view.dart';
 import 'package:foodee/src/ui/views/post_view.dart';
+import 'package:foodee/src/ui/views/profile_view.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,6 +15,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _index = 0;
+  var _viewItems=[
+    PostView(),
+    Text(''),
+    Text(''),
+    FriendsChatView(),
+    ProfileView(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +66,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      body: PostView(),
+      body: _viewItems[_index],
       bottomNavigationBar: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -123,7 +133,7 @@ class _HomePageState extends State<HomePage> {
               ),
               padding: EdgeInsets.all(5),
               child: GestureDetector(
-                onTap: () => print('Clicked'),
+                onTap: () => AppNavigation.toPage(context, AppPage.createPost),
                 child: Container(
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(

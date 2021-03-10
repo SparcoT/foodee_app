@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foodee/src/data/data.dart';
-import 'package:foodee/src/ui/pages/auth/sign-in_page.dart';
-import 'package:foodee/src/ui/pages/chat/chat_page.dart';
-import 'package:foodee/src/ui/pages/driver-searching_page.dart';
 import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:foodee/src/ui/pages/posts/create-post_page.dart';
 
@@ -14,10 +11,12 @@ class AppPage {
   static const home = AppPage._('/');
   static const signIn = AppPage._('/sign-in');
   static const signUp = AppPage._('/sign-up');
+  static const createPost = AppPage._('/create-post');
 }
 
 abstract class AppNavigation {
-  static Future<void> to(BuildContext context, Widget page, {bool replace = false}) {
+  static Future<void> to(BuildContext context, Widget page,
+      {bool replace = false}) {
     if (replace) {
       return Navigator.of(context).pushReplacement(CupertinoPageRoute(
         builder: (context) => page,
@@ -28,7 +27,7 @@ abstract class AppNavigation {
       ));
     }
   }
-  
+
   static Future<void> toPage(BuildContext context, AppPage page) {
     return Navigator.of(context).pushNamed(page._name);
   }
@@ -41,7 +40,8 @@ abstract class AppNavigation {
 
   static final routes = <String, WidgetBuilder>{
     AppPage.home._name: (context) =>
-        AppData.auth.isAuthenticated ? Container() : HomePage()
+        AppData.auth.isAuthenticated ? Container() : HomePage(),
+    AppPage.createPost._name: (context) => CreatePostPage(),
     // SignInPage()
   };
 }

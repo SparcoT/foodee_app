@@ -10,7 +10,7 @@ class ImagePickerWidget extends StatefulWidget {
   final List<File> images;
   final Function(List<File>) onChanged;
 
-  ImagePickerWidget({
+    ImagePickerWidget({
     this.onChanged,
     this.images,
   }) : assert(onChanged != null);

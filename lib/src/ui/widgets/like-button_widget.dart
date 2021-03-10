@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodee/src/base/assets.dart';
 
 class LikeButtonWidget extends StatefulWidget {
   final bool isFavourite;
@@ -60,15 +60,16 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget>
                           end: Alignment.bottomCenter,
                         ).createShader(bounds);
                       },
-                      child: Image.asset(
-                        AppAssets.favoriteRed,
-                        width: 30,
+                      child: Icon(
+                        CupertinoIcons.heart_fill,
+                        color: Colors.red,
+                        size: 27,
                       ),
                     )
-                  : Image.asset(
-                      AppAssets.favoriteEmpty,
-                      // color: Colors.red,
-                      width: 30,
+                  : Icon(
+                      CupertinoIcons.heart,
+                      color: Colors.red,
+                      size: 27,
                     ),
             ),
             onTap: () async {

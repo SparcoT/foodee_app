@@ -171,7 +171,7 @@ class CommentRow extends StatefulWidget {
 class _CommentRowState extends State<CommentRow> {
   @override
   Widget build(BuildContext context) {
-    final url = 'https://images.unsplash.com/photo-1547721064-da6cfb341d50';
+    final url = 'https://images.pexels.com/photos/2576787/pexels-photo-2576787.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
     return Container(
       decoration: BoxDecoration(
         color: Color(0xfff6f6f6),
