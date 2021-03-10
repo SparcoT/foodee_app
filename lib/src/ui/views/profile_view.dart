@@ -12,7 +12,6 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverAppBar(),
         SliverToBoxAdapter(
           child: Column(
             children: [
@@ -57,7 +56,9 @@ class _ProfileViewState extends State<ProfileView> {
                 (index) => Hero(
                       tag: kPostTag,
                       child: PostWidget(),
-                    )).toList(),
+                    )
+            ).
+            toList(),
           ),
         ),
       ],

@@ -12,7 +12,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff3f4f7),
+      backgroundColor: AppTheme.primaryColor,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -21,7 +21,7 @@ class _ChatPageState extends State<ChatPage> {
           IconButton(
             icon: Icon(
               Icons.more_vert,
-              color: Colors.black,
+              color: Colors.white,
             ),
             onPressed: () {},
           )
@@ -29,21 +29,21 @@ class _ChatPageState extends State<ChatPage> {
         title: Row(
           children: [
             IconButton(
-              icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+              icon: Icon(Icons.arrow_back_ios, color: Colors.white),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            CircleAvatar(radius: 16, backgroundColor: Colors.black),
+            CircleAvatar(radius: 16, backgroundColor: Colors.white),
             SizedBox(
               width: 8,
             ),
             Text(
               "Osama Sandhu",
-              style: TextStyle(color: Colors.black, fontSize: 18),
+              style: TextStyle(color: Colors.white, fontSize: 18),
             )
           ],
         ),
         elevation: 0,
-        backgroundColor: Color(0xfff3f4f7),
+        backgroundColor: AppTheme.primaryColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(35))),
       ),
@@ -64,7 +64,7 @@ class _ChatPageState extends State<ChatPage> {
                       icon: true,
                       leftPadding: 70,
                       rightPadding: 15,
-                      color: Color(0xfff3f4f7))
+                      color: AppTheme.primaryColor.withOpacity(0.8))
                   : container(
                       mainAxisAlignment: MainAxisAlignment.start,
                       bottomRight: 20,
@@ -73,7 +73,9 @@ class _ChatPageState extends State<ChatPage> {
                       icon: false,
                       leftPadding: 15,
                       rightPadding: 70,
-                      color: Color(0xfff3f4f0));
+                      color:
+ Color(0xffe9ebe6),                 //    Color(0xfff3f4f0),
+                  textColor: Colors.black);
             },
           ),
           width: MediaQuery.of(context).size.width,
@@ -141,7 +143,8 @@ class _ChatPageState extends State<ChatPage> {
       double bottomLeft,
       double bottomRight,
       bool icon,
-      Color color}) {
+      Color color,
+        Color textColor}) {
     return Padding(
       padding: EdgeInsets.fromLTRB(
         leftPadding,
@@ -159,9 +162,11 @@ class _ChatPageState extends State<ChatPage> {
                   " Osama Sandhu Hello!"
                   " Osama Sandhu Hello!"
                   " Osama Sandhu Hello!"
-                  " Osama Sandhu Hello!"),
+                  " Osama Sandhu Hello!",style: TextStyle(color:textColor??Colors.white),),
               decoration: BoxDecoration(
-                  color: color,
+                boxShadow: [BoxShadow(
+
+                )],  color: color,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(bottomLeft),

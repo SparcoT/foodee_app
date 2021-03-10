@@ -1,4 +1,5 @@
 import 'package:foodee/src/app.dart';
+import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:unicons/unicons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -39,79 +40,81 @@ class _SignInPageState extends State<SignInPage> {
       child: LocalizedView(
         builder: (context, lang) => Scaffold(
           backgroundColor: Colors.transparent,
-          body: Form(
-            key: _key,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // logo(imgPath: "assets/images/couple4.png"),
-                  Text(
-                    App.name,
-                    style: GoogleFonts.pacifico(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xfffcc522),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: Text(
-                      "let's choose your match",
-                      style: TextStyle(
-                        fontFamily: 'QuickSand',
+          body: Center(
+            child: Form(
+              key: _key,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // logo(imgPath: "assets/images/couple4.png"),
+                    Text(
+                      App.name,
+                      style: GoogleFonts.pacifico(
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
+                        color: Color(0xfffcc522),
                       ),
                     ),
-                  ),
-                  AppTextField(
-                    key: Keys.signInEmail,
-                    icon: UniconsLine.user,
-                    placeholder: lang.email,
-                    validator: Validators.requiredEmail,
-                    onSaved: (email) => _data.username = email,
-                    keyboardType: TextInputType.emailAddress,
-                    autoValidateMode: AutovalidateMode.onUserInteraction,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: AppTextField.password(
-                      key: Keys.signInPassword,
-                      placeholder: lang.password,
-                      icon: UniconsLine.lock_open_alt,
-                      validator: Validators.requiredPassword,
-                      onSaved: (password) => _data.password = password,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Text(
+                        "let's choose your match",
+                        style: TextStyle(
+                          fontFamily: 'QuickSand',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    AppTextField(
+                      key: Keys.signInEmail,
+                      icon: UniconsLine.user,
+                      placeholder: lang.email,
+                      validator: Validators.requiredEmail,
+                      onSaved: (email) => _data.username = email,
+                      keyboardType: TextInputType.emailAddress,
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 15),
-                    child: TextButton(
-                      key: Keys.signInButton,
-                      onPressed: _signIn,
-                      style: AppTheme.primaryButtonTheme,
-                      child: Text(lang.signIn.toUpperCase()),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: AppTextField.password(
+                        key: Keys.signInPassword,
+                        placeholder: lang.password,
+                        icon: UniconsLine.lock_open_alt,
+                        validator: Validators.requiredPassword,
+                        onSaved: (password) => _data.password = password,
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
+                      ),
                     ),
-                  ),
-                  Text.rich(
-                    TextSpan(
-                      text: lang.dnt_have_acc,
-                      children: [
-                        TextSpan(
-                          text: lang.signUpNow,
-                          style: TextStyle(fontWeight: FontWeight.w900),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap =
-                                () => AppNavigation.to(context, SignUpPage()),
-                        ),
-                      ],
-                      style: GoogleFonts.quicksand(color: Colors.white),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 15),
+                      child: TextButton(
+                        key: Keys.signInButton,
+                        onPressed: () => AppNavigation.to(context, HomePage()),
+                        style: AppTheme.primaryButtonTheme,
+                        child: Text(lang.signIn.toUpperCase()),
+                      ),
                     ),
-                    key: Keys.signUpText,
-                  ),
-                ],
+                    Text.rich(
+                      TextSpan(
+                        text: lang.dnt_have_acc,
+                        children: [
+                          TextSpan(
+                            text: lang.signUpNow,
+                            style: TextStyle(fontWeight: FontWeight.w900),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap =
+                                  () => AppNavigation.to(context, SignUpPage()),
+                          ),
+                        ],
+                        style: GoogleFonts.quicksand(color: Colors.white),
+                      ),
+                      key: Keys.signUpText,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -139,7 +142,7 @@ class _SignInPageState extends State<SignInPage> {
   _signIn() async {
     if (_key.currentState.validate()) {
       _key.currentState.save();
-      // AppServices().signIn(_data);
+      AppNavigation.to(context, HomePage());      // AppServices().signIn(_data);
     }
   }
 

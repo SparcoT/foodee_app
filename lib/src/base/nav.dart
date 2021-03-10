@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foodee/src/data/data.dart';
+import 'package:foodee/src/ui/pages/auth/sign-in_page.dart';
 import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:foodee/src/ui/pages/posts/create-post_page.dart';
 
@@ -40,7 +41,7 @@ abstract class AppNavigation {
 
   static final routes = <String, WidgetBuilder>{
     AppPage.home._name: (context) =>
-        AppData.auth.isAuthenticated ? Container() : HomePage(),
+        AppData.auth.isAuthenticated ? Container() : SignInPage(),
     AppPage.createPost._name: (context) => CreatePostPage(),
     // SignInPage()
   };
