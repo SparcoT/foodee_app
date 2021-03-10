@@ -8,6 +8,8 @@ import 'package:foodee/src/ui/views/firiends-chat_view.dart';
 import 'package:foodee/src/ui/views/post_view.dart';
 import 'package:foodee/src/ui/views/profile_view.dart';
 
+import '../../../segmentedPAge.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -17,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   var _index = 0;
   var _viewItems=[
     PostView(),
-Center(child: CircularProgressIndicator()),    Text(''),
+SegmentedPage(),   Text(''),
     FriendsChatView(),
     ProfileView(),
   ];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/nav.dart';
+import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/ui/pages/chat/chat_page.dart';
 
 class FriendsChatView extends StatefulWidget {
@@ -14,15 +15,18 @@ class _FriendsChatViewState extends State<FriendsChatView> {
       appBar: AppBar(
         elevation: 8,
         titleSpacing: 10,
-        actions: [
-          CircleAvatar(child: Text("O")),
-          SizedBox(
-            width: 10,
-          )
-        ],
-        title: Text(
-          "Chat",
-          style: TextStyle(color: Colors.black, fontSize: 18),
+centerTitle: true,
+        title: ShaderMask(
+          blendMode: BlendMode.srcATop,  // Add this
+          shaderCallback: (Rect bounds) {
+            return RadialGradient(
+              center: Alignment.topLeft,
+              radius: 1.0,
+              colors: <Color>[AppTheme.primaryColor, AppTheme.secondaryColor],
+              tileMode: TileMode.mirror,
+            ).createShader(bounds);
+          },
+          child: const Text('Chat',style: TextStyle( fontWeight: FontWeight.bold),),
         ),
         backgroundColor: Color(0xfff3f4f7),
         bottom: PreferredSize(

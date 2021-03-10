@@ -76,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
                       color:
  Color(0xffe9ebe6),                 //    Color(0xfff3f4f0),
                   textColor: Colors.black);
-            },
+            },padding: EdgeInsets.fromLTRB(0, 85, 0, 55),
           ),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -85,7 +85,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
       bottomSheet: Container(
         color: Colors.white,
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
         child: Row(
           children: [
             Expanded(
