@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/theme.dart';
 
 class ChatPage extends StatefulWidget {
@@ -8,118 +9,121 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List<Chat> chats = [];
-  final _myId = '1';
-  var _previousId = '';
-
-  @override
-  void initState() {
-    super.initState();
-    chats.add(Chat(message: 'Hey', senderId: '2', time: '04:37'));
-    chats.add(Chat(message: 'Hey Butterfly', senderId: '2', time: '04:38'));
-    chats.add(Chat(message: 'Yes', senderId: '1', time: '04:40'));
-    chats.add(
-      Chat(
-          message: 'Why are you replying late???????',
-          senderId: '2',
-          time: '04:40'),
-    );
-    chats.add(Chat(message: 'Hmm', senderId: '1', time: '04:42'));
-    chats.add(Chat(message: 'I am busy', senderId: '1', time: '04:37'));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xfff3f4f7),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Rashid'),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppTheme.secondaryColor,
-              AppTheme.primaryColor,
-            ],
-          ),
+        automaticallyImplyLeading: false,
+        titleSpacing: 5,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.black,
+            ),
+            onPressed: () {},
+          )
+        ],
+        title: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            CircleAvatar(radius: 16, backgroundColor: Colors.black),
+            SizedBox(
+              width: 8,
+            ),
+            Text(
+              "Osama Sandhu",
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            )
+          ],
         ),
-        child: Column(
+        elevation: 0,
+        backgroundColor: Color(0xfff3f4f7),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(35))),
+      ),
+      body: ClipPath(
+        clipper: ClipperCustom(MediaQuery.of(context).padding.top, 40),
+        child: Container(
+          // padding: EdgeInsets.only(
+          //     top: MediaQuery.of(context).padding.top + kToolbarHeight),
+          child: ListView.builder(
+            itemCount: 10,
+            itemBuilder: (context, i) {
+              return i % 2 == 0
+                  ? container(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      bottomRight: 0,
+                      bottomLeft: 20,
+                      alignment: Alignment.topRight,
+                      icon: true,
+                      leftPadding: 70,
+                      rightPadding: 15,
+                      color: Color(0xfff3f4f7))
+                  : container(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      bottomRight: 20,
+                      bottomLeft: 0,
+                      alignment: Alignment.topLeft,
+                      icon: false,
+                      leftPadding: 15,
+                      rightPadding: 70,
+                      color: Color(0xfff3f4f0));
+            },
+          ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          color: Colors.white,
+        ),
+      ),
+      bottomSheet: Container(
+        color: Colors.white,
+        padding: EdgeInsets.all(10.0),
+        child: Row(
           children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: chats.length,
-                itemBuilder: (ctx, index) {
-                  Chat chat = chats[index];
-                  var _isPrevious = false;
-                  if (_previousId == chat.senderId)
-                    _isPrevious = true;
-                  else
-                    _previousId = chat.senderId;
-                  if (_previousId.isEmpty) _previousId = chat.senderId;
-                  return _RowItem(
-                    previousPerson: _isPrevious,
-                    isMe: chat.senderId == _myId,
-                    time: chat.time,
-                    message: chat.message,
-                  );
-                },
-              ),
-            ),
-            Material(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      AppTheme.primaryColor,
-                      AppTheme.secondaryColor,
-                    ],
+              child: SizedBox(
+                height: 40,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Type here something...',
+                    hintStyle: TextStyle(
+                      fontSize: 13,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(25.0),
+                      ),
+                    ),
                   ),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: TextField(
-                          style: TextStyle(color: Colors.white),
-                          cursorColor: Colors.white,
-                          decoration: InputDecoration(
-                            hintText: 'Type Something...',
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(color: Colors.white),
-                            contentPadding: EdgeInsets.only(left: 15.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: SizedBox(
-                        width: 40,
-                        height: 40.0,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Icon(
-                            Icons.send,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          style: TextButton.styleFrom(
-                            backgroundColor: AppTheme.primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(250.0),
-                              // side: BorderSide(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+              ),
+            ),
+            SizedBox(width: 15),
+            SizedBox(
+              width: 40,
+              height: 40,
+              child: TextButton(
+                onPressed: () {},
+                child: SvgPicture.asset(
+                  AppAssets.send,
+                  color: Colors.white,
+                  width: 23,
+                ),
+                // child: Icon(
+                //   CupertinoIcons.search,
+                //   color: Colors.white,
+                // ),
+                style: TextButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.zero,
+                  backgroundColor: AppTheme.primaryColor,
                 ),
               ),
             ),
@@ -128,102 +132,90 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
-}
 
-class _RowItem extends StatelessWidget {
-  final bool previousPerson;
-  final bool isMe;
-  final String message, time;
-
-  _RowItem({
-    this.isMe = true,
-    this.time,
-    this.message,
-    this.previousPerson,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final firstColor = isMe ? Color(0xffB18D81) : AppTheme.primaryColor;
-    final secondColor = isMe ? Color(0xffC9AFA6) : AppTheme.primaryColor;
-    final msgTxtColor = isMe?Colors.black: Colors.white;
-    final align = isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start;
-    final radius = isMe
-        ? BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(previousPerson ? 18.0 : 0),
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0),
-          )
-        : BorderRadius.only(
-            topRight: Radius.circular(20.0),
-            topLeft: Radius.circular(previousPerson ? 18.0 : 0),
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0),
-          );
-    return Column(
-      crossAxisAlignment: align,
-      children: [
-        Container(
-          margin: const EdgeInsets.all(5.0),
-          padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                firstColor,
-                secondColor,
-              ],
+  Widget container(
+      {MainAxisAlignment mainAxisAlignment,
+      Alignment alignment,
+      double leftPadding,
+      double rightPadding,
+      double bottomLeft,
+      double bottomRight,
+      bool icon,
+      Color color}) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        leftPadding,
+        15,
+        rightPadding,
+        5,
+      ),
+      child: Align(
+        alignment: alignment,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: Text(" Osama Sandhu Hello!"
+                  " Osama Sandhu Hello!"
+                  " Osama Sandhu Hello!"
+                  " Osama Sandhu Hello!"
+                  " Osama Sandhu Hello!"),
+              decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(bottomLeft),
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(bottomRight))),
             ),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: .5,
-                spreadRadius: 1.0,
-                color: Colors.black.withOpacity(.12),
-              ),
-            ],
-            // color: bubbleColor,
-            borderRadius: radius,
-          ),
-          child: Stack(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 68.0),
-                child: Text(
-                  message,
-                  style: TextStyle(color: msgTxtColor, fontSize: 15.0),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                Text("2:23 pm"),
+                SizedBox(
+                  width: 3,
                 ),
-              ),
-              Positioned(
-                bottom: 0.0,
-                right: 0.0,
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      time,
-                      style: TextStyle(
-                        color: msgTxtColor,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                icon
+                    ? Icon(
+                        Icons.check,
+                        color: Colors.green,
+                        size: 20,
+                      )
+                    : SizedBox()
+              ],
+            )
+          ],
         ),
-      ],
+      ),
     );
   }
 }
 
-class Chat {
-  String message, senderId, time;
+class ClipperCustom extends CustomClipper<Path> {
+  final double padding;
+  final double radius;
 
-  Chat({
-    this.time,
-    this.message,
-    this.senderId,
-  });
+  ClipperCustom(this.padding, this.radius);
+
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..lineTo(0, padding)
+      ..lineTo(0, padding + kToolbarHeight - radius)
+      ..quadraticBezierTo(
+          0, kToolbarHeight + padding, radius, kToolbarHeight + padding)
+      // ..lineTo(radius, kToolbarHeight + padding)
+      ..lineTo(size.width - radius, kToolbarHeight + padding)
+      ..quadraticBezierTo(size.width, kToolbarHeight + padding, size.width,
+          kToolbarHeight + padding + radius)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }
