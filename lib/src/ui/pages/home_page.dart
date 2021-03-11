@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
@@ -148,13 +148,17 @@ SegmentedPage(),   Text(''),
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.home),
                 ),
+
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    _index == 3 ? AppAssets.searchDark : AppAssets.searchLight,
-                    color: AppTheme.secondaryColor,
-                    // width: 27.5,
-                  ),
+                  icon: Icon(CupertinoIcons.home),
                 ),
+                // BottomNavigationBarItem(
+                //   icon: SvgPicture.asset(
+                //     _index == 3 ? AppAssets.searchDark : AppAssets.camera,
+                //     color: AppTheme.secondaryColor,
+                //     // width: 27.5,
+                //   ),
+                // ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     _index == 4
@@ -212,7 +216,6 @@ SegmentedPage(),   Text(''),
       ),
     );
   }
-
   _onTap(int index) {
     setState(() {
       _index = index;

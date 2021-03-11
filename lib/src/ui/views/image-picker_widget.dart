@@ -77,8 +77,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   }
 
   _imgFromCamera() async {
-    final pickedImage = await ImagePicker()
-        .getImage(source: ImageSource.camera, imageQuality: 50);
+    // ignore: invalid_use_of_visible_for_testing_member
+    final pickedImage = await ImagePicker.platform.pickImage(source: ImageSource.camera, imageQuality: 50);
     if (pickedImage != null)
       setState(() {
         images.add(File(pickedImage.path));

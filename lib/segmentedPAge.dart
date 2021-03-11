@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/ui/widgets/shader_Text.dart';
 
 class SegmentedPage extends StatefulWidget {
   @override
@@ -13,22 +13,13 @@ class _SegmentedPageState extends State<SegmentedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         elevation: 8,
         titleSpacing: 10,
-      centerTitle: true,
-        title: ShaderMask(
-          blendMode: BlendMode.srcATop,  // Add this
-          shaderCallback: (Rect bounds) {
-            return RadialGradient(
-              center: Alignment.topLeft,
-              radius: 1.0,
-              colors: <Color>[AppTheme.primaryColor, AppTheme.secondaryColor],
-              tileMode: TileMode.mirror,
-            ).createShader(bounds);
-          },
-          child: const Text('Search Your Near by',style: TextStyle(fontWeight: FontWeight.bold),),
+        centerTitle: true,
+        title: ShaderText(
+          shaderText: "Search Your Near By",
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Color(0xfff3f4f7),
         bottom: PreferredSize(
@@ -38,7 +29,9 @@ class _SegmentedPageState extends State<SegmentedPage> {
                 color: Color(0xfff3f4f7),
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30))),
+                    bottomRight: Radius.circular(30)
+                )
+            ),
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
             child: Container(
                 decoration: BoxDecoration(
@@ -64,21 +57,13 @@ class _SegmentedPageState extends State<SegmentedPage> {
             bottom: Radius.circular(30),
           ),
         ),
-        automaticallyImplyLeading: false,),
+        automaticallyImplyLeading: false,
+      ),
       body: Center(
-          child: ShaderMask(
-            blendMode: BlendMode.srcATop,  // Add this
-            shaderCallback: (Rect bounds) {
-              return RadialGradient(
-                center: Alignment.topLeft,
-                radius: 1.0,
-                colors: <Color>[AppTheme.primaryColor, AppTheme.secondaryColor],
-                tileMode: TileMode.mirror,
-              ).createShader(bounds);
-            },
-            child: const Text('Here you can search your near by',style: TextStyle(fontWeight: FontWeight.bold),),
-          ),
-        ),
+          child: ShaderText(
+        shaderText: 'Here you can search your near by',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      )),
     );
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/data/model/user-model.dart';
 import 'package:foodee/src/ui/views/localized_view.dart';
 import 'package:foodee/src/ui/widgets/text_field.dart';
+import 'package:foodee/src/utils/lazy_task.dart';
 import 'package:foodee/src/utils/validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
@@ -14,6 +16,7 @@ class SignUpPage extends StatelessWidget {
   var _password;
   final _key = GlobalKey<FormState>();
   var _context;
+  User user;
 
   @override
   Widget build(BuildContext context) {
@@ -30,126 +33,131 @@ class SignUpPage extends StatelessWidget {
         ),
       ),
       child: LocalizedView(
-        builder: (context, lang) => Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Form(
-            key: _key,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // logo(imgPath: "assets/images/couple4.png"),
-                  appTitle(),
-                  description(),
-                  Padding(
-                    padding: const EdgeInsets.only( bottom:20),
-                    child: AppTextField(
-                      placeholder: 'Your Name',
-                      icon: UniconsLine.user,
-                      validator: Validators.required,
-                      onSaved: (username) => _username = username,
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only( bottom:20),
-
-                    child: AppTextField(
-                      placeholder: 'Your Email',
-                      icon: Icons.email_outlined,
-                      onSaved: (email) => _email = email,
-                      validator: Validators.requiredEmail,
-                      keyboardType: TextInputType.emailAddress,
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only( bottom:20),
-                    child: AppTextField.password(
-                      placeholder: 'Enter Password',
-                      icon: UniconsLine.lock_open_alt,
-                      validator: Validators.requiredPassword,
-                      onSaved: (password) => _password = password,
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only( bottom:40),
-                    child: AppTextField.password(
-                      icon: UniconsLine.lock_alt,
-                      placeholder: 'Confirm Password',
-                      onSaved: (value) => _password = value,
-                      validator: Validators.requiredPassword,
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only( bottom:20),
-                    child: TextButton(
-                      onPressed: _signUp,
-
-                      style: AppTheme.primaryButtonTheme,
-                      // child: Text(lang.signUpNow.toUpperCase()),
-                    ),
-                  ),
-                  Text.rich(TextSpan(
-                    text: "Already have account?  ",
+        builder: (context, lang) =>
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Form(
+                key: _key,
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      TextSpan(
-                        // text: lang.signIn,
-                        style: TextStyle(fontWeight: FontWeight.w900),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            print('Tapped');
-                          },
-                      )
+                      // logo(imgPath: "assets/images/couple4.png"),
+                      appTitle(),
+                      description(),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: AppTextField(
+                          key: UniqueKey(),
+                          placeholder: 'Your Name',
+                          icon: UniconsLine.user,
+                          validator: Validators.required,
+                          onSaved: (username) => user.username = username,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+
+                        child: AppTextField(
+                          key: UniqueKey(),
+                          placeholder: 'Your Email',
+                          icon: Icons.email_outlined,
+                          onSaved: (email) => user.email = email,
+                          validator: Validators.requiredEmail,
+                          keyboardType: TextInputType.emailAddress,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: AppTextField.password(
+                          key: UniqueKey(),
+                          placeholder: 'Enter Password',
+                          icon: UniconsLine.lock_open_alt,
+                          validator: Validators.requiredPassword,
+                          onSaved: (password) => user.password = password,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 40),
+                        child: AppTextField.password(
+                          key: UniqueKey(),
+                          icon: UniconsLine.lock_alt,
+                          placeholder: 'Confirm Password',
+                          onSaved: (value) => user.password = value,
+                          validator: Validators.requiredPassword,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: TextButton(
+                          onPressed: _signUp,
+
+                          style: AppTheme.primaryButtonTheme,
+                         child: Text(lang.signUpNow.toUpperCase()),
+                        ),
+                      ),
+                      Text.rich(TextSpan(
+                        text: "Already have account?  ",
+                        children: [
+                          TextSpan(
+                            // text: lang.signIn,
+                            style: TextStyle(fontWeight: FontWeight.w900),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                print('Tapped');
+                              },
+                          )
+                        ],
+                        style: GoogleFonts.quicksand(color: Colors.white),
+                      )),
                     ],
-                    style: GoogleFonts.quicksand(color: Colors.white),
-                  )),
-                ],
+                  ),
+                ),
               ),
+              // extendBody: true,
+              // bottomNavigationBar: Padding(
+              //   padding: const EdgeInsets.only(bottom: 30),
+              //   child: GestureDetector(
+              //     onTap: () => AppNavigation.to(context, ForgotPasswordPage()),
+              //     child: Text(
+              //       lang.forgotPassword,
+              //       textAlign: TextAlign.center,
+              //       style: GoogleFonts.quicksand(
+              //         color: Colors.white,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ),
-          ),
-          // extendBody: true,
-          // bottomNavigationBar: Padding(
-          //   padding: const EdgeInsets.only(bottom: 30),
-          //   child: GestureDetector(
-          //     onTap: () => AppNavigation.to(context, ForgotPasswordPage()),
-          //     child: Text(
-          //       lang.forgotPassword,
-          //       textAlign: TextAlign.center,
-          //       style: GoogleFonts.quicksand(
-          //         color: Colors.white,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        ),
       ),
     );
   }
 
   _signUp() async {
-    // if (_key.currentState.validate()) {
-    //   var error;
-    //   await performLazyTask(_context, () async {
-    //     _key.currentState.save();
-    //     User user =
-    //         User(username: _username, password: _password, email: _email);
-    //     await FoodeeService().createUser(user).catchError((e) {
-    //       print(e);
-    //       error = ServerError.withError(e);
-    //     });
-    //   });
-    //   if (error != null) {
-    //     errorChecks('Error', error.errorMessage);
-    //   } else
-    //     errorChecks(
-    //         'Message', 'Verification email has been send successfully.');
-    //   // AppNavigation.to(_context, FoodeeHomePage());
+    if (_key.currentState.validate()) {
+      var error;
+      await performLazyTask(_context, () async {
+        _key.currentState.save();
+        User user =
+        User(username: _username, password: _password, email: _email);
+        // await FoodeeService().createUser(user).catchError((e) {
+        //   print(e);
+        //   error = ServerError.withError(e);
+        // });
+      print(user);});
+      if (error != null) {
+        errorChecks('Error', error.errorMessage);
+      } else
+        errorChecks(
+            'Message', 'Verification email has been send successfully.');
+      // AppNavigation.to(_context, FoodeeHomePage());
 
     }
   }
@@ -159,7 +167,7 @@ class SignUpPage extends StatelessWidget {
         builder: (BuildContext context) {
           return AlertDialog(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             title: Text(
               'Error',
               textAlign: TextAlign.center,
@@ -193,7 +201,7 @@ class SignUpPage extends StatelessWidget {
               ),
             ],
           );
-        });
+        }, context: _context);
   }
 
   Widget description() {
@@ -234,3 +242,4 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
+}

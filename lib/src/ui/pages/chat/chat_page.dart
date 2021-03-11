@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/ui/views/firiends-chat_view.dart';
 
+// ignore: must_be_immutable
 class ChatPage extends StatefulWidget {
+  ChatListModel chatListModel;
+  ChatPage({this.chatListModel});
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,12 +23,9 @@ class _ChatPageState extends State<ChatPage> {
         automaticallyImplyLeading: false,
         titleSpacing: 5,
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            ),
-            onPressed: () {},
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: popMenuButton(),
           )
         ],
         title: Row(
@@ -37,7 +39,7 @@ class _ChatPageState extends State<ChatPage> {
               width: 8,
             ),
             Text(
-              "Osama Sandhu",
+              widget.chatListModel.name,
               style: TextStyle(color: Colors.white, fontSize: 18),
             )
           ],
@@ -135,6 +137,23 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  Widget popMenuButton(){return  PopupMenuButton(
+      child: Icon(Icons.more_vert),
+
+      //     key: _menuKey,
+      itemBuilder: (_) => <PopupMenuItem>[
+        PopupMenuItem(
+            child: GestureDetector(
+                onTap: () {},
+                child: Text('Urgent'))),
+        PopupMenuItem<String>(
+          child: GestureDetector(
+              onTap: () {},
+              child: Text('Cancelled Order')),
+        ),
+
+      ],
+      onSelected: (_) {});}
   Widget container(
       {MainAxisAlignment mainAxisAlignment,
       Alignment alignment,

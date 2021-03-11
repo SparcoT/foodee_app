@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodee/src/base/nav.dart';
-import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/ui/pages/chat/chat_page.dart';
+import 'package:foodee/src/ui/widgets/shader_Text.dart';
 
 class FriendsChatView extends StatefulWidget {
   @override
@@ -15,19 +14,9 @@ class _FriendsChatViewState extends State<FriendsChatView> {
       appBar: AppBar(
         elevation: 8,
         titleSpacing: 10,
-centerTitle: true,
-        title: ShaderMask(
-          blendMode: BlendMode.srcATop,  // Add this
-          shaderCallback: (Rect bounds) {
-            return RadialGradient(
-              center: Alignment.topLeft,
-              radius: 1.0,
-              colors: <Color>[AppTheme.primaryColor, AppTheme.secondaryColor],
-              tileMode: TileMode.mirror,
-            ).createShader(bounds);
-          },
-          child: const Text('Chat',style: TextStyle( fontWeight: FontWeight.bold),),
-        ),
+        centerTitle: true,
+        title:          ShaderText(shaderText: "Chat",style: TextStyle(fontWeight: FontWeight.bold),)
+        ,
         backgroundColor: Color(0xfff3f4f7),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
@@ -62,7 +51,8 @@ centerTitle: true,
             bottom: Radius.circular(30),
           ),
         ),
-      automaticallyImplyLeading: false,),
+        automaticallyImplyLeading: false,
+      ),
       body: ListView.builder(
         itemCount: chatListModel.length,
         itemBuilder: (context, i) {
@@ -94,11 +84,11 @@ centerTitle: true,
                     children: [
                       ListTile(
                         onTap: () {
-                          AppNavigation.to(context, ChatPage());
-                          // Navigator.of(context).push(MaterialPageRoute(
-                          //     builder: (context) => ChatScreen(
-                          //       chatListModel: chatListModel[i],
-                          //     )));
+                         // AppNavigation.to(context, ChatPage());
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChatPage(
+                                chatListModel: chatListModel[i],
+                              )));
                         },
                         leading: CircleAvatar(
                           child: Text(chatListModel[i].name[0]),
@@ -146,6 +136,7 @@ centerTitle: true,
     );
   }
 }
+
 
 class ChatListModel {
   String name;
@@ -288,7 +279,7 @@ List<ChatListModel> chatListModel = [
       message:
           "j askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
       dateTime: DateTime.now(),
-      unReadMessage: "22"),
+      unReadMessage: "122"),
   ChatListModel(
       name: "Ahmad",
       message:

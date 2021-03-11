@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
-import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
+import 'package:foodee/src/ui/widgets/shader_Text.dart';
 
 class PostView extends StatelessWidget {
   @override
@@ -11,18 +11,20 @@ class PostView extends StatelessWidget {
 
       appBar: AppBar(bottom: PreferredSize(  child: Container(child: ListTile( title: Padding(
         padding: EdgeInsets.only(left: 7),
-        child:ShaderMask(
-          blendMode: BlendMode.srcATop,  // Add this
-          shaderCallback: (Rect bounds) {
-            return RadialGradient(
-              center: Alignment.topLeft,
-              radius: 1.0,
-              colors: <Color>[AppTheme.primaryColor, AppTheme.secondaryColor],
-              tileMode: TileMode.mirror,
-            ).createShader(bounds);
-          },
-          child: const Text('Foodee',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-        ),
+         child:
+         ShaderText(shaderText: "Foodee",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),)
+        // ShaderMask(
+        //   blendMode: BlendMode.srcATop,  // Add this
+        //   shaderCallback: (Rect bounds) {
+        //     return RadialGradient(
+        //       center: Alignment.topLeft,
+        //       radius: 1.0,
+        //       colors: <Color>[AppTheme.primaryColor, AppTheme.secondaryColor],
+        //       tileMode: TileMode.mirror,
+        //     ).createShader(bounds);
+        //   },
+        //   child: Text('Foodee',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+        // ),
         //RichText(
         //   text: TextSpan(
         //     text: 'Foo',
@@ -66,15 +68,6 @@ class PostView extends StatelessWidget {
         return Hero(tag: kPostTag, child: PostWidget());
       }),
     );
-    Column(
-      children: [
-        Expanded(
-          child: Hero(
-            tag: kPostTag,
-            child: PostWidget(),
-          ),
-        ),
-      ],
-    );
+
   }
 }

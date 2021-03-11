@@ -1,7 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pedantic/pedantic.dart';
-
 import '../base/foodee-loading-dialog.dart';
 
 Future<dynamic> performLazyTask(
@@ -11,9 +10,9 @@ Future<dynamic> performLazyTask(
   bool persistent = true,
 }) async {
   if (persistent) {
-    unawaited(openLoadingDialog(context, message));
+    openLoadingDialog(context, message);
   } else {
-    unawaited(openLoadingDialog(context, message));
+    openLoadingDialog(context, message);
   }
 
   final result = await task();

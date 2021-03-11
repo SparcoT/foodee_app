@@ -14,31 +14,27 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
-  intl: 0.17.0
-  file_picker: ^2.1.6
-  dio: 3.0.10
-  hive: 1.5.0-pre
-  unicons: any
-  retrofit: 1.3.4+1
-  hive_flutter: any
-  google_fonts: ^1.1.1
-  path_provider: ^1.6.24
-  json_annotation: ^3.1.1
-  firebase_messaging: 8.0.0-dev.11
-  image_picker:
+  intl: ^0.17.0
+  file_picker: ^3.0.0
+  dio: ^4.0.0-beta7
+  hive: ^2.0.0
+  unicons: ^1.0.1
+  hive_flutter: ^1.0.0
+  google_fonts: ^2.0.0
+  path_provider: ^2.0.1
+  json_annotation: ^4.0.0
+  firebase_messaging: ^9.0.0
+  image_picker: ^0.7.2+1
+  flutter_svg: ^0.21.0-nullsafety.0
+  cupertino_icons: ^1.0.2
   carousel_slider: ^4.0.0-nullsafety.0
-  flutter_svg: ^0.19.3
-
-  cupertino_icons: ^1.0.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  hive_generator: any
-  build_runner: 1.10.11
-  json_serializable: ^3.5.1
-  retrofit_generator: 1.4.1
+  hive_generator: ^1.0.0
+  build_runner: ^1.11.5
+  json_serializable: ^4.0.2
 
 flutter:
   generate: true

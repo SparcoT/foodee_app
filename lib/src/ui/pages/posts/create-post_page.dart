@@ -15,6 +15,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   openGallery(BuildContext context) async {
     // ignore: invalid_use_of_visible_for_testing_member
     var galleryImage =
+        // ignore: invalid_use_of_visible_for_testing_member
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     this.setState(() {
       imageFile.add(File(galleryImage.path));
@@ -25,6 +26,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   openCamera(BuildContext context) async {
     // ignore: invalid_use_of_visible_for_testing_member
     var cameraImage =
+        // ignore: invalid_use_of_visible_for_testing_member
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
     this.setState(() {
       imageFile.add(File(cameraImage.path));
@@ -113,6 +115,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           Container(
             padding: EdgeInsets.all(12),
             width: 90,
+            // ignore: deprecated_member_use
             child: RaisedButton(
                 color: Colors.brown,
                 splashColor: Colors.white,
@@ -142,6 +145,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           SizedBox(height: 10),
           textFieldContainer(hint: "What's on your mind"),
           Expanded(child: _decideImageView()),
+          // ignore: deprecated_member_use
           RaisedButton(
               color: Colors.brown,
               splashColor: Colors.white,

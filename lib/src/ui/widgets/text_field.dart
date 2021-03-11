@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:unicons/unicons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:unicons/unicons.dart';
 
 class AppTextField extends StatefulWidget {
   final bool _isPassword;

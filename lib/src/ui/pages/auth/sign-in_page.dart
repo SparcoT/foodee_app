@@ -1,4 +1,5 @@
 import 'package:foodee/src/app.dart';
+import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
 import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:unicons/unicons.dart';
 import 'package:flutter/gestures.dart';
@@ -13,7 +14,6 @@ import 'package:foodee/src/ui/views/localized_view.dart';
 import 'package:foodee/src/data/model/auth-data_model.dart';
 import 'package:foodee/src/ui/pages/auth/sign-up_page.dart';
 
-import 'forgot-password_page.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -83,7 +83,8 @@ class _SignInPageState extends State<SignInPage> {
                         key: Keys.signInPassword,
                         placeholder: lang.password,
                         icon: UniconsLine.lock_open_alt,
-                        validator: Validators.requiredPassword,
+validator: (val){return val.isEmpty?"Required":null;},
+                    //    validator: Validators.requiredPassword,//
                         onSaved: (password) => _data.password = password,
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                       ),
@@ -123,7 +124,8 @@ class _SignInPageState extends State<SignInPage> {
             padding: const EdgeInsets.only(bottom: 30),
             child: GestureDetector(
               key: Keys.forgotPasswordButton,
-              onTap: () => AppNavigation.to(context, ForgotPassword()),
+              onTap: () => AppNavigation.to(context, EditProfile()),
+//              onTap: () => AppNavigation.to(context, ForgotPassword()),
               child: Text(
                 lang.forgotPassword,
                 textAlign: TextAlign.center,
@@ -139,12 +141,12 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  _signIn() async {
-    if (_key.currentState.validate()) {
-      _key.currentState.save();
-      AppNavigation.to(context, HomePage());      // AppServices().signIn(_data);
-    }
-  }
+  // _signIn() async {
+  //   if (_key.currentState.validate()) {
+  //     _key.currentState.save();
+  //     AppNavigation.to(context, HomePage());      // AppServices().signIn(_data);
+  //   }
+  // }
 
   invalidUser(String message, bool isEmail) {
     return showDialog(

@@ -46,6 +46,7 @@ class ForgotPassword extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: AppTextField(
+                      key: UniqueKey(),
                       placeholder: 'Email',
                       icon: Icons.email_outlined,
                       onSaved: (email) => _sendEmail(context, email),
@@ -77,7 +78,7 @@ class ForgotPassword extends StatelessWidget {
   Future<void> _sendEmail(BuildContext context, String email) async {
     var error;
     await performLazyTask(context, () async {
-      await AppServices()
+      AppServices()
           // .forgotPassword(email: _email)
           // .catchError((e) {
           // error = ServerError.withError(e);
@@ -128,6 +129,7 @@ class ForgotPassword extends StatelessWidget {
             style: GoogleFonts.pacifico(),
           ),
           actions: <Widget>[
+            // ignore: deprecated_member_use
             FlatButton(
               child: Text(
                 'OK',

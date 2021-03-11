@@ -16,10 +16,10 @@ class AuthData extends HiveObject {
 
   AuthData({this.user, this.token});
 
-  factory AuthData.fromJson(Map<String, dynamic> json) =>
-      _$AuthDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AuthDataToJson(this);
+  // factory AuthData.fromJson(Map<String, dynamic> json) =>
+  //     _$AuthDataFromJson(json);
+  //
+  // Map<String, dynamic> toJson() => _$AuthDataToJson(this);
 }
 
 @JsonSerializable()
@@ -30,8 +30,8 @@ class AuthRequest extends HiveObject {
 
   AuthRequest({this.username, this.password});
 
-  factory AuthRequest.fromJson(Map<String, dynamic> json) =>
-      _$AuthRequestFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AuthRequestToJson(this);
+  // factory AuthRequest.fromJson(Map<String, dynamic> json) =>
+  //     _$AuthRequestFromJson(json);
+  //
+  // Map<String, dynamic> toJson() => _$AuthRequestToJson(this);
 }

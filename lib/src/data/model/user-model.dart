@@ -75,6 +75,9 @@ class User extends HiveObject {
   @HiveField(19)
   String cover;
 
+  @HiveField(20)
+  String address;
+
   User({
     this.id,
     this.age,
@@ -91,9 +94,9 @@ class User extends HiveObject {
     this.deviceToken,
     this.contribution,
     this.emailConfirm,
-    this.isAgePrivate,
+    this.isAgePrivate,this.address
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  // factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  // Map<String, dynamic> toJson() => _$UserToJson(this);
 }
