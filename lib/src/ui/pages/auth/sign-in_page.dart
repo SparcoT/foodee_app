@@ -14,6 +14,8 @@ import 'package:foodee/src/ui/views/localized_view.dart';
 import 'package:foodee/src/data/model/auth-data_model.dart';
 import 'package:foodee/src/ui/pages/auth/sign-up_page.dart';
 
+import 'forgot-password_page.dart';
+
 
 class SignInPage extends StatefulWidget {
   @override
