@@ -124,8 +124,8 @@ validator: (val){return val.isEmpty?"Required":null;},
             padding: const EdgeInsets.only(bottom: 30),
             child: GestureDetector(
               key: Keys.forgotPasswordButton,
-              onTap: () => AppNavigation.to(context, EditProfile()),
-//              onTap: () => AppNavigation.to(context, ForgotPassword()),
+//              onTap: () => AppNavigation.to(context, EditProfile()),
+              onTap: () => AppNavigation.to(context, ForgotPassword()),
               child: Text(
                 lang.forgotPassword,
                 textAlign: TextAlign.center,
