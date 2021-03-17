@@ -14,4 +14,6 @@ abstract class AppAssets {
   static const camera = '$_iconsDir/shutter.png';
   static const send = '$_iconsDir/Send.svg';
   static const doubleArrow = '$_iconsDir/arrow_up.png';
+  static const chatLight = '$_iconsDir/chatLight.svg';
+  static const chatDark = '$_iconsDir/chatDark.svg';
 }
