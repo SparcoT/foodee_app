@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:foodee/src/base/theme.dart';
+import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class ShaderText extends StatelessWidget {
@@ -14,7 +14,7 @@ class ShaderText extends StatelessWidget {
         return RadialGradient(
           center: Alignment.topLeft,
           radius: 1.0,
-          colors: <Color>[AppTheme.primaryColor, AppTheme.secondaryColor],
+          colors: <Color>[Colors.purple,Colors.purple[900]],
           tileMode: TileMode.mirror,
         ).createShader(bounds);
       },

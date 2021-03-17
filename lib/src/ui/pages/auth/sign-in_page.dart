@@ -1,5 +1,4 @@
 import 'package:foodee/src/app.dart';
-import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
 import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:unicons/unicons.dart';
 import 'package:flutter/gestures.dart';

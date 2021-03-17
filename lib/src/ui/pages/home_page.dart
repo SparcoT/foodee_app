@@ -4,11 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/ui/views/firiends-chat_view.dart';
+import 'package:foodee/src/ui/views/friends-chat_view.dart';
 import 'package:foodee/src/ui/views/post_view.dart';
 import 'package:foodee/src/ui/views/profile_view.dart';
 
-import '../../../segmentedPAge.dart';
+import 'near-by/near-by.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,7 +19,8 @@ class _HomePageState extends State<HomePage> {
   var _index = 0;
   var _viewItems=[
     PostView(),
-SegmentedPage(),   Text(''),
+NearBy(),
+    Text(''),
     FriendsChatView(),
     ProfileView(),
   ];
@@ -145,12 +146,16 @@ SegmentedPage(),   Text(''),
                     color: AppTheme.secondaryColor,
                   ),
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.home),
-                ),
 
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.home),
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    _index == 3 ? AppAssets.chatDark : AppAssets.chatLight,
+                    color: AppTheme.secondaryColor,
+                    width: 22.5,
+                  ),
                 ),
                 // BottomNavigationBarItem(
                 //   icon: SvgPicture.asset(

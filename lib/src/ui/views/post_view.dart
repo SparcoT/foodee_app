@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
+import 'package:foodee/src/ui/pages/image-models.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
 
@@ -65,7 +66,7 @@ class PostView extends StatelessWidget {
       ),
 
       body: ListView.builder(itemBuilder: (context, i) {
-        return Hero(tag: kPostTag, child: PostWidget());
+        return Hero(tag: kPostTag, child: PostWidget(url: imageModel[i].url,));
       }),
     );
 

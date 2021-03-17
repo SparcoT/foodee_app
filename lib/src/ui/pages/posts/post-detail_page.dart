@@ -7,6 +7,8 @@ import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 
 class PostDetailPage extends StatefulWidget {
+  String url;
+  PostDetailPage({this.url});
   @override
   _PostDetailPageState createState() => _PostDetailPageState();
 }
@@ -22,7 +24,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           SliverToBoxAdapter(
             child: Hero(
               tag: kPostTag,
-              child: PostWidget(isDetail: true),
+              child: PostWidget(isDetail: true,url:widget.url ,),
             ),
           ),
           SliverToBoxAdapter(
@@ -171,7 +173,8 @@ class CommentRow extends StatefulWidget {
 class _CommentRowState extends State<CommentRow> {
   @override
   Widget build(BuildContext context) {
-    final url = 'https://images.pexels.com/photos/2576787/pexels-photo-2576787.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
+    final url =
+        "https://cdn.psychologytoday.com/sites/default/files/styles/article-inline-half-caption/public/field_blog_entry_images/2018-09/shutterstock_648907024.jpg?itok=0hb44OrI";
     return Container(
       decoration: BoxDecoration(
         color: Color(0xfff6f6f6),

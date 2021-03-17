@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/ui/views/firiends-chat_view.dart';
+import 'package:foodee/src/ui/views/friends-chat_view.dart';
 
 // ignore: must_be_immutable
 class ChatPage extends StatefulWidget {
@@ -172,20 +172,27 @@ class _ChatPageState extends State<ChatPage> {
         5,
       ),
       child: Align(
-        alignment: alignment,
+
+        alignment
+            : alignment,
+
         child: Column(
+
           children: [
+
             Container(
+
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              child: Text(" Osama Sandhu Hello!"
+
+              child:
+              Text(
+                " Osama Sandhu Hello!"
                   " Osama Sandhu Hello!"
                   " Osama Sandhu Hello!"
                   " Osama Sandhu Hello!"
                   " Osama Sandhu Hello!",style: TextStyle(color:textColor??Colors.white),),
               decoration: BoxDecoration(
-                boxShadow: [BoxShadow(
-
-                )],  color: color,
+                  //color: color,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(bottomLeft),

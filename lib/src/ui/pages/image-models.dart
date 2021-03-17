@@ -5,7 +5,6 @@ class ImagesModel {
 }
 
 List<ImagesModel> imageModel = [
-  ImagesModel(url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0SBGXDCkwdH_AtLYHmdq32rGPHR2iwhekDw&usqp=CAU"),
   ImagesModel(url: "https://qph.fs.quoracdn.net/main-qimg-f7725da51cb81a03c0427cf3d2a83842"),
   ImagesModel(url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMXX5j61te-TlhY9c0oQnZfecR7yExDVKh_A&usqp=CAU"),
   ImagesModel(url:"https://in.bmscdn.com/iedb/artist/images/website/poster/large/sargun-mehta-1066825-30-01-2017-07-40-56.jpg?1"),

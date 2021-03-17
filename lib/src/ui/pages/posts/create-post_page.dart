@@ -34,11 +34,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
     Navigator.of(context).pop();
   }
 
-  Future<void> showChoiceDialog(BuildContext context) {
+  showChoiceDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: Colors.yellow,
             title: Text('Make a choice'),
             content: ListBody(
               children: <Widget>[
@@ -65,7 +66,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Widget _decideImageView() {
     if (imageFile.isEmpty) {
-      return Text('');
+      return Text('No IMage Font');
     } else {
       return ListView.builder(
         shrinkWrap: true,
@@ -131,56 +132,53 @@ class _CreatePostPageState extends State<CreatePostPage> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Row(
-            children: <Widget>[
-              SizedBox(
-                height: 10,
-              ),
-              profileImageContainer(imgPath: 'assets/images/image.jpg'),
-              postTitleContainer(title: 'Naseer Ahsan'),
-            ],
-          ),
-          SizedBox(height: 10),
-          textFieldContainer(hint: "What's on your mind"),
-          Expanded(child: _decideImageView()),
-          // ignore: deprecated_member_use
-          RaisedButton(
-              color: Colors.brown,
-              splashColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: BorderSide(color: Colors.grey)),
-              child: Text(
-                'Select image',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                showChoiceDialog(context);
-              }),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            head(),
+            // Row(
+            //   children: <Widget>[
+            //     SizedBox(
+            //       height: 10,
+            //     ),
+            //     profileImageContainer(imgPath: 'assets/images/image.jpg'),
+            //     postTitleContainer(title: 'Naseer Ahsan'),
+            //   ],
+            // ),
+            SizedBox(height: 10),
+            textFieldContainer(hint: "What's on your mind"),
+            Container(height: 150, child: _decideImageView()),
+            // ignore: deprecated_member_use
+            RaisedButton(
+                color: Colors.brown,
+                splashColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(color: Colors.grey)),
+                child: Text(
+                  'Select image',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  showChoiceDialog(context);
+                }),
+          ],
+        ),
       ),
     );
   }
 
-  Widget profileImageContainer({String imgPath}) {
-    return Container(
-      padding: EdgeInsets.all(3),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-      // color: Colors.amber,
-      height: 60,
-      width: 60,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: Image(
-          width: 80,
-          height: 80,
-          image: AssetImage(imgPath),
-          fit: BoxFit.fill,
-        ),
+  Widget head() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: <Widget>[
+          CircleAvatar(),
+          postTitleContainer(title: "Ahsan Naseer"),
+        ],
       ),
     );
+
   }
 
   Widget textFieldContainer({String hint}) {
@@ -197,7 +195,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Widget postTitleContainer({String title}) {
     return Container(
-      alignment: Alignment.topLeft,
       margin: EdgeInsets.only(left: 10),
       child: Text(
         title,

@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/assets.dart';
+import 'package:foodee/src/ui/pages/image-models.dart';
+import 'package:foodee/src/ui/pages/near-by/near-by_model.dart';
 import 'package:foodee/src/ui/pages/posts/post-detail_page.dart';
 import 'package:foodee/src/ui/widgets/like-button_widget.dart';
 
 // ignore: must_be_immutable
 class PostWidget extends StatelessWidget {
   final bool isDetail;
-
-  PostWidget({this.isDetail = false});
+  String url;
+Function onTap;
+  PostWidget({this.isDetail = false,this.url,this.onTap});
 
   var _isFavourite = false;
   BuildContext _context;
@@ -16,15 +19,15 @@ class PostWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _context = context;
-    final url =
-        'https://images.pexels.com/photos/3236736/pexels-photo-3236736.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
+//    final url =
+ //       'https://images.pexels.com/photos/3236736/pexels-photo-3236736.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
     return SizedBox(
-      height: 319,
+      height: 369,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: isDetail ? null : _onNextPage,
+            onTap: onTap,
             child: Material(
               child: ListTile(
                 tileColor: Colors.white,
@@ -38,7 +41,7 @@ class PostWidget extends StatelessWidget {
                       image: NetworkImage(
                         url,
                       ),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
@@ -84,18 +87,24 @@ class PostWidget extends StatelessWidget {
           //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut nulla et nibh convallis semper. Aenean eu vulputate dolor. Nullam non tristique arcu. Morbi sit amet pretium ipsum. Fusce non ex dignissim, porta lectus non, eleifend quam. In mollis tempor mauris, a sagittis leo porttitor id. Suspendisse tempus ex velit, id placerat massa volutpat et. Duis massa lectus, sagittis id nulla non, convallis maximus libero. Mauris at lorem libero. Phasellus magna neque, sodales id justo eu, consequat viverra turpis.',
           //   ),
           // ),
-          Container(
-            height: 200,
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Material(elevation: 2,
               borderRadius: BorderRadius.circular(15.0),
-              image: DecorationImage(
-                image: NetworkImage(
-                  url,
+              child: Container(
+                height: 250,
+            //    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.0),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      url,
+                    ),
+                    fit: BoxFit.fill,
+                  ),
                 ),
-                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -160,8 +169,7 @@ class PostWidget extends StatelessWidget {
   }
 
   _onNextPage() {
-    Navigator.of(_context)
-        .push(MaterialPageRoute(builder: (builder) => PostDetailPage()));
+
     // AppNavigation.to(_context, PostDetailPage());
   }
 }
