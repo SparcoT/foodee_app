@@ -1,4 +1,5 @@
 import 'package:foodee/src/app.dart';
+import 'package:foodee/src/notificationPage.dart';
 import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
 import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:unicons/unicons.dart';
@@ -96,6 +97,7 @@ validator: (val){return val.isEmpty?"Required":null;},
                       child: TextButton(
                         key: Keys.signInButton,
                         onPressed: () => AppNavigation.to(context, HomePage()),
+                       // onPressed: () => AppNavigation.to(context, NotificationPage()),
                         style: AppTheme.primaryButtonTheme,
                         child: Text(lang.signIn.toUpperCase()),
                       ),
