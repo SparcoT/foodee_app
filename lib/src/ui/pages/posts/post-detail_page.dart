@@ -4,11 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/constants.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/ui/pages/near-by/near-by_model.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 
 class PostDetailPage extends StatefulWidget {
+  NearByModel nearByModel;
   String url;
-  PostDetailPage({this.url});
+  PostDetailPage({this.url,this.nearByModel});
   @override
   _PostDetailPageState createState() => _PostDetailPageState();
 }

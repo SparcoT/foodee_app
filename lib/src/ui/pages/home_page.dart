@@ -29,98 +29,6 @@ NearBy(),
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: CupertinoNavigationBar(
-      //   padding: EdgeInsetsDirectional.zero,
-      //   leading: Center(
-      //     child: RichText(
-      //       text: TextSpan(
-      //         text: 'Foo',
-      //         style: TextStyle(
-      //           color: AppTheme.secondaryColor,
-      //           fontWeight: FontWeight.bold,
-      //           fontSize: 28,
-      //         ),
-      //         children: [
-      //           TextSpan(
-      //             text: 'd',
-      //             style: TextStyle(
-      //               color: AppTheme.primaryColor,
-      //               fontWeight: FontWeight.bold,
-      //               fontSize: 28,
-      //             ),
-      //           ),
-      //           TextSpan(
-      //             text: 'ee',
-      //             style: TextStyle(
-      //               color: AppTheme.secondaryColor,
-      //               fontWeight: FontWeight.bold,
-      //               fontSize: 28,
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      //   trailing: Material(
-      //     child: IconButton(
-      //       icon: Icon(CupertinoIcons.bell),
-      //       onPressed: () {},
-      //     ),
-      //   ),
-      // ),
-
-      // appBar: AppBar(bottom: PreferredSize(  child: Container(child: ListTile( title: Padding(
-      //   padding: EdgeInsets.only(left: 7),
-      //    child:ShaderMask(
-      //      blendMode: BlendMode.srcATop,  // Add this
-      //      shaderCallback: (Rect bounds) {
-      //        return RadialGradient(
-      //          center: Alignment.topLeft,
-      //          radius: 1.0,
-      //          colors: <Color>[AppTheme.primaryColor, AppTheme.secondaryColor],
-      //          tileMode: TileMode.mirror,
-      //        ).createShader(bounds);
-      //      },
-      //      child: const Text('Foodee',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-      //    ),
-         //RichText(
-        //   text: TextSpan(
-        //     text: 'Foo',
-        //     style: TextStyle(
-        //       color: AppTheme.secondaryColor,
-        //       fontWeight: FontWeight.bold,
-        //  fontSize: 20    ),
-        //     children: [
-        //       TextSpan(
-        //         text: 'd',
-        //         style: TextStyle(
-        //           color: AppTheme.primaryColor,
-        //           fontWeight: FontWeight.bold,
-        //  fontSize: 20       ),
-        //       ),
-        //       TextSpan(
-        //         text: 'ee',
-        //         style: TextStyle(
-        //           color: AppTheme.secondaryColor,
-        //           fontWeight: FontWeight.bold,
-        //             fontSize: 20 ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-      // ),trailing:
-      // IconButton(
-      //   icon: Icon(CupertinoIcons.bell,color: Colors.purple,),
-      //   onPressed: () {},
-      // ),
-      // )
-      //   ,),
-      //   preferredSize: Size.fromHeight(10.0),
-      // ), elevation: 0,backgroundColor: Colors.white,
-      //
-      //
-      //
-      //          ),
       body: _viewItems[_index],
       bottomNavigationBar: Stack(
         clipBehavior: Clip.none,
@@ -157,13 +65,6 @@ NearBy(),
                     width: 22.5,
                   ),
                 ),
-                // BottomNavigationBarItem(
-                //   icon: SvgPicture.asset(
-                //     _index == 3 ? AppAssets.searchDark : AppAssets.camera,
-                //     color: AppTheme.secondaryColor,
-                //     // width: 27.5,
-                //   ),
-                // ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     _index == 4
@@ -208,11 +109,6 @@ NearBy(),
                     color: Colors.white,
                     // width: 14,
                   ),
-                  // child: Icon(
-                  //   Icons.camera,
-                  //   color: Colors.white,
-                  //   size: 30,
-                  // ),
                 ),
               ),
             ),

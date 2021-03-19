@@ -1,10 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
 import 'package:foodee/src/ui/pages/image-models.dart';
-import 'package:foodee/src/ui/pages/near-by/near-by_model.dart';
 import 'package:foodee/src/ui/pages/posts/post-detail_page.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 
@@ -13,76 +12,83 @@ class ProfileView extends StatefulWidget {
   _ProfileViewState createState() => _ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class _ProfileViewState extends State<ProfileView>
+    with SingleTickerProviderStateMixin {
+  var currentIndex = 0;
+
+  PageController pageController;
+  TabController _tabController;
+
+  @override
+  void initState() {
+    pageController = PageController(initialPage: 0);
+    _tabController = TabController(length: 4, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Column(
-            children: [
-              imageContainerWidget(),
-              followersWidget(),
-              rowWidget(),
-              richTextWidget(),
-              SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    iconWidget(
-                        onTap: () {
-                          print("Add Friend Button is Pressed!");
-                        },
-                        icon: Icons.person_add_outlined,
-                        iconColors: Colors.white,
-                        color: AppTheme.primaryColor),
-                    iconWidget(
-                        onTap: () {
-                          print("Message Button is Pressed!");
-                        },
-                        icon: Icons.message_outlined),
-                    iconWidget(
-                        onTap: () {
-                          print("Share Button is Pressed!");
-                        },
-                        icon: Icons.reply_outlined),
-                    iconWidget(
-                        onTap: () {
-                          print("Mail Button is Pressed!");
-                        },
-                        icon: Icons.mail_outline_outlined),
-                  ],
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool isBox) {
+        return [
+          SliverAppBar(
+            stretch: true,
+            pinned: true,
+            expandedHeight: 230,
+            title: Row(children: [
+              Spacer(),
+              Container(
+                width: 45,
+                height: 45,
+                clipBehavior: Clip.hardEdge,
+                child: BackdropFilter(
+                  child: Icon(Icons.settings),
+                  filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.black54, width: 2),
                 ),
               ),
-              SizedBox(
-                height: 15,
+            ]),
+            flexibleSpace: FlexibleSpaceBar(
+              stretchModes: [
+                StretchMode.blurBackground,
+                StretchMode.zoomBackground,
+              ],
+              background: Expanded(
+                child: Image.network(
+                  'https://static.toiimg.com/photo/msid-71581763/71581763.jpg?259859',
+                  fit: BoxFit.cover,
+                ),
               ),
-            ],
+            ),
           ),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate(
-            List.generate(
-                imageModel.length,
-                (i) => Hero(
-                      tag: kPostTag,
-                      child: PostWidget(
-                        url: imageModel[i].url,
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (builder) => PostDetailPage(
-                                    url: imageModel[i].url,
-                                  )));
-                        },
-                      ),
-                    )).toList(),
+        ];
+      },
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                followersWidget(),
+                rowWidget(),
+                richTextWidget(),
+                SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          SliverFillRemaining(child: tabs())
+        ],
+      ),
     );
   }
 
@@ -101,53 +107,13 @@ class _ProfileViewState extends State<ProfileView> {
               ),
             ),
           ),
-          child: Align(
-            alignment: Alignment(0, 1.8),
-            child: Container(
-              padding: EdgeInsets.all(3),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.pink[200], width: 2.5),
-                shape: BoxShape.circle,
-              ),
-              // color: Colors.amber,
-              height: 100,
-              width: 100,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Image(
-                  width: 80,
-                  height: 80,
-                  image: NetworkImage(
-                    'https://i0.wp.com/www.newsgram.com/wp-content/uploads/2020/03/Katrina-Kaif.jpg',
-                  ),
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-          ),
+          // child:
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(15, 25, 15, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // GestureDetector(child: Material(borderRadius: BorderRadius.circular(8),     elevation: 8,     child: Container(       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: Colors.blue),child: Padding(padding: const EdgeInsets.all(3.0),child: Icon(Icons.edit,color: Colors.white,),),),),onTap: () {},),GestureDetector(child: CircleAvatar(child: Icon(Icons.edit),),   onTap: () {},),
-
-              iconWidget(
-                  onTap: () {
-                    print("Edit Button is Pressed!");
-                  },
-                  icon: Icons.edit,
-                  iconColors: Colors.white,
-                  color: Colors.grey[300]),
-              iconWidget(
-                  onTap: () {
-                    print("Setting Button is Pressed!");
-                  },
-                  icon: Icons.settings,
-                  iconColors: Colors.white,
-                  color: Colors.grey[300])
-            ],
+            children: [],
           ),
         )
       ],
@@ -221,12 +187,12 @@ class _ProfileViewState extends State<ProfileView> {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Column(
         children: <Widget>[
-          Text(
-            text,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 5,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text(
+              text,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           Text(
             textFollow,
@@ -237,25 +203,126 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget iconWidget(
-      {Color iconColors, IconData icon, Color color, Function onTap}) {
-    return Material(
-      elevation: 2,
-      borderRadius: BorderRadius.circular(50),
-      child: GestureDetector(
-        onTap: onTap,
-        child: CircleAvatar(
-          backgroundColor: color ?? Color(0xffededed),
+  Widget tabs() {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textButton(
+                  index: 0,
+                  icon: Icons.person_add,
+                  onPressed: () {
+                    setState(() {
+                      currentIndex = 0;
+                    });
+                    pageController.animateToPage(0,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
+                  }),
+              textButton(
+                  index: 1,
+                  icon: Icons.settings,
+                  onPressed: () {
+                    setState(() {
+                      currentIndex = 1;
+                    });
+                    pageController.animateToPage(1,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
+                  }),
+              textButton(
+                  index: 2,
+                  icon: Icons.edit,
+                  onPressed: () {
+                    setState(() {
+                      currentIndex = 2;
+                    });
+                    pageController.animateToPage(2,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
+                  }),
+              textButton(
+                  index: 3,
+                  icon: Icons.notifications,
+                  onPressed: () {
+                    setState(() {
+                      currentIndex = 3;
+                    });
 
-          //onPressed: (){},
-          child: Icon(
-            icon,
-            color: iconColors,
+                    pageController.animateToPage(3,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
+                  }),
+              // Container(width: MediaQuery.of(context).size.width,
+            ],
           ),
-          //style: TextButton.styleFrom(
-          //shape: CircleBorder()
-        ),
+          Expanded(
+            child: PageView(
+              controller: pageController,
+              //controller: _tabController,
+              children: [
+                ListView.builder(
+                  itemBuilder: (ctx, index) {
+                    return Hero(
+                        tag: kPostTag,
+                        child: PostWidget(
+                          url: imageModel[index].url,
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (builder) => PostDetailPage(
+                                      url: imageModel[index].url,
+                                    )));
+                          },
+                        ));
+                  },
+                  itemCount: imageModel.length,
+                ),
+                Center(
+                  child: Text(
+                    'Settings',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                EditProfile(),
+                Center(
+                  child: Text(
+                    'Notifications',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget textButton({
+    IconData icon,
+    Function onPressed,
+    int index,
+  }) {
+    return TextButton(
+      child: Icon(
+        icon,
+        color: index == currentIndex ? Colors.white : Colors.black,
+      ),
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+          backgroundColor:
+              index == currentIndex ? AppTheme.primaryColor : Colors.grey,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
     );
   }
 }

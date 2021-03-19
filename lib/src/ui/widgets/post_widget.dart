@@ -10,8 +10,9 @@ import 'package:foodee/src/ui/widgets/like-button_widget.dart';
 class PostWidget extends StatelessWidget {
   final bool isDetail;
   String url;
-Function onTap;
-  PostWidget({this.isDetail = false,this.url,this.onTap});
+  Function onTap;
+
+  PostWidget({this.isDetail = false, this.url, this.onTap});
 
   var _isFavourite = false;
   BuildContext _context;
@@ -20,7 +21,7 @@ Function onTap;
   Widget build(BuildContext context) {
     _context = context;
 //    final url =
- //       'https://images.pexels.com/photos/3236736/pexels-photo-3236736.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
+    //       'https://images.pexels.com/photos/3236736/pexels-photo-3236736.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
     return SizedBox(
       height: 369,
       child: Column(
@@ -30,7 +31,7 @@ Function onTap;
             onTap: onTap,
             child: Material(
               child: ListTile(
-                tileColor: Colors.white,
+                // tileColor: Colors.white,
                 contentPadding: EdgeInsets.only(left: 20.0, right: 30),
                 leading: Container(
                   width: 47,
@@ -79,55 +80,22 @@ Function onTap;
                   onTap: () {},
                 ),
               ),
-            ),
+              ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.fromLTRB(25.0, 0, 10.0, 25.0),
-          //   child: ExpandableText(
-          //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut nulla et nibh convallis semper. Aenean eu vulputate dolor. Nullam non tristique arcu. Morbi sit amet pretium ipsum. Fusce non ex dignissim, porta lectus non, eleifend quam. In mollis tempor mauris, a sagittis leo porttitor id. Suspendisse tempus ex velit, id placerat massa volutpat et. Duis massa lectus, sagittis id nulla non, convallis maximus libero. Mauris at lorem libero. Phasellus magna neque, sodales id justo eu, consequat viverra turpis.',
-          //   ),
-          // ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Material(elevation: 2,
-              borderRadius: BorderRadius.circular(15.0),
-              child: Container(
-                height: 250,
-            //    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      url,
-                    ),
-                    fit: BoxFit.fill,
-                  ),
+          Container(
+            height: 200,
+               margin: EdgeInsets.symmetric(horizontal: 20.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+               borderRadius: BorderRadius.circular(15.0),
+              image: DecorationImage(
+                image: NetworkImage(
+                  url,
                 ),
+                fit: BoxFit.fill,
               ),
             ),
           ),
-          // CarouselSlider.builder(
-          //   itemCount: 1,
-          //   itemBuilder: (ctx, index, _) {
-          //     return Container(
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(15.0),
-          //         image: DecorationImage(
-          //           image: NetworkImage(
-          //             url,
-          //           ),
-          //           fit: BoxFit.cover,
-          //         ),
-          //       ),
-          //     );
-          //   },
-          //   options: CarouselOptions(
-          //     enlargeCenterPage: true,
-          //     reverse: false,
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.fromLTRB(30, 5, 5, 5),
             child: Row(
@@ -169,7 +137,6 @@ Function onTap;
   }
 
   _onNextPage() {
-
     // AppNavigation.to(_context, PostDetailPage());
   }
 }
