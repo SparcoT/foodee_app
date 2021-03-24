@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/notifications-page.dart';
+import 'package:foodee/src/settingPage.dart';
 import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
 import 'package:foodee/src/ui/pages/image-models.dart';
 import 'package:foodee/src/ui/pages/posts/post-detail_page.dart';
@@ -86,7 +88,8 @@ class _ProfileViewState extends State<ProfileView>
               ],
             ),
           ),
-          SliverFillRemaining(child: tabs())
+          SliverToBoxAdapter(child: tabs()),
+          SliverFillRemaining(child: pageViews())
         ],
       ),
     );
@@ -206,106 +209,84 @@ class _ProfileViewState extends State<ProfileView>
   Widget tabs() {
     return Padding(
       padding: EdgeInsets.all(8.0),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textButton(
-                  index: 0,
-                  icon: Icons.person_add,
-                  onPressed: () {
-                    setState(() {
-                      currentIndex = 0;
-                    });
-                    pageController.animateToPage(0,
-                        duration: Duration(milliseconds: 200),
-                        curve: Curves.bounceIn);
-                  }),
-              textButton(
-                  index: 1,
-                  icon: Icons.settings,
-                  onPressed: () {
-                    setState(() {
-                      currentIndex = 1;
-                    });
-                    pageController.animateToPage(1,
-                        duration: Duration(milliseconds: 200),
-                        curve: Curves.bounceIn);
-                  }),
-              textButton(
-                  index: 2,
-                  icon: Icons.edit,
-                  onPressed: () {
-                    setState(() {
-                      currentIndex = 2;
-                    });
-                    pageController.animateToPage(2,
-                        duration: Duration(milliseconds: 200),
-                        curve: Curves.bounceIn);
-                  }),
-              textButton(
-                  index: 3,
-                  icon: Icons.notifications,
-                  onPressed: () {
-                    setState(() {
-                      currentIndex = 3;
-                    });
-
-                    pageController.animateToPage(3,
-                        duration: Duration(milliseconds: 200),
-                        curve: Curves.bounceIn);
-                  }),
-              // Container(width: MediaQuery.of(context).size.width,
-            ],
-          ),
-          Expanded(
-            child: PageView(
-              controller: pageController,
-              //controller: _tabController,
-              children: [
-                ListView.builder(
-                  itemBuilder: (ctx, index) {
-                    return Hero(
-                        tag: kPostTag,
-                        child: PostWidget(
-                          url: imageModel[index].url,
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (builder) => PostDetailPage(
-                                      url: imageModel[index].url,
-                                    )));
-                          },
-                        ));
-                  },
-                  itemCount: imageModel.length,
-                ),
-                Center(
-                  child: Text(
-                    'Settings',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                EditProfile(),
-                Center(
-                  child: Text(
-                    'Notifications',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          textButton(
+              index: 0,
+              icon: Icons.person_add,
+              onPressed: () {
+                setState(() {
+                  currentIndex = 0;
+                });
+                pageController.animateToPage(0,
+                    duration: Duration(milliseconds: 200),
+                    curve: Curves.bounceIn);
+              }),
+          textButton(
+              index: 1,
+              icon: Icons.settings,
+              onPressed: () {
+                setState(() {
+                  currentIndex = 1;
+                });
+                pageController.animateToPage(1,
+                    duration: Duration(milliseconds: 200),
+                    curve: Curves.bounceIn);
+              }),
+          textButton(
+              index: 2,
+              icon: Icons.edit,
+              onPressed: () {
+                setState(() {
+                  currentIndex = 2;
+                });
+                pageController.animateToPage(2,
+                    duration: Duration(milliseconds: 200),
+                    curve: Curves.bounceIn);
+              }),
+          // textButton(
+          //     index: 3,
+          //     icon: Icons.notifications,
+          //     onPressed: () {
+          //       setState(() {
+          //         currentIndex = 3;
+          //       });
+          //
+          //       pageController.animateToPage(3,
+          //           duration: Duration(milliseconds: 200),
+          //           curve: Curves.bounceIn);
+          //     }),
+          // Container(width: MediaQuery.of(context).size.width,
         ],
       ),
     );
   }
+  Widget pageViews(){return PageView(
+    controller: pageController,
+    //controller: _tabController,
+    children: [
+      ListView.builder(
+        itemBuilder: (ctx, index) {
+          return Hero(
+              tag: kPostTag,
+              child: PostWidget(
+                url: imageModel[index].url,
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (builder) => PostDetailPage(
+                        url: imageModel[index].url,
+                      )));
+                },
+              ));
+        },
+        itemCount: imageModel.length,
+      ),
+      SettingPage(),
+      EditProfile(),
+     // NotificationsPage(),
+    ],
+  );}
 
   Widget textButton({
     IconData icon,

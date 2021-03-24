@@ -145,11 +145,11 @@ class _ChatPageState extends State<ChatPage> {
         PopupMenuItem(
             child: GestureDetector(
                 onTap: () {},
-                child: Text('Urgent'))),
+                child: Text('Block'))),
         PopupMenuItem<String>(
           child: GestureDetector(
               onTap: () {},
-              child: Text('Cancelled Order')),
+              child: Text('Close')),
         ),
 
       ],
@@ -192,7 +192,7 @@ class _ChatPageState extends State<ChatPage> {
                   " Osama Sandhu Hello!"
                   " Osama Sandhu Hello!",style: TextStyle(color:textColor??Colors.white),),
               decoration: BoxDecoration(
-                  //color: color,
+                  color: color,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(bottomLeft),

@@ -12,7 +12,7 @@ class _FriendsChatViewState extends State<FriendsChatView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 8,
+        elevation: 1,
         titleSpacing: 10,
         centerTitle: true,
         title:          ShaderText(shaderText: "Chat",style: TextStyle(fontWeight: FontWeight.bold),)
@@ -26,7 +26,7 @@ class _FriendsChatViewState extends State<FriendsChatView> {
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30))),
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+            padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
             child: Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -53,7 +53,9 @@ class _FriendsChatViewState extends State<FriendsChatView> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: ListView.builder(
+      body: ListView.separated( separatorBuilder: (BuildContext context, int index) {
+        return Divider(height: 0,);
+      },
         itemCount: chatListModel.length,
         itemBuilder: (context, i) {
           return chatListModel.isEmpty
@@ -80,55 +82,46 @@ class _FriendsChatViewState extends State<FriendsChatView> {
                         content: Text("${chatListModel[i].name} is Deleted")));
                   },
                   key: UniqueKey(),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        onTap: () {
-                         // AppNavigation.to(context, ChatPage());
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatPage(
-                                chatListModel: chatListModel[i],
-                              )));
-                        },
-                        leading: CircleAvatar(
-                          child: Text(chatListModel[i].name[0]),
+                  child:ListTile(
+                    onTap: () {
+                      // AppNavigation.to(context, ChatPage());
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ChatPage(
+                            chatListModel: chatListModel[i],
+                          )));
+                    },
+                    leading: CircleAvatar(
+                      child: Text(chatListModel[i].name[0]),
+                    ),
+                    title: Text(chatListModel[i].name),
+                    subtitle: Text(
+                      chatListModel[i].message,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        chatListModel[i].unReadMessage.isNotEmpty
+                            ? CircleAvatar(
+                          child: Text(
+                            chatListModel[i].unReadMessage,
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 11),
+                            textAlign: TextAlign.center,
+                          ),
+                          radius: 11,
+                        )
+                            : SizedBox(),
+                        SizedBox(
+                          height: 5,
                         ),
-                        title: Text(chatListModel[i].name),
-                        subtitle: Text(
-                          chatListModel[i].message,
-                          overflow: TextOverflow.ellipsis,
+                        Text(
+                          "${chatListModel[i].dateTime.hour.toString()}:${chatListModel[i].dateTime.minute.toString()} pm  ",
+                          style: TextStyle(color: Colors.blueGrey),
                         ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            chatListModel[i].unReadMessage.isNotEmpty
-                                ? CircleAvatar(
-                                    child: Text(
-                                      chatListModel[i].unReadMessage,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 11),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    radius: 11,
-                                  )
-                                : SizedBox(),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "${chatListModel[i].dateTime.hour.toString()}:${chatListModel[i].dateTime.minute.toString()} pm  ",
-                              style: TextStyle(color: Colors.blueGrey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        height: 0,
-                        endIndent: 30,
-                        indent: 70,
-                      )
-                    ],
+                      ],
+                    ),
                   ),
                 );
         },
@@ -139,12 +132,24 @@ class _FriendsChatViewState extends State<FriendsChatView> {
 
 
 class ChatListModel {
-  String name;
-  String message;
-  DateTime dateTime;
-  String unReadMessage;
 
-  ChatListModel({this.dateTime, this.name, this.message, this.unReadMessage});
+  String
+   name;
+  String
+  message;
+  DateTime
+  dateTime;
+  String
+  unReadMessage;
+  ChatListModel
+      (
+      {
+        this.dateTime,
+        this.name,
+        this.message,
+        this.unReadMessage
+      }
+      );
 }
 
 List<ChatListModel> chatListModel = [

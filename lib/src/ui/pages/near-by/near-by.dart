@@ -16,7 +16,7 @@ class _NearByState extends State<NearBy> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: 8,
+          elevation: 1,
           titleSpacing: 10,
           centerTitle: true,
           title: ShaderText(
@@ -32,11 +32,11 @@ class _NearByState extends State<NearBy> {
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30))),
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+              padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
               child: Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(60)),
+                      borderRadius: BorderRadius.circular(30)),
                   child: Center(
                     child: TextField(
                       decoration: InputDecoration(
@@ -59,28 +59,27 @@ class _NearByState extends State<NearBy> {
           ),
           automaticallyImplyLeading: false,
         ),
-        body: ListView.builder(
-            itemCount: nearByModel.length,
-            itemBuilder: (context, i) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Material(
-               borderRadius: BorderRadius.circular(8),
-                  elevation: 8,
-                  child: Container(
-decoration: BoxDecoration(               borderRadius: BorderRadius.circular(8),
-),                    child: ListTile(onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileView()));},
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(nearByModel[i].url),
-                      ),
-                      title: ShaderText(
-                        shaderText: nearByModel[i].name,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }));
+        body: ListView.separated(
+          padding: EdgeInsets.only(top: 10),
+          itemCount: nearByModel.length,
+          itemBuilder: (context, i) {
+            return ListTile(
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ProfileView()));
+              },
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(nearByModel[i].url),
+              ),
+              title: ShaderText(
+                shaderText: nearByModel[i].name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(height: 0,);
+          },
+        ));
   }
 }

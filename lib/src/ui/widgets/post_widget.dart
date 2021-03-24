@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/assets.dart';
-import 'package:foodee/src/ui/pages/image-models.dart';
-import 'package:foodee/src/ui/pages/near-by/near-by_model.dart';
-import 'package:foodee/src/ui/pages/posts/post-detail_page.dart';
 import 'package:foodee/src/ui/widgets/like-button_widget.dart';
 
 // ignore: must_be_immutable
@@ -42,7 +39,7 @@ class PostWidget extends StatelessWidget {
                       image: NetworkImage(
                         url,
                       ),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -92,7 +89,7 @@ class PostWidget extends StatelessWidget {
                 image: NetworkImage(
                   url,
                 ),
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -111,7 +108,7 @@ class PostWidget extends StatelessWidget {
                     onTap: isDetail ? null : _onNextPage,
                     child: Icon(
                       CupertinoIcons.chat_bubble,
-                      size: 25,
+                      size: 25,color: Colors.grey,
                     ),
                   ),
                 ),
