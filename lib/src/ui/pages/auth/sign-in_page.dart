@@ -1,5 +1,4 @@
 import 'package:foodee/src/app.dart';
-import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:unicons/unicons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import 'package:foodee/src/ui/pages/auth/sign-up_page.dart';
 
 import 'forgot-password_page.dart';
 
-
 class SignInPage extends StatefulWidget {
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -24,6 +22,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final _data = AuthRequest();
   final _key = GlobalKey<FormState>();
+  var _autoValidateMode = AutovalidateMode.disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +31,7 @@ class _SignInPageState extends State<SignInPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            AppTheme.primaryColor,
-            AppTheme.primaryColor
-          ],
+          colors: [AppTheme.primaryColor, AppTheme.primaryColor],
         ),
       ),
       child: LocalizedView(
@@ -43,6 +39,7 @@ class _SignInPageState extends State<SignInPage> {
           backgroundColor: Colors.transparent,
           body: Center(
             child: Form(
+              autovalidateMode: _autoValidateMode,
               key: _key,
               child: SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
@@ -76,7 +73,6 @@ class _SignInPageState extends State<SignInPage> {
                       validator: Validators.requiredEmail,
                       onSaved: (email) => _data.username = email,
                       keyboardType: TextInputType.emailAddress,
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -84,17 +80,15 @@ class _SignInPageState extends State<SignInPage> {
                         key: Keys.signInPassword,
                         placeholder: lang.password,
                         icon: UniconsLine.lock_open_alt,
-validator: (val){return val.isEmpty?"Required":null;},
-                    //    validator: Validators.requiredPassword,//
+                        validator: Validators.required,
                         onSaved: (password) => _data.password = password,
-                        autoValidateMode: AutovalidateMode.onUserInteraction,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10, bottom: 15),
                       child: TextButton(
                         key: Keys.signInButton,
-                        onPressed: () => AppNavigation.to(context, HomePage()),
+                        onPressed: _signIn,
                         style: AppTheme.primaryButtonTheme,
                         child: Text(lang.signIn.toUpperCase()),
                       ),
@@ -142,12 +136,12 @@ validator: (val){return val.isEmpty?"Required":null;},
     );
   }
 
-  // _signIn() async {
-  //   if (_key.currentState.validate()) {
-  //     _key.currentState.save();
-  //     AppNavigation.to(context, HomePage());      // AppServices().signIn(_data);
-  //   }
-  // }
+  _signIn() async {
+    if (_key.currentState.validate()) {
+      _key.currentState.save();
+    } else
+      setState(() => _autoValidateMode = AutovalidateMode.disabled);
+  }
 
   invalidUser(String message, bool isEmail) {
     return showDialog(
