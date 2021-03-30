@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/notifications-page.dart';
 import 'package:foodee/src/settingPage.dart';
 import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
 import 'package:foodee/src/ui/pages/image-models.dart';
@@ -20,23 +19,64 @@ class _ProfileViewState extends State<ProfileView>
 
   PageController pageController;
   TabController _tabController;
+  OverlayEntry _overlayEntry;
+
+  // final _scrollController = ScrollController();
+  // final _layerLink = LayerLink();
+  // final _overlayWidget = SizedBox(
+  //   width: 80,
+  //   height: 80,
+  //   child: CircleAvatar(
+  //     backgroundImage: NetworkImage(
+  //       'https://static.toiimg.com/photo/msid-71581763/71581763.jpg?259859',
+  //     ),
+  //   ),
+  // );
 
   @override
   void initState() {
+    super.initState();
     pageController = PageController(initialPage: 0);
     _tabController = TabController(length: 4, vsync: this);
-    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   _scrollController.addListener(() {
+    //     this._overlayEntry = _createOverlayEntry();
+    //     Overlay.of(context).insert(_overlayEntry);
+    // });
+    // });
   }
+
+  // OverlayEntry _createOverlayEntry() {
+  //   RenderBox renderBox = context.findRenderObject();
+  //   // var size = renderBox.size;
+  //   return OverlayEntry(
+  //     builder: (ctx) {
+  //       return Positioned(
+  //         child: CompositedTransformFollower(
+  //           link: _layerLink,
+  //           showWhenUnlinked: false,
+  //           offset: Offset(0.0, 0.0 + 5.0),
+  //           // link: this._,
+  //           child: _overlayWidget,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    // _scrollController.dispose();
+    this._overlayEntry.remove();
   }
 
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
+      // controller: _scrollController,
+      key: UniqueKey(),
       headerSliverBuilder: (BuildContext context, bool isBox) {
         return [
           SliverAppBar(
@@ -168,12 +208,15 @@ class _ProfileViewState extends State<ProfileView>
       child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-            text:
-                'I believe that to be distinctive,inspiring and \n innovative ',
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-            children: <TextSpan>[
-              TextSpan(text: '@Behance', style: TextStyle(color: Colors.blue))
-            ]),
+          text: 'I believe that to be distinctive,inspiring and \n innovative ',
+          style: TextStyle(color: Colors.grey, fontSize: 13),
+          children: <TextSpan>[
+            TextSpan(
+              text: '@Behance',
+              style: TextStyle(color: Colors.blue),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -181,7 +224,10 @@ class _ProfileViewState extends State<ProfileView>
   Widget textBold({String text}) {
     return Text(
       text,
-      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
@@ -213,38 +259,47 @@ class _ProfileViewState extends State<ProfileView>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           textButton(
-              index: 0,
-              icon: Icons.person_add,
-              onPressed: () {
-                setState(() {
-                  currentIndex = 0;
-                });
-                pageController.animateToPage(0,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.bounceIn);
-              }),
+            index: 0,
+            icon: Icons.person_add,
+            onPressed: () {
+              setState(() {
+                currentIndex = 0;
+              });
+              pageController.animateToPage(
+                0,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.bounceIn,
+              );
+            },
+          ),
           textButton(
-              index: 1,
-              icon: Icons.settings,
-              onPressed: () {
-                setState(() {
-                  currentIndex = 1;
-                });
-                pageController.animateToPage(1,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.bounceIn);
-              }),
+            index: 1,
+            icon: Icons.settings,
+            onPressed: () {
+              setState(() {
+                currentIndex = 1;
+              });
+              pageController.animateToPage(
+                1,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.bounceIn,
+              );
+            },
+          ),
           textButton(
-              index: 2,
-              icon: Icons.edit,
-              onPressed: () {
-                setState(() {
-                  currentIndex = 2;
-                });
-                pageController.animateToPage(2,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.bounceIn);
-              }),
+            index: 2,
+            icon: Icons.edit,
+            onPressed: () {
+              setState(() {
+                currentIndex = 2;
+              });
+              pageController.animateToPage(
+                2,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.bounceIn,
+              );
+            },
+          ),
           // textButton(
           //     index: 3,
           //     icon: Icons.notifications,
@@ -262,31 +317,38 @@ class _ProfileViewState extends State<ProfileView>
       ),
     );
   }
-  Widget pageViews(){return PageView(
-    controller: pageController,
-    //controller: _tabController,
-    children: [
-      ListView.builder(
-        itemBuilder: (ctx, index) {
-          return Hero(
+
+  Widget pageViews() {
+    return PageView(
+      controller: pageController,
+      //controller: _tabController,
+      children: [
+        ListView.builder(
+          itemBuilder: (ctx, index) {
+            return Hero(
               tag: kPostTag,
               child: PostWidget(
                 url: imageModel[index].url,
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
                       builder: (builder) => PostDetailPage(
                         url: imageModel[index].url,
-                      )));
+                      ),
+                    ),
+                  );
                 },
-              ));
-        },
-        itemCount: imageModel.length,
-      ),
-      SettingPage(),
-      EditProfile(),
-     // NotificationsPage(),
-    ],
-  );}
+              ),
+            );
+          },
+          itemCount: imageModel.length,
+        ),
+        SettingPage(),
+        EditProfile(),
+        // NotificationsPage(),
+      ],
+    );
+  }
 
   Widget textButton({
     IconData icon,
