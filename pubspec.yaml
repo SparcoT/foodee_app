@@ -29,6 +29,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   carousel_slider: ^4.0.0-nullsafety.0
   group_list_view: ^1.1.1
+  openapi:
+    path: api
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

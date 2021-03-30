@@ -1,0 +1,764 @@
+swagger: '2.0'
+info:
+  title: Foodee API
+  description: Foodee description
+  termsOfService: https://www.google.com/policies/terms/
+  contact:
+    email: contact@foodee.local
+  license:
+    name: Foodee License
+  version: v1
+host: 192.168.88.21:8000
+schemes:
+  - http
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  Basic:
+    type: basic
+security:
+  - Basic: []
+paths:
+  /chats/:
+    get:
+      operationId: chats_list
+      description: ''
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Chats'
+      tags:
+        - chats
+    post:
+      operationId: chats_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Chats'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Chats'
+      tags:
+        - chats
+    parameters: []
+  /chats/{id}/messages:
+    get:
+      operationId: chats_messages_list
+      description: ''
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/ChatMessages'
+      tags:
+        - chats
+    post:
+      operationId: chats_messages_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ChatMessages'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/ChatMessages'
+      tags:
+        - chats
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this chat message.
+        required: true
+        type: integer
+  /feeds/:
+    get:
+      operationId: feeds_list
+      description: GET, POST request to /feeds
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Feed'
+      tags:
+        - feeds
+    post:
+      operationId: feeds_create
+      description: GET, POST request to /feeds
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FeedWrite'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedWrite'
+      tags:
+        - feeds
+    parameters: []
+  /feeds/comments/{id}:
+    get:
+      operationId: feeds_comments_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedCommentWrite'
+      tags:
+        - feeds
+    put:
+      operationId: feeds_comments_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FeedCommentWrite'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedCommentWrite'
+      tags:
+        - feeds
+    patch:
+      operationId: feeds_comments_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FeedCommentWrite'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedCommentWrite'
+      tags:
+        - feeds
+    delete:
+      operationId: feeds_comments_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - feeds
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this feed comment.
+        required: true
+        type: integer
+  /feeds/images/{id}:
+    get:
+      operationId: feeds_images_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedImage'
+      tags:
+        - feeds
+    put:
+      operationId: feeds_images_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FeedImage'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedImage'
+      tags:
+        - feeds
+    patch:
+      operationId: feeds_images_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FeedImage'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedImage'
+      tags:
+        - feeds
+    delete:
+      operationId: feeds_images_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - feeds
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this feed image.
+        required: true
+        type: integer
+  /feeds/{id}/:
+    get:
+      operationId: feeds_read
+      description: PUT, PATCH, DELETE request to /feeds/<int:id>
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Feed'
+      tags:
+        - feeds
+    put:
+      operationId: feeds_update
+      description: PUT, PATCH, DELETE request to /feeds/<int:id>
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FeedWrite'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedWrite'
+      tags:
+        - feeds
+    patch:
+      operationId: feeds_partial_update
+      description: PUT, PATCH, DELETE request to /feeds/<int:id>
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FeedWrite'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedWrite'
+      tags:
+        - feeds
+    delete:
+      operationId: feeds_delete
+      description: PUT, PATCH, DELETE request to /feeds/<int:id>
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - feeds
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this feed.
+        required: true
+        type: integer
+  /feeds/{id}/comments:
+    get:
+      operationId: feeds_comments_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - feeds
+    post:
+      operationId: feeds_comments_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - feeds
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /users/:
+    get:
+      operationId: users_list
+      description: ''
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+      tags:
+        - users
+    post:
+      operationId: users_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+        - users
+    parameters: []
+definitions:
+  Chats:
+    required:
+      - user1
+      - user2
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      created_at:
+        title: Created at
+        type: string
+        format: date-time
+        readOnly: true
+      user1:
+        title: User1
+        type: integer
+      user2:
+        title: User2
+        type: integer
+  ChatMessages:
+    required:
+      - data
+      - sender
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      data:
+        title: Data
+        type: string
+        minLength: 1
+      seen_at:
+        title: Seen at
+        type: string
+        format: date-time
+        x-nullable: true
+      sent_at:
+        title: Sent at
+        type: string
+        format: date-time
+        readOnly: true
+      sender:
+        title: Sender
+        type: integer
+  FeedImage:
+    required:
+      - post
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      path:
+        title: Path
+        type: string
+        readOnly: true
+        format: uri
+      post:
+        title: Post
+        type: integer
+  FeedUser:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      first_name:
+        title: First name
+        type: string
+        maxLength: 150
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 150
+      image:
+        title: Image
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+  Feed:
+    required:
+      - description
+      - comments_count
+      - likes_count
+      - user
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      description:
+        title: Description
+        type: string
+        minLength: 1
+      comments_count:
+        title: Comments count
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+      likes_count:
+        title: Likes count
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+      updated_at:
+        title: Updated at
+        type: string
+        format: date-time
+        readOnly: true
+      created_at:
+        title: Created at
+        type: string
+        format: date-time
+        readOnly: true
+      images:
+        type: array
+        items:
+          $ref: '#/definitions/FeedImage'
+        readOnly: true
+        default: []
+      user:
+        $ref: '#/definitions/FeedUser'
+  FeedWrite:
+    required:
+      - description
+      - likes_count
+      - comments_count
+      - user
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      description:
+        title: Description
+        type: string
+        minLength: 1
+      likes_count:
+        title: Likes count
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+      comments_count:
+        title: Comments count
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+      updated_at:
+        title: Updated at
+        type: string
+        format: date-time
+        readOnly: true
+      created_at:
+        title: Created at
+        type: string
+        format: date-time
+        readOnly: true
+      user:
+        title: User
+        type: integer
+  FeedCommentWrite:
+    required:
+      - description
+      - user
+    type: object
+    properties:
+      description:
+        title: Description
+        type: string
+        minLength: 1
+      user:
+        title: User
+        type: integer
+  User:
+    required:
+      - password
+      - username
+      - location
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+      last_login:
+        title: Last login
+        type: string
+        format: date-time
+        x-nullable: true
+      is_superuser:
+        title: Superuser status
+        description: Designates that this user has all permissions without explicitly
+          assigning them.
+        type: boolean
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      first_name:
+        title: First name
+        type: string
+        maxLength: 150
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 150
+      email:
+        title: Email address
+        type: string
+        format: email
+        maxLength: 254
+      is_staff:
+        title: Staff status
+        description: Designates whether the user can log into this admin site.
+        type: boolean
+      is_active:
+        title: Active
+        description: Designates whether this user should be treated as active. Unselect
+          this instead of deleting accounts.
+        type: boolean
+      date_joined:
+        title: Date joined
+        type: string
+        format: date-time
+      age:
+        title: Age
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+        x-nullable: true
+      address:
+        title: Address
+        type: string
+        minLength: 1
+        x-nullable: true
+      gender:
+        title: Gender
+        type: string
+        maxLength: 10
+        minLength: 1
+        x-nullable: true
+      phone:
+        title: Phone
+        type: string
+        maxLength: 15
+        minLength: 1
+        x-nullable: true
+      image:
+        title: Image
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+      isAgePublic:
+        title: IsAgePublic
+        type: boolean
+      contribution:
+        title: Contribution
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+        x-nullable: true
+      deviceToken:
+        title: DeviceToken
+        type: string
+        maxLength: 255
+        minLength: 1
+        x-nullable: true
+      location:
+        title: Location
+        type: string
+      groups:
+        description: The groups this user belongs to. A user will get all permissions
+          granted to each of their groups.
+        type: array
+        items:
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+          type: integer
+        uniqueItems: true
+      user_permissions:
+        description: Specific permissions for this user.
+        type: array
+        items:
+          description: Specific permissions for this user.
+          type: integer
+        uniqueItems: true
