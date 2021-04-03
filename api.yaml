@@ -257,6 +257,30 @@ paths:
         description: A unique integer value identifying this feed comment.
         required: true
         type: integer
+  /feeds/images:
+    post:
+      operationId: feeds_images_create
+      description: ''
+      parameters:
+        - name: path
+          in: formData
+          required: true
+          type: file
+        - name: post
+          in: formData
+          required: true
+          type: integer
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedImage'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      tags:
+        - feeds
+    parameters: []
   /feeds/images/{id}:
     get:
       operationId: feeds_images_read
@@ -267,38 +291,53 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/FeedImage'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
       tags:
         - feeds
     put:
       operationId: feeds_images_update
       description: ''
       parameters:
-        - name: data
-          in: body
+        - name: path
+          in: formData
           required: true
-          schema:
-            $ref: '#/definitions/FeedImage'
+          type: file
+        - name: post
+          in: formData
+          required: true
+          type: integer
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/FeedImage'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
       tags:
         - feeds
     patch:
       operationId: feeds_images_partial_update
       description: ''
       parameters:
-        - name: data
-          in: body
+        - name: path
+          in: formData
           required: true
-          schema:
-            $ref: '#/definitions/FeedImage'
+          type: file
+        - name: post
+          in: formData
+          required: true
+          type: integer
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/FeedImage'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
       tags:
         - feeds
     delete:
@@ -308,6 +347,9 @@ paths:
       responses:
         '204':
           description: ''
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
       tags:
         - feeds
     parameters:
@@ -437,25 +479,569 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/User'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
       tags:
         - users
     post:
       operationId: users_create
       description: ''
       parameters:
-        - name: data
-          in: body
+        - name: password
+          in: formData
           required: true
-          schema:
-            $ref: '#/definitions/User'
+          type: string
+          maxLength: 128
+          minLength: 1
+        - name: last_login
+          in: formData
+          required: false
+          type: string
+          format: date-time
+          x-nullable: true
+        - name: is_superuser
+          in: formData
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+          required: false
+          type: boolean
+        - name: username
+          in: formData
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          required: true
+          type: string
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+          minLength: 1
+        - name: is_staff
+          in: formData
+          description: Designates whether the user can log into this admin site.
+          required: false
+          type: boolean
+        - name: is_active
+          in: formData
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+          required: false
+          type: boolean
+        - name: date_joined
+          in: formData
+          required: false
+          type: string
+          format: date-time
+        - name: age
+          in: formData
+          required: false
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          x-nullable: true
+        - name: address
+          in: formData
+          required: false
+          type: string
+          minLength: 1
+          x-nullable: true
+        - name: email
+          in: formData
+          required: true
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 1
+        - name: first_name
+          in: formData
+          required: true
+          type: string
+          maxLength: 150
+          minLength: 1
+        - name: last_name
+          in: formData
+          required: true
+          type: string
+          maxLength: 150
+          minLength: 1
+        - name: gender
+          in: formData
+          required: false
+          type: string
+          maxLength: 10
+          minLength: 1
+          x-nullable: true
+        - name: phone
+          in: formData
+          required: false
+          type: string
+          maxLength: 15
+          minLength: 1
+          x-nullable: true
+        - name: image
+          in: formData
+          required: false
+          type: file
+          x-nullable: true
+        - name: isAgePublic
+          in: formData
+          required: false
+          type: boolean
+        - name: contribution
+          in: formData
+          required: false
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          x-nullable: true
+        - name: deviceToken
+          in: formData
+          required: false
+          type: string
+          maxLength: 255
+          minLength: 1
+          x-nullable: true
+        - name: location
+          in: formData
+          required: false
+          type: string
+          x-nullable: true
+        - name: status
+          in: formData
+          required: false
+          type: boolean
+        - name: verification_token
+          in: formData
+          required: false
+          type: string
+          minLength: 1
+          x-nullable: true
+        - name: groups
+          in: formData
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+          required: false
+          type: array
+          items:
+            type: integer
+          uniqueItems: true
+        - name: user_permissions
+          in: formData
+          description: Specific permissions for this user.
+          required: false
+          type: array
+          items:
+            type: integer
+          uniqueItems: true
       responses:
         '201':
           description: ''
           schema:
             $ref: '#/definitions/User'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
       tags:
         - users
     parameters: []
+  /users/login:
+    post:
+      operationId: users_login_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LoginResponse'
+      tags:
+        - users
+    parameters: []
+  /users/logout:
+    post:
+      operationId: users_logout_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - users
+    parameters: []
+  /users/verify/{email}/:
+    post:
+      operationId: users_verify_create
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/VerifyAccountResponse'
+        '406':
+          description: ''
+          schema:
+            $ref: '#/definitions/VerifyAccountResponse'
+      tags:
+        - users
+    parameters:
+      - name: email
+        in: path
+        required: true
+        type: string
+  /users/{id}/:
+    get:
+      operationId: users_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      tags:
+        - users
+    put:
+      operationId: users_update
+      description: ''
+      parameters:
+        - name: password
+          in: formData
+          required: true
+          type: string
+          maxLength: 128
+          minLength: 1
+        - name: last_login
+          in: formData
+          required: false
+          type: string
+          format: date-time
+          x-nullable: true
+        - name: is_superuser
+          in: formData
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+          required: false
+          type: boolean
+        - name: username
+          in: formData
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          required: true
+          type: string
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+          minLength: 1
+        - name: is_staff
+          in: formData
+          description: Designates whether the user can log into this admin site.
+          required: false
+          type: boolean
+        - name: is_active
+          in: formData
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+          required: false
+          type: boolean
+        - name: date_joined
+          in: formData
+          required: false
+          type: string
+          format: date-time
+        - name: age
+          in: formData
+          required: false
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          x-nullable: true
+        - name: address
+          in: formData
+          required: false
+          type: string
+          minLength: 1
+          x-nullable: true
+        - name: email
+          in: formData
+          required: true
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 1
+        - name: first_name
+          in: formData
+          required: true
+          type: string
+          maxLength: 150
+          minLength: 1
+        - name: last_name
+          in: formData
+          required: true
+          type: string
+          maxLength: 150
+          minLength: 1
+        - name: gender
+          in: formData
+          required: false
+          type: string
+          maxLength: 10
+          minLength: 1
+          x-nullable: true
+        - name: phone
+          in: formData
+          required: false
+          type: string
+          maxLength: 15
+          minLength: 1
+          x-nullable: true
+        - name: image
+          in: formData
+          required: false
+          type: file
+          x-nullable: true
+        - name: isAgePublic
+          in: formData
+          required: false
+          type: boolean
+        - name: contribution
+          in: formData
+          required: false
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          x-nullable: true
+        - name: deviceToken
+          in: formData
+          required: false
+          type: string
+          maxLength: 255
+          minLength: 1
+          x-nullable: true
+        - name: location
+          in: formData
+          required: false
+          type: string
+          x-nullable: true
+        - name: status
+          in: formData
+          required: false
+          type: boolean
+        - name: verification_token
+          in: formData
+          required: false
+          type: string
+          minLength: 1
+          x-nullable: true
+        - name: groups
+          in: formData
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+          required: false
+          type: array
+          items:
+            type: integer
+          uniqueItems: true
+        - name: user_permissions
+          in: formData
+          description: Specific permissions for this user.
+          required: false
+          type: array
+          items:
+            type: integer
+          uniqueItems: true
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      tags:
+        - users
+    patch:
+      operationId: users_partial_update
+      description: ''
+      parameters:
+        - name: password
+          in: formData
+          required: true
+          type: string
+          maxLength: 128
+          minLength: 1
+        - name: last_login
+          in: formData
+          required: false
+          type: string
+          format: date-time
+          x-nullable: true
+        - name: is_superuser
+          in: formData
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+          required: false
+          type: boolean
+        - name: username
+          in: formData
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          required: true
+          type: string
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+          minLength: 1
+        - name: is_staff
+          in: formData
+          description: Designates whether the user can log into this admin site.
+          required: false
+          type: boolean
+        - name: is_active
+          in: formData
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+          required: false
+          type: boolean
+        - name: date_joined
+          in: formData
+          required: false
+          type: string
+          format: date-time
+        - name: age
+          in: formData
+          required: false
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          x-nullable: true
+        - name: address
+          in: formData
+          required: false
+          type: string
+          minLength: 1
+          x-nullable: true
+        - name: email
+          in: formData
+          required: true
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 1
+        - name: first_name
+          in: formData
+          required: true
+          type: string
+          maxLength: 150
+          minLength: 1
+        - name: last_name
+          in: formData
+          required: true
+          type: string
+          maxLength: 150
+          minLength: 1
+        - name: gender
+          in: formData
+          required: false
+          type: string
+          maxLength: 10
+          minLength: 1
+          x-nullable: true
+        - name: phone
+          in: formData
+          required: false
+          type: string
+          maxLength: 15
+          minLength: 1
+          x-nullable: true
+        - name: image
+          in: formData
+          required: false
+          type: file
+          x-nullable: true
+        - name: isAgePublic
+          in: formData
+          required: false
+          type: boolean
+        - name: contribution
+          in: formData
+          required: false
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          x-nullable: true
+        - name: deviceToken
+          in: formData
+          required: false
+          type: string
+          maxLength: 255
+          minLength: 1
+          x-nullable: true
+        - name: location
+          in: formData
+          required: false
+          type: string
+          x-nullable: true
+        - name: status
+          in: formData
+          required: false
+          type: boolean
+        - name: verification_token
+          in: formData
+          required: false
+          type: string
+          minLength: 1
+          x-nullable: true
+        - name: groups
+          in: formData
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+          required: false
+          type: array
+          items:
+            type: integer
+          uniqueItems: true
+        - name: user_permissions
+          in: formData
+          description: Specific permissions for this user.
+          required: false
+          type: array
+          items:
+            type: integer
+          uniqueItems: true
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      tags:
+        - users
+    delete:
+      operationId: users_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes:
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+      tags:
+        - users
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this user.
+        required: true
+        type: integer
 definitions:
   Chats:
     required:
@@ -523,6 +1109,9 @@ definitions:
         title: Post
         type: integer
   FeedUser:
+    required:
+      - first_name
+      - last_name
     type: object
     properties:
       id:
@@ -533,10 +1122,12 @@ definitions:
         title: First name
         type: string
         maxLength: 150
+        minLength: 1
       last_name:
         title: Last name
         type: string
         maxLength: 150
+        minLength: 1
       image:
         title: Image
         type: string
@@ -546,8 +1137,6 @@ definitions:
   Feed:
     required:
       - description
-      - comments_count
-      - likes_count
       - user
     type: object
     properties:
@@ -564,11 +1153,13 @@ definitions:
         type: integer
         maximum: 2147483647
         minimum: 0
+        x-nullable: true
       likes_count:
         title: Likes count
         type: integer
         maximum: 2147483647
         minimum: 0
+        x-nullable: true
       updated_at:
         title: Updated at
         type: string
@@ -579,19 +1170,22 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+      tags:
+        type: array
+        items:
+          type: integer
+          x-nullable: true
+        uniqueItems: true
       images:
         type: array
         items:
           $ref: '#/definitions/FeedImage'
         readOnly: true
-        default: []
       user:
         $ref: '#/definitions/FeedUser'
   FeedWrite:
     required:
       - description
-      - likes_count
-      - comments_count
       - user
     type: object
     properties:
@@ -608,11 +1202,13 @@ definitions:
         type: integer
         maximum: 2147483647
         minimum: 0
+        x-nullable: true
       comments_count:
         title: Comments count
         type: integer
         maximum: 2147483647
         minimum: 0
+        x-nullable: true
       updated_at:
         title: Updated at
         type: string
@@ -626,6 +1222,12 @@ definitions:
       user:
         title: User
         type: integer
+      tags:
+        type: array
+        items:
+          type: integer
+          x-nullable: true
+        uniqueItems: true
   FeedCommentWrite:
     required:
       - description
@@ -643,7 +1245,9 @@ definitions:
     required:
       - password
       - username
-      - location
+      - email
+      - first_name
+      - last_name
     type: object
     properties:
       id:
@@ -673,19 +1277,6 @@ definitions:
         pattern: ^[\w.@+-]+$
         maxLength: 150
         minLength: 1
-      first_name:
-        title: First name
-        type: string
-        maxLength: 150
-      last_name:
-        title: Last name
-        type: string
-        maxLength: 150
-      email:
-        title: Email address
-        type: string
-        format: email
-        maxLength: 254
       is_staff:
         title: Staff status
         description: Designates whether the user can log into this admin site.
@@ -710,6 +1301,22 @@ definitions:
         type: string
         minLength: 1
         x-nullable: true
+      email:
+        title: Email address
+        type: string
+        format: email
+        maxLength: 254
+        minLength: 1
+      first_name:
+        title: First name
+        type: string
+        maxLength: 150
+        minLength: 1
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 150
+        minLength: 1
       gender:
         title: Gender
         type: string
@@ -746,6 +1353,15 @@ definitions:
       location:
         title: Location
         type: string
+        x-nullable: true
+      status:
+        title: Status
+        type: boolean
+      verification_token:
+        title: Verification token
+        type: string
+        minLength: 1
+        x-nullable: true
       groups:
         description: The groups this user belongs to. A user will get all permissions
           granted to each of their groups.
@@ -762,3 +1378,45 @@ definitions:
           description: Specific permissions for this user.
           type: integer
         uniqueItems: true
+  Login:
+    required:
+      - username
+      - password
+    type: object
+    properties:
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+  LoginResponse:
+    required:
+      - token
+      - user_id
+    type: object
+    properties:
+      token:
+        title: Token
+        type: string
+        minLength: 1
+      user_id:
+        title: User id
+        type: integer
+  VerifyAccountResponse:
+    required:
+      - message
+    type: object
+    properties:
+      message:
+        title: Message
+        type: string
+        maxLength: 200
+        minLength: 1

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foodee/src/data/data.dart';
+import 'package:foodee/src/data/local_data.dart';
 import 'package:foodee/src/ui/pages/auth/sign-in_page.dart';
+import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:foodee/src/ui/pages/posts/create-post_page.dart';
 
 class AppPage {
@@ -39,8 +41,11 @@ abstract class AppNavigation {
       .popUntil((route) => route.settings.name == AppPage.home._name);
 
   static final routes = <String, WidgetBuilder>{
-    AppPage.home._name: (context) =>
-        AppData.auth.isAuthenticated ? Container() : SignInPage(),
+    AppPage.home._name:(context)=> AppData().hasData()?HomePage():SignInPage(),
+    // AppPage.home._name: (context) =>
+    //     AppData.auth.isAuthenticated ? Container() : SignInPage(),
+        //AppData.auth.isAuthenticated ? Container() : Transaction(),
+
     AppPage.createPost._name: (context) => CreatePostPage(),
     // SignInPage()
   };

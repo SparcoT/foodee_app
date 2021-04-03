@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'mixins/auth_mixin.dart';
 import 'mixins/notifications_service_mixin.dart';
 
-class AppServices with NotificationsServiceMixin,
-    AuthServiceMixin
+class AppServices with NotificationsServiceMixin
 {
   static BuildContext _context;
   static BuildContext get context {

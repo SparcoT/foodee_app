@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
 import 'package:foodee/src/ui/pages/image-models.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
+import 'package:openapi/openapi.dart';
+import 'package:openapi/src/model/inline_response2002.dart';
+import 'package:openapi/src/model/feed.dart';
 
 class PostView extends StatelessWidget {
   @override
@@ -28,14 +32,32 @@ class PostView extends StatelessWidget {
           ],
         ),
         SliverFillRemaining(
-          child: ListView.builder(itemBuilder: (context, i) {
-            return Hero(
-                tag: kPostTag,
-                child: PostWidget(
-                  url: imageModel[i].url,
-                ));
-          }),
-        )
+          child: FutureBuilder(
+            future: Openapi().getFeedsApi().feedsList(
+                  limit: 10,
+                ),
+            builder: (ctx, AsyncSnapshot<Response<InlineResponse2002>> post) {
+              if (post.data == null)
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              else
+                return ListView.builder(
+                  itemCount: post.data.data.results.length,
+                  itemBuilder: (context, i) {
+                    return Hero(
+                      tag: kPostTag,
+                      child: PostWidget(
+                        url:
+                            "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.thespruce.com%2Fportable-generator-dos-and-donts-1152600&psig=AOvVaw3Q81P_2t6uBxvC0myhKvvJ&ust=1617278070515000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCIiFvLm82u8CFQAAAAAdAAAAABAD",
+                        feed: post.data.data.results[i],
+                      ),
+                    );
+                  },
+                );
+            },
+          ),
+        ),
       ],
     );
     Scaffold(

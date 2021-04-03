@@ -52,7 +52,7 @@ class ForgotPassword extends StatelessWidget {
                       onSaved: (email) => _sendEmail(context, email),
                       validator: Validators.requiredEmail,
                       keyboardType: TextInputType.emailAddress,
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
+                      // autoValidateMode: AutovalidateMode.onUserInteraction,
                     ),
                   ),
                   Padding(

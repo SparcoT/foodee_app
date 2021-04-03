@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/ui/modals/confirmation_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -34,15 +35,28 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       itemCount: images.length + 1,
       itemBuilder: (ctx, index) {
         if (index != images.length)
-          return InkWell(
-            onLongPress: () async {
-              if (await openConfirmationDialog(
-                  context: context,
-                  title: 'Confirmation',
-                  content: 'Do you really want to delete image?'))
-                setState(() => images.removeAt(index));
-            },
-            child: Image.file(images.elementAt(index)),
+          return Stack(fit: StackFit.expand,
+            children: [
+              Image.file(images.elementAt(index),fit: BoxFit.cover,),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(color: AppTheme.secondaryColor,
+                  icon: Icon(Icons.cancel),
+                  onPressed: ()async {
+                    if (await openConfirmationDialog(
+                        context: context,
+                        title: 'Confirmation',
+                        content: 'Do you really want to delete image?'))
+                      setState(() => images.removeAt(index));
+
+                    // setState(() {
+                    //   imageFile.removeAt(i);
+                    // }
+                  },
+                ),
+              )
+
+            ],
           );
         else
           return Row(

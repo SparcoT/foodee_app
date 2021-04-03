@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/data/model/user-model.dart';
 import 'package:foodee/src/ui/widgets/text_field.dart';
 import 'package:foodee/src/utils/validators.dart';
 import 'dart:io';
@@ -19,6 +18,7 @@ class _EditProfileState extends State<EditProfile> {
   openGallery(BuildContext context) async {
     // ignore: invalid_use_of_visible_for_testing_member
     var picture =
+        // ignore: invalid_use_of_visible_for_testing_member
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     this.setState(() {
       image = picture.path;
@@ -29,6 +29,7 @@ class _EditProfileState extends State<EditProfile> {
   openCamera(BuildContext context) async {
     // ignore: invalid_use_of_visible_for_testing_member
     var picture =
+        // ignore: invalid_use_of_visible_for_testing_member
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
     this.setState(() {
       image = picture.path;
@@ -74,7 +75,6 @@ class _EditProfileState extends State<EditProfile> {
     1: Text('Treat Me'),
   };
 
-  User user;
   var formKey  = GlobalKey<FormState>();
 
   TextEditingController firstNameController = TextEditingController();
@@ -124,6 +124,7 @@ class _EditProfileState extends State<EditProfile> {
                         right: 0,
                         child: MaterialButton(
                             minWidth: 30,
+
                             shape: CircleBorder(),
                             color: Colors.white,
                             padding: EdgeInsets.all(0),
@@ -159,9 +160,9 @@ class _EditProfileState extends State<EditProfile> {
                   icon: Icons.person,
                   keyboardType: TextInputType.name,
                   placeholder: "UserName",
-                  onSaved: (name) => user.username = name,
+                  //onSaved: (name) => username = name,
                   validator: Validators.required,
-                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                  //autoValidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(
                   height: 10,
@@ -171,9 +172,9 @@ class _EditProfileState extends State<EditProfile> {
                   icon: Icons.phone,
                   placeholder: 'Phone',
                   keyboardType: TextInputType.phone,
-                  onSaved: (phone) => user.phone = phone,
+                 // onSaved: (phone) => user.phone = phone,
                   validator: Validators.required,
-                  autoValidateMode: AutovalidateMode.onUserInteraction,
+ //                 autoValidateMode: AutovalidateMode.onUserInteraction,
 
                   //  controller: lastNameController,
                 ),
@@ -185,9 +186,9 @@ class _EditProfileState extends State<EditProfile> {
                   icon: Icons.date_range_outlined,
 
                   placeholder: 'Age',
-                  onSaved: (age) => user.age = int.parse(age),
+                //  onSaved: (age) => user.age = int.parse(age),
                   validator: Validators.required,
-                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                  //autoValidateMode: AutovalidateMode.onUserInteraction,
 
                   //  controller: lastNameController,
                 ),
@@ -198,9 +199,9 @@ class _EditProfileState extends State<EditProfile> {
                   key: UniqueKey(),
                   icon: Icons.person_outline,
                   placeholder: 'Gender',
-                  onSaved: (gender) => user.gender = gender,
+                 // onSaved: (gender) => user.gender = gender,
                   validator: Validators.required,
-                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                  //autoValidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(
                   height: 10,
@@ -209,9 +210,9 @@ class _EditProfileState extends State<EditProfile> {
                   key: UniqueKey(),
                   icon: Icons.home_outlined,
                   placeholder: 'Address',
-                  onSaved: (address) => user.address = address,
+                 // onSaved: (address) => user.address = address,
                   validator: Validators.required,
-                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                  //autoValidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(
                   height: 10,
@@ -248,7 +249,7 @@ class _EditProfileState extends State<EditProfile> {
 //print(user);
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
-                        print(user);
+                     //   print(user);
                       }
                       //AppNavigation.to(context, HomePage());
                     },

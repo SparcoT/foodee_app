@@ -14,6 +14,10 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
 
+
+  TextEditingController controller=TextEditingController() ;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +97,7 @@ class _ChatPageState extends State<ChatPage> {
             Expanded(
               child: SizedBox(
                 height: 40,
-                child: TextFormField(
+                child: TextFormField(controller: controller,
                   decoration: InputDecoration(
                     hintText: 'Type here something...',
                     hintStyle: TextStyle(
@@ -114,7 +118,9 @@ class _ChatPageState extends State<ChatPage> {
               width: 40,
               height: 40,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  print(controller.text);
+                },
                 child: SvgPicture.asset(
                   AppAssets.send,
                   color: Colors.white,

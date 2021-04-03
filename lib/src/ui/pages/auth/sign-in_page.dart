@@ -1,4 +1,12 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:foodee/src/app.dart';
+import 'package:foodee/src/data/data.dart';
+import 'package:foodee/src/ui/modals/information_dialog.dart';
+import 'package:foodee/src/ui/pages/home_page.dart';
+import 'package:foodee/src/utils/lazy_task.dart';
+import 'package:openapi/openapi.dart';
 import 'package:unicons/unicons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +17,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:foodee/src/utils/validators.dart';
 import 'package:foodee/src/ui/widgets/text_field.dart';
 import 'package:foodee/src/ui/views/localized_view.dart';
-import 'package:foodee/src/data/model/auth-data_model.dart';
 import 'package:foodee/src/ui/pages/auth/sign-up_page.dart';
 
 import 'forgot-password_page.dart';
@@ -20,9 +27,10 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final _data = AuthRequest();
+  //final _data = AuthRequest();
   final _key = GlobalKey<FormState>();
   var _autoValidateMode = AutovalidateMode.disabled;
+  String _userName, _password;
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +77,10 @@ class _SignInPageState extends State<SignInPage> {
                     AppTextField(
                       key: Keys.signInEmail,
                       icon: UniconsLine.user,
-                      placeholder: lang.email,
-                      validator: Validators.requiredEmail,
-                      onSaved: (email) => _data.username = email,
-                      keyboardType: TextInputType.emailAddress,
+                      placeholder: "Username",
+                      validator: Validators.required,
+                      onSaved: (userName) => _userName = userName,
+                      keyboardType: TextInputType.text,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -81,7 +89,7 @@ class _SignInPageState extends State<SignInPage> {
                         placeholder: lang.password,
                         icon: UniconsLine.lock_open_alt,
                         validator: Validators.required,
-                        onSaved: (password) => _data.password = password,
+                        onSaved: (password) => _password = password,
                       ),
                     ),
                     Padding(
@@ -89,6 +97,7 @@ class _SignInPageState extends State<SignInPage> {
                       child: TextButton(
                         key: Keys.signInButton,
                         onPressed: _signIn,
+                        // onPressed:(){    AppNavigation.to(context, HomePage());},
                         style: AppTheme.primaryButtonTheme,
                         child: Text(lang.signIn.toUpperCase()),
                       ),
@@ -119,7 +128,7 @@ class _SignInPageState extends State<SignInPage> {
             padding: const EdgeInsets.only(bottom: 30),
             child: GestureDetector(
               key: Keys.forgotPasswordButton,
-//              onTap: () => AppNavigation.to(context, EditProfile()),
+              // onTap: () => AppNavigation.to(context, EditProfile()),
               onTap: () => AppNavigation.to(context, ForgotPassword()),
               child: Text(
                 lang.forgotPassword,
@@ -139,8 +148,43 @@ class _SignInPageState extends State<SignInPage> {
   _signIn() async {
     if (_key.currentState.validate()) {
       _key.currentState.save();
+      // final result = await performLazyTask(context, () async {
+      // });
+      Login loginUser = Login((login) {
+        login
+          ..username = _userName
+          ..password = _password;
+      });
+      print(loginUser.username);
+      print(loginUser.password);
+      final result = await Openapi()
+          .getUsersApi()
+          .usersLoginCreate(data: loginUser)
+          .catchError((e) async {
+        print('=============================');
+        openInfoDialog(
+          context: context,
+          title: 'Warning',
+          content: e?.response?.data['message'] ?? 'No Internet Connection',
+        );
+      });
+      if (result != null) {
+        print('===Message===');
+        print(result);
+        if (result.statusCode == 200) {
+          AppData().setToken(result.data.token);
+          AppData().setUserId(result.data.userId);
+          return AppNavigation.to(context, HomePage());
+        }
+      } else {
+        openInfoDialog(
+            context: context,
+            title: "Warning",
+            content: 'Internet Error',
+            ok: "ok");
+      }
     } else
-      setState(() => _autoValidateMode = AutovalidateMode.disabled);
+      setState(() => _autoValidateMode = AutovalidateMode.onUserInteraction);
   }
 
   invalidUser(String message, bool isEmail) {

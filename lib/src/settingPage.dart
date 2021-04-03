@@ -27,7 +27,7 @@ class _SettingPageState extends State<SettingPage> {
           CheckboxListTile(title: Text("Push Notifications"), activeColor: AppTheme.primaryColor, value: isCheck1, onChanged: (newCheck) {setState(() {isCheck1 = newCheck;});}),
           SwitchListTile  (title: Text("Notifications on"), value: isSwitched2, activeColor: AppTheme.primaryColor, onChanged: (val) {setState(() {isSwitched2 = val;});}),
           CheckboxListTile(title: Text("Push Notifications"), activeColor: AppTheme.primaryColor, value: isCheck2, onChanged: (newCheck) {setState(() {isCheck2 = newCheck;});}),
-          ListTile        (title: Text("Change Password"), trailing: Icon(Icons.arrow_forward_ios),onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePassword()));},),
+    //      ListTile        (title: Text("Change Password"), trailing: Icon(Icons.arrow_forward_ios),onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePassword()));},),
           ListTile        (title: Text("Logout"), trailing: Icon(Icons.logout),onTap: () {Navigator.of(context).popUntil((route) => false);},)
         ],
       ),

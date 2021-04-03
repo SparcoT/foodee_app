@@ -14,7 +14,7 @@ class AppTextField extends StatefulWidget {
   final String placeholder;
   final Function(String) onSaved;
   final TextInputType keyboardType;
-  final AutovalidateMode autoValidateMode;
+  // final AutovalidateMode autoValidateMode;
   final String Function(String) validator;
 
   AppTextField({
@@ -24,7 +24,7 @@ class AppTextField extends StatefulWidget {
     @required this.onSaved,
     this.keyboardType,
     this.validator,
-    this.autoValidateMode = AutovalidateMode.onUserInteraction,
+    // this.autoValidateMode = AutovalidateMode.onUserInteraction,
   }) : _isPassword = false;
 
   AppTextField.password({
@@ -34,7 +34,7 @@ class AppTextField extends StatefulWidget {
     @required this.onSaved,
     this.keyboardType,
     this.validator,
-    this.autoValidateMode = AutovalidateMode.onUserInteraction,
+    // this.autoValidateMode = AutovalidateMode.onUserInteraction,
   }) : _isPassword = true;
 
   @override
@@ -52,7 +52,7 @@ class _AppTextFieldState extends State<AppTextField> {
         validator: widget.validator,
         placeholder: widget.placeholder,
         keyboardType: widget.keyboardType,
-        autoValidateMode: widget.autoValidateMode,
+        // autoValidateMode: widget.autoValidateMode,
       );
     } else {
       return _TextField(
@@ -62,7 +62,7 @@ class _AppTextFieldState extends State<AppTextField> {
         validator: widget.validator,
         placeholder: widget.placeholder,
         keyboardType: widget.keyboardType,
-        autoValidateMode: widget.autoValidateMode,
+        // autoValidateMode: widget.autoValidateMode,
       );
     }
   }
@@ -77,7 +77,7 @@ class _TextField extends StatelessWidget {
 
   final Function(String) onSaved;
   final TextInputType keyboardType;
-  final AutovalidateMode autoValidateMode;
+  // final AutovalidateMode autoValidateMode;
   final String Function(String) validator;
 
   _TextField({
@@ -89,7 +89,7 @@ class _TextField extends StatelessWidget {
     this.suffix,
     this.keyboardType,
     this.validator,
-    this.autoValidateMode = AutovalidateMode.onUserInteraction,
+    // this.autoValidateMode = AutovalidateMode.onUserInteraction,
   });
 
   @override
@@ -101,7 +101,7 @@ class _TextField extends StatelessWidget {
       onSaved: onSaved,
       obscureText: obscure,
       keyboardType: keyboardType,
-      autovalidateMode: autoValidateMode,
+      // autovalidateMode: autoValidateMode,
       style: GoogleFonts.quicksand(color: Colors.white, fontSize: 14),
       validator: validator,
       textAlign: TextAlign.center,
@@ -154,7 +154,7 @@ class _PasswordField extends StatefulWidget {
   final String placeholder;
   final Function(String) onSaved;
   final TextInputType keyboardType;
-  final AutovalidateMode autoValidateMode;
+  // final AutovalidateMode autoValidateMode;
   final String Function(String) validator;
   final Key key;
 
@@ -164,7 +164,7 @@ class _PasswordField extends StatefulWidget {
     @required this.onSaved,
     this.keyboardType,
     this.validator,
-    this.autoValidateMode = AutovalidateMode.onUserInteraction,
+    // this.autoValidateMode = AutovalidateMode.onUserInteraction,
     @required this.key,
   });
 
@@ -195,7 +195,7 @@ class __PasswordFieldState extends State<_PasswordField> {
       ),
       placeholder: widget.placeholder,
       keyboardType: widget.keyboardType,
-      autoValidateMode: widget.autoValidateMode,
+      // autoValidateMode: widget.autoValidateMode,
     );
   }
 }
