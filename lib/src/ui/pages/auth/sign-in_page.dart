@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:foodee/src/app.dart';
 import 'package:foodee/src/data/data.dart';
+import 'package:foodee/src/services/lazy-task_service.dart';
 import 'package:foodee/src/ui/modals/information_dialog.dart';
 import 'package:foodee/src/ui/pages/home_page.dart';
-import 'package:foodee/src/utils/lazy_task.dart';
 import 'package:openapi/openapi.dart';
 import 'package:unicons/unicons.dart';
 import 'package:flutter/gestures.dart';
@@ -148,32 +146,35 @@ class _SignInPageState extends State<SignInPage> {
   _signIn() async {
     if (_key.currentState.validate()) {
       _key.currentState.save();
-      // final result = await performLazyTask(context, () async {
-      // });
-      Login loginUser = Login((login) {
-        login
-          ..username = _userName
-          ..password = _password;
-      });
-      print(loginUser.username);
-      print(loginUser.password);
-      final result = await Openapi()
-          .getUsersApi()
-          .usersLoginCreate(data: loginUser)
-          .catchError((e) async {
-        print('=============================');
+      final _result = await LazyTaskService.execute<Response<LoginResponse>>(
+        context,
+        () async {
+          Login loginUser = Login(
+            (login) {
+              login
+                ..username = _userName
+                ..password = _password;
+            },
+          );
+          return Openapi().getUsersApi().usersLoginCreate(data: loginUser);
+        },
+        throwError: true,
+      ).catchError((e) {
+        print('=== === === === === === === === ===');
+        print(e);
+
         openInfoDialog(
           context: context,
           title: 'Warning',
           content: e?.response?.data['message'] ?? 'No Internet Connection',
         );
       });
-      if (result != null) {
+      if (_result != null) {
         print('===Message===');
-        print(result);
-        if (result.statusCode == 200) {
-          AppData().setToken(result.data.token);
-          AppData().setUserId(result.data.userId);
+        print(_result);
+        if (_result.statusCode == 200) {
+          AppData().setToken(_result.data.token);
+          AppData().setUserId(_result.data.userId);
           return AppNavigation.to(context, HomePage());
         }
       } else {

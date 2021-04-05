@@ -157,7 +157,7 @@ class _SignUpPageState extends State<SignUpPage> {
             );
       });
       print(result.statusMessage);
-      if (result.statusCode == 200) {
+      if (result.statusCode == 201) {
         print(result.data.email);
       }
     } else
