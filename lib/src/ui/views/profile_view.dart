@@ -1,12 +1,18 @@
 import 'dart:ui';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
+import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/data/data.dart';
+import 'package:foodee/src/services/lazy-task_service.dart';
 import 'package:foodee/src/settingPage.dart';
+import 'package:foodee/src/ui/modals/information_dialog.dart';
 import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
 import 'package:foodee/src/ui/pages/image-models.dart';
 import 'package:foodee/src/ui/pages/posts/post-detail_page.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
+import 'package:openapi/openapi.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -69,7 +75,7 @@ class _ProfileViewState extends State<ProfileView>
     super.dispose();
     _tabController.dispose();
     // _scrollController.dispose();
-    this._overlayEntry.remove();
+    // this._overlayEntry.remove();
   }
 
   @override
@@ -298,6 +304,40 @@ class _ProfileViewState extends State<ProfileView>
                 duration: Duration(milliseconds: 200),
                 curve: Curves.bounceIn,
               );
+            },
+          ),
+          textButton(
+            index: 2,
+            icon: Icons.exit_to_app,
+            onPressed: () async {
+              final _result =
+                  await LazyTaskService.execute<Response<dynamic>>(
+                context,
+                () async {
+                  return Openapi().getUsersApi().usersLogoutCreate();
+                },
+                throwError: true,
+              ).catchError((e) {
+                print('=== === === === === === === === ===');
+                print(e);
+                var errorMessage = 'No Internet Connection';
+                if (e?.response?.data != null)
+                  errorMessage = e.response.data['message'];
+                openInfoDialog(
+                  context: context,
+                  title: 'Warning',
+                  content: errorMessage,
+                );
+              });
+              if (_result != null) {
+                print('===Message===');
+                print(_result);
+                if (_result.statusCode == 200) {
+                  await AppData().clearData();
+                  Navigator.of(context).pop();
+                  AppNavigation.toPage(context, AppPage.home);
+                }
+              }
             },
           ),
           // textButton(

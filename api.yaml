@@ -675,8 +675,8 @@ paths:
       description: ''
       parameters: []
       responses:
-        '201':
-          description: ''
+        '200':
+          description: Logout successful
       tags:
         - users
     parameters: []
