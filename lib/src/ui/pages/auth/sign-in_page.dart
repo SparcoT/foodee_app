@@ -181,64 +181,64 @@ class _SignInPageState extends State<SignInPage> {
         }
       }
     } else
-      setState(() => _autoValidateMode = AutovalidateMode.onUserInteraction);
+      setState(() => _autoValidateMode = AutovalidateMode.always);
   }
 
-  invalidUser(String message, bool isEmail) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(
-            'Error',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.pacifico(
-              fontWeight: FontWeight.bold,
-              color: Colors.brown,
-              fontSize: 24,
-            ),
-          ),
-          content: Text(
-            message,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  shape: StadiumBorder(),
-                  backgroundColor: Colors.brown,
-                ),
-                child: Text(
-                  'OK',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.quicksand(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: Navigator.of(context).pop,
-              ),
-            ),
-            if (isEmail) TextButton(child: Text('Resend'), onPressed: _resend),
-          ],
-        );
-      },
-    );
-  }
+  // invalidUser(String message, bool isEmail) {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         shape:
+  //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+  //         title: Text(
+  //           'Error',
+  //           textAlign: TextAlign.center,
+  //           style: GoogleFonts.pacifico(
+  //             fontWeight: FontWeight.bold,
+  //             color: Colors.brown,
+  //             fontSize: 24,
+  //           ),
+  //         ),
+  //         content: Text(
+  //           message,
+  //           textAlign: TextAlign.center,
+  //           style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
+  //         ),
+  //         actions: [
+  //           Padding(
+  //             padding: const EdgeInsets.only(right: 5),
+  //             child: TextButton(
+  //               style: TextButton.styleFrom(
+  //                 shape: StadiumBorder(),
+  //                 backgroundColor: Colors.brown,
+  //               ),
+  //               child: Text(
+  //                 'OK',
+  //                 textAlign: TextAlign.center,
+  //                 style: GoogleFonts.quicksand(
+  //                   color: Colors.white,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //               onPressed: Navigator.of(context).pop,
+  //             ),
+  //           ),
+  //           if (isEmail) TextButton(child: Text('Resend'), onPressed: _resend),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
-  _resend() async {
-    // Navigator.of(context).pop();
-    // await performLazyTask(context, () async {
-    //   await FoodeeService().resendEmail(email: _email).catchError((e) {
-    //     print(e);
-    //   });
-    // });
-  }
+  // _resend() async {
+  //   // Navigator.of(context).pop();
+  //   // await performLazyTask(context, () async {
+  //   //   await FoodeeService().resendEmail(email: _email).catchError((e) {
+  //   //     print(e);
+  //   //   });
+  //   // });
+  // }
 
   Widget logo({String imgPath}) {
     return Center(
