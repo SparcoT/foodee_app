@@ -1,9 +1,14 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:foodee/src/app.dart';
+import 'package:foodee/src/base/keys.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/services/lazy-task_service.dart';
+import 'package:foodee/src/ui/modals/information_dialog.dart';
 import 'package:foodee/src/ui/views/localized_view.dart';
 import 'package:foodee/src/ui/widgets/text_field.dart';
-import 'package:foodee/src/utils/lazy_task.dart';
 import 'package:foodee/src/utils/validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:openapi/openapi.dart';
@@ -18,9 +23,11 @@ class _SignUpPageState extends State<SignUpPage> {
   final _key = GlobalKey<FormState>();
   String userName, firstName, lastName, email, password, confirmPassword;
   var _autoValidateMode = AutovalidateMode.disabled;
+  BuildContext _context;
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -30,108 +37,113 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
       child: LocalizedView(
-        builder: (context, lang) => Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Form(
-            autovalidateMode: _autoValidateMode,
-            key: _key,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // logo(imgPath: "assets/images/couple4.png"),
-                  appTitle(),
-                  description(),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: AppTextField(
-                      key: UniqueKey(),
+        builder: (context, lang) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Form(
+              autovalidateMode: _autoValidateMode,
+              key: _key,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Foodee",
+                      style: GoogleFonts.pacifico(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xfffcc522)),
+                    ),
+                    Text(
+                      "let's choose your match",
+                      style: TextStyle(
+                        fontFamily: "QuickSand",
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    AppTextField(
+                      key: Keys.signUpFirstName,
+                      icon: UniconsLine.user,
                       placeholder: 'First Name',
-                      icon: UniconsLine.user,
+                      keyboardType: TextInputType.name,
+                      onSaved: (value) => firstName = value,
                       validator: Validators.required,
-                      onSaved: (firstname) => firstName = firstname,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: AppTextField(
-                      key: UniqueKey(),
-                      placeholder: 'Last Name',
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: AppTextField(
+                        key: Keys.signUpLastName,
+                        icon: UniconsLine.user,
+                        placeholder: 'Last Name',
+                        keyboardType: TextInputType.name,
+                        onSaved: (value) => lastName = value,
+                        validator: Validators.required,
+                      ),
+                    ),
+                    AppTextField(
+                      key: Keys.signUpUserName,
                       icon: UniconsLine.user,
-                      validator: Validators.required,
-                      onSaved: (lastname) => lastName = lastname,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: AppTextField(
-                      key: UniqueKey(),
                       placeholder: 'Username',
-                      icon: UniconsLine.user,
+                      onSaved: (value) => userName = value,
                       validator: Validators.required,
-                      onSaved: (username) => userName = username,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: AppTextField(
-                      key: UniqueKey(),
-                      placeholder: 'Your Email',
-                      icon: Icons.email_outlined,
-                      onSaved: (value) => email = value,
-                      validator: Validators.requiredEmail,
-                      keyboardType: TextInputType.emailAddress,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: AppTextField(
+                        key: Keys.signUpEmail,
+                        icon: Icons.email_outlined,
+                        placeholder: 'Email',
+                        onSaved: (value) => email = value,
+                        validator: Validators.requiredEmail,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: AppTextField.password(
-                      key: UniqueKey(),
-                      placeholder: 'Enter Password',
-                      icon: UniconsLine.lock_open_alt,
-                      validator: Validators.requiredPassword,
-                      onSaved: (password) => this.password = password,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 40),
-                    child: AppTextField.password(
-                      key: UniqueKey(),
+                    AppTextField.password(
+                      key: Keys.signUpPassword,
                       icon: UniconsLine.lock_alt,
-                      placeholder: 'Confirm Password',
-                      onSaved: (value) => confirmPassword = value,
-                      validator: Validators.requiredPassword,
+                      placeholder: 'Password',
+                      onSaved: (value) => password = value,
+                      validator: Validators.required,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: TextButton(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 40),
+                      child: AppTextField.password(
+                        key: Keys.signUpConfirmPassword,
+                        icon: UniconsLine.lock_alt,
+                        placeholder: 'Confirm Password',
+                        onSaved: (value) => confirmPassword = value,
+                        validator: Validators.required,
+                      ),
+                    ),
+                    TextButton(
                       onPressed: _signUp,
-                      style: AppTheme.primaryButtonTheme,
                       child: Text(lang.signUpNow.toUpperCase()),
+                      style: AppTheme.primaryButtonTheme,
                     ),
-                  ),
-                  Text.rich(TextSpan(
-                    text: "Already have account?  ",
-                    children: [
+                    SizedBox(height: 20),
+                    Text.rich(
                       TextSpan(
-                        // text: lang.signIn,
-                        style: TextStyle(fontWeight: FontWeight.w900),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            print('Tapped');
-                          },
-                      )
-                    ],
-                    style: GoogleFonts.quicksand(color: Colors.white),
-                  )),
-                ],
+                        text: "Already have account?  ",
+                        children: [
+                          TextSpan(
+                            text: lang.signIn,
+                            style: TextStyle(fontWeight: FontWeight.w900),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Navigator.of(context).pop(),
+                          )
+                        ],
+                        style: GoogleFonts.quicksand(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -139,108 +151,57 @@ class _SignUpPageState extends State<SignUpPage> {
   _signUp() async {
     if (_key.currentState.validate()) {
       _key.currentState.save();
-      final result = await performLazyTask(context, () async {
-        // User signUpUser = User((signUp) {
-        //   signUp
-        //     ..firstName = firstName
-        //     ..lastName = lastName
-        //     ..username = userName
-        //     ..password = password
-        //     ..email = email;
-        // });
-        return await Openapi().getUsersApi().usersCreate(
-              password: password,
-              username: userName,
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-            );
+      print('Sign In');
+      if (password != confirmPassword) {
+        scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text('Password did not matched'),
+          ),
+        );
+        return;
+      }
+      var hasError = false;
+      final result = await LazyTaskService.execute<Response<User>>(
+        context,
+        () async {
+          return await Openapi().getUsersApi().usersCreate(
+                password: password,
+                username: userName,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+              );
+        },
+        throwError: true,
+      ).catchError((e) {
+        hasError = true;
+        var errorMessage = 'No Internet Connection';
+        if (e?.response?.data != null)
+          errorMessage = e.response.data['message'];
+        openInfoDialog(
+          context: _context,
+          title: 'Warning',
+          content: errorMessage,
+        );
       });
-      print(result.statusMessage);
-      if (result.statusCode == 201) {
+      if (result?.statusCode == 201) {
         print(result.data.email);
+        scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text('A verification link has been sent to your email'),
+          ),
+        );
+        await Future.delayed(Duration(seconds: 4));
+        Navigator.of(context).pop();
+      } else {
+        if (!hasError)
+          scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              content: Text('A user already registered with this email'),
+            ),
+          );
       }
     } else
       setState(() => _autoValidateMode = AutovalidateMode.always);
-  }
-
-  // errorChecks(String title, String message) {
-  //   return showDialog(
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           shape:
-  //               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-  //           title: Text(
-  //             'Error',
-  //             textAlign: TextAlign.center,
-  //             style: GoogleFonts.pacifico(
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Colors.brown,
-  //                 fontSize: 24),
-  //           ),
-  //           content: Text(
-  //             message,
-  //             textAlign: TextAlign.center,
-  //             style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
-  //           ),
-  //           actions: <Widget>[
-  //             Padding(
-  //               padding: const EdgeInsets.only(right: 5),
-  //               child: TextButton(
-  //                 style: TextButton.styleFrom(
-  //                     shape: StadiumBorder(), backgroundColor: Colors.brown),
-  //                 child: Text(
-  //                   'OK',
-  //                   textAlign: TextAlign.center,
-  //                   style: GoogleFonts.quicksand(
-  //                       color: Colors.white, fontWeight: FontWeight.bold),
-  //                 ),
-  //                 onPressed: () async {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //               ),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //       context: _context);
-  // }
-
-  Widget description() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: Text(
-        "let's choose your match",
-        style: TextStyle(fontFamily: "QuickSand", fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget appTitle() {
-    return Text(
-      "Foodee",
-      style: GoogleFonts.pacifico(
-          fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xfffcc522)),
-    );
-  }
-
-  Widget logo({String imgPath}) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: Material(
-          elevation: 8,
-          borderRadius: BorderRadius.circular(50),
-          child: Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(50)),
-            child: Image.asset("$imgPath"),
-            width: 180,
-            height: 180,
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -7,6 +7,8 @@ import 'base/theme.dart';
 import 'data/data.dart';
 import 'base/nav.dart';
 
+final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+
 class App extends StatelessWidget {
   static const name = 'Foodee';
 
@@ -23,7 +25,8 @@ class App extends StatelessWidget {
     AppServices.bindUiContext(context);
     return Theme(
       data: AppTheme.data,
-      child: CupertinoApp(
+      child: MaterialApp(
+        scaffoldMessengerKey: scaffoldKey,
         debugShowCheckedModeBanner: false,
         title: name,
         routes: AppNavigation.routes,
