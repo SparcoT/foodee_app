@@ -162,11 +162,13 @@ class _SignInPageState extends State<SignInPage> {
       ).catchError((e) {
         print('=== === === === === === === === ===');
         print(e);
-
+        var errorMessage = 'No Internet Connection';
+        if (e?.response?.data != null)
+          errorMessage = e.response.data['message'];
         openInfoDialog(
           context: context,
           title: 'Warning',
-          content: e?.response?.data['message'] ?? 'No Internet Connection',
+          content: errorMessage,
         );
       });
       if (_result != null) {
@@ -177,12 +179,6 @@ class _SignInPageState extends State<SignInPage> {
           AppData().setUserId(_result.data.userId);
           return AppNavigation.to(context, HomePage());
         }
-      } else {
-        openInfoDialog(
-            context: context,
-            title: "Warning",
-            content: 'Internet Error',
-            ok: "ok");
       }
     } else
       setState(() => _autoValidateMode = AutovalidateMode.onUserInteraction);
