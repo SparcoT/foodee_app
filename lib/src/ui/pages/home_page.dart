@@ -7,7 +7,7 @@ import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/ui/views/friends-chat_view.dart';
 import 'package:foodee/src/ui/views/post_view.dart';
 import 'package:foodee/src/ui/views/profile_view.dart';
-
+import 'package:web_socket_channel/io.dart';
 import 'near-by/near-by.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,16 +17,35 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _index = 0;
-  var _viewItems=[
+  var _viewItems = [
     PostView(),
-NearBy(),
+    NearBy(),
     Text(''),
     FriendsChatView(),
     ProfileView(),
   ];
+  String response;
+  IOWebSocketChannel channel;
+
+  @override
+  void initState() {
+    super.initState();
+    channel = IOWebSocketChannel.connect('ws://zain-pc:8000/ws/chat/19');
+
+    channel.stream.listen((event) {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    return Column(children: [
+      Text(response ?? 'No Response'),
+      TextButton(
+        onPressed: () {
+          channel.sink.add({'data': 'ASDASDASDASD'});
+        },
+        child: Text('Send Project'),
+      )
+    ]);
     return Scaffold(
       backgroundColor: Colors.white,
       body: _viewItems[_index],
@@ -54,7 +73,6 @@ NearBy(),
                     color: AppTheme.secondaryColor,
                   ),
                 ),
-
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.home),
                 ),
@@ -117,6 +135,7 @@ NearBy(),
       ),
     );
   }
+
   _onTap(int index) {
     setState(() {
       _index = index;

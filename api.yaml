@@ -79,6 +79,44 @@ paths:
       tags:
         - chats
     parameters: []
+  /chats/get_chats/{user}:
+    get:
+      operationId: chats_get_chats_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Chats'
+      tags:
+        - chats
+    parameters:
+      - name: user
+        in: path
+        required: true
+        type: string
+  /chats/get_messages/{chat}:
+    get:
+      operationId: chats_get_messages_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ChatMessages'
+      tags:
+        - chats
+    parameters:
+      - name: chat
+        in: path
+        required: true
+        type: string
   /chats/{id}/messages:
     get:
       operationId: chats_messages_list
@@ -1105,6 +1143,7 @@ definitions:
     required:
       - data
       - sender
+      - chat
     type: object
     properties:
       id:
@@ -1127,6 +1166,9 @@ definitions:
         readOnly: true
       sender:
         title: Sender
+        type: integer
+      chat:
+        title: Chat
         type: integer
   FeedImage:
     required:

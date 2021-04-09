@@ -15,6 +15,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
+  web_socket_channel:
   file_picker: ^3.0.0
   dio: ^4.0.0-beta7
   unicons: ^1.0.1

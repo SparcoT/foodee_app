@@ -135,7 +135,7 @@ class _ProfileViewState extends State<ProfileView>
             ),
           ),
           SliverToBoxAdapter(child: tabs()),
-          SliverFillRemaining(child: pageViews())
+          SliverFillRemaining(child: Expanded(child: pageViews()))
         ],
       ),
     );
@@ -361,7 +361,7 @@ class _ProfileViewState extends State<ProfileView>
   Widget pageViews() {
     return PageView(
       controller: pageController,
-      //controller: _tabController,
+      ///controller: _tabController,
       children: [
         ListView.builder(
           itemBuilder: (ctx, index) {
