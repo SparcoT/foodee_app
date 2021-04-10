@@ -1,22 +1,54 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/data/data.dart';
 import 'package:foodee/src/ui/views/friends-chat_view.dart';
+import 'package:openapi/openapi.dart';
+import 'package:web_socket_channel/io.dart';
 
 // ignore: must_be_immutable
 class ChatPage extends StatefulWidget {
-  ChatListModel chatListModel;
-  ChatPage({this.chatListModel});
+  int chatId;
+  final IOWebSocketChannel socket;
+  List<ChatMessages> chatListModel;
+  ChatPage({this.chatListModel,this.socket,this.chatId});
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-
-
+  StreamSubscription subscription;
   TextEditingController controller=TextEditingController() ;
 
+  @override
+  void initState() {
+    super.initState();
+    listenForNewMessages();
+  }
+
+  dispose() {
+    super.dispose();
+    subscription.cancel();
+  }
+
+  listenForNewMessages(){
+    subscription = widget.socket.stream.listen((event) {
+      print("printing both");
+      var dataa = json.decode(event);
+      print('decode json');
+      print(dataa);
+      widget.chatListModel.add(ChatMessages((b){
+        b.data = dataa['message'].toString();
+        b.sender= int.parse(dataa['sender'].toString());
+        b.chat = widget.chatId;
+      }));
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +75,7 @@ class _ChatPageState extends State<ChatPage> {
               width: 8,
             ),
             Text(
-              widget.chatListModel.name,
+              "Name 1",
               style: TextStyle(color: Colors.white, fontSize: 18),
             )
           ],
@@ -56,13 +88,13 @@ class _ChatPageState extends State<ChatPage> {
       body: ClipPath(
         clipper: ClipperCustom(MediaQuery.of(context).padding.top, 40),
         child: Container(
-          // padding: EdgeInsets.only(
-          //     top: MediaQuery.of(context).padding.top + kToolbarHeight),
           child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, i) {
-              return i % 2 == 0
-                  ? container(
+                itemCount: widget.chatListModel.length,
+                itemBuilder: (context, i) {
+                  ChatMessages msg = widget.chatListModel[i];
+                  return msg.sender == AppData().getUserId()
+                      ? container(
+                      message: msg.data,
                       mainAxisAlignment: MainAxisAlignment.end,
                       bottomRight: 0,
                       bottomLeft: 20,
@@ -71,7 +103,8 @@ class _ChatPageState extends State<ChatPage> {
                       leftPadding: 70,
                       rightPadding: 15,
                       color: AppTheme.primaryColor.withOpacity(0.8))
-                  : container(
+                      : container(
+                    message: msg.data,
                       mainAxisAlignment: MainAxisAlignment.start,
                       bottomRight: 20,
                       bottomLeft: 0,
@@ -80,14 +113,16 @@ class _ChatPageState extends State<ChatPage> {
                       leftPadding: 15,
                       rightPadding: 70,
                       color:
- Color(0xffe9ebe6),                 //    Color(0xfff3f4f0),
-                  textColor: Colors.black);
-            },padding: EdgeInsets.fromLTRB(0, 85, 0, 55),
+                      Color(0xffe9ebe6),
+                      //    Color(0xfff3f4f0),
+                      textColor: Colors.black);
+                }, padding: EdgeInsets.fromLTRB(0, 85, 0, 55),
+              ),
+  width: MediaQuery.of(context).size.width,
+  height: MediaQuery.of(context).size.height,
+  color: Colors.white,
           ),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Colors.white,
-        ),
+
       ),
       bottomSheet: Container(
         color: Colors.white,
@@ -119,7 +154,10 @@ class _ChatPageState extends State<ChatPage> {
               height: 40,
               child: TextButton(
                 onPressed: () {
-                  print(controller.text);
+                  String test = '{"message": "${controller.text}", "sender": ${AppData().getUserId()}, "chat": ${widget.chatId}}';
+                 print(json.decode(test));
+                  widget.socket.sink.add(test);
+                  controller.clear();
                 },
                 child: SvgPicture.asset(
                   AppAssets.send,
@@ -161,7 +199,9 @@ class _ChatPageState extends State<ChatPage> {
       ],
       onSelected: (_) {});}
   Widget container(
-      {MainAxisAlignment mainAxisAlignment,
+      {
+        String message,
+        MainAxisAlignment mainAxisAlignment,
       Alignment alignment,
       double leftPadding,
       double rightPadding,
@@ -192,11 +232,7 @@ class _ChatPageState extends State<ChatPage> {
 
               child:
               Text(
-                " Osama Sandhu Hello!"
-                  " Osama Sandhu Hello!"
-                  " Osama Sandhu Hello!"
-                  " Osama Sandhu Hello!"
-                  " Osama Sandhu Hello!",style: TextStyle(color:textColor??Colors.white),),
+                message,style: TextStyle(color:textColor??Colors.white),),
               decoration: BoxDecoration(
                   color: color,
                   borderRadius: BorderRadius.only(

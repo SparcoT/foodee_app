@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/data/data.dart';
+import 'package:foodee/src/ui/pages/chat/chat_page.dart';
+import 'package:foodee/src/ui/views/friends-chat_view.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
 import 'package:openapi/openapi.dart';
 import 'package:web_socket_channel/io.dart';
@@ -13,16 +15,6 @@ class NearBy extends StatefulWidget {
 
 class _NearByState extends State<NearBy> {
   int val;
-  var channel;
-
-  @override
-  void initState() {
-    super.initState();
-    channel = IOWebSocketChannel.connect(Uri.parse('ws://zain-pc:8000/ws/chat/19'));
-    channel.stream.listen((message) {
-      print(message);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +74,28 @@ class _NearByState extends State<NearBy> {
               User user = users.data?.data?.results?.elementAt(i);
               return ListTile(
                 onTap: () async {
-                // int chatId = (await Openapi().getChatsApi().chatsCreate(data: Chats((builder) {
-                //     builder..user1 = AppData().getUserId();
-                //     builder..user2 = user.id;
-                //   }))).data.id;
+                int chatId = (await Openapi().getChatsApi().chatsCreate(data: Chats((builder) {
+                    builder..user1 = AppData().getUserId();
+                    builder..user2 = user.id;
+                  }))).data.id;
+                  try{
+                    IOWebSocketChannel channel = IOWebSocketChannel.connect('ws://192.168.88.28:8000/ws/chat/$chatId');
+                 List<ChatMessages> messages = (await Openapi().getChatsApi().chatsMessagesList(id: chatId)).data.results.toList();
 
-                channel.sink.add({"message":"Hello how are you?", "sender":"${AppData().getUserId()}", "chat": '19'});
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChatPage(
+                          chatListModel: messages,
+                          socket: channel,
+                          chatId: chatId
+                        )));
+
+
+                  } catch(e){
+                    print(e);
+                  }
+
+
+                // channel.sink.add({"message":"Hello how are you?", "sender":"${AppData().getUserId()}", "chat": '19'});
 
 
                 },

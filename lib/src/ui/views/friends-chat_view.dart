@@ -85,10 +85,10 @@ class _FriendsChatViewState extends State<FriendsChatView> {
                   child:ListTile(
                     onTap: () {
                       // AppNavigation.to(context, ChatPage());
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ChatPage(
-                            chatListModel: chatListModel[i],
-                          )));
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => ChatPage(
+                      //       chatListModel: chatListModel[i],
+                      //     )));
                     },
                     leading: CircleAvatar(
                       child: Text(chatListModel[i].name[0]),

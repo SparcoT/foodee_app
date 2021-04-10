@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
+import 'package:foodee/src/data/data.dart';
 import 'package:foodee/src/ui/views/friends-chat_view.dart';
 import 'package:foodee/src/ui/views/post_view.dart';
 import 'package:foodee/src/ui/views/profile_view.dart';
@@ -30,22 +31,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    channel = IOWebSocketChannel.connect('ws://zain-pc:8000/ws/chat/19');
-
-    channel.stream.listen((event) {});
   }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Text(response ?? 'No Response'),
-      TextButton(
-        onPressed: () {
-          channel.sink.add({'data': 'ASDASDASDASD'});
-        },
-        child: Text('Send Project'),
-      )
-    ]);
     return Scaffold(
       backgroundColor: Colors.white,
       body: _viewItems[_index],
