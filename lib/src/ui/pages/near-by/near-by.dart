@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/data/data.dart';
 import 'package:foodee/src/ui/pages/chat/chat_page.dart';
-import 'package:foodee/src/ui/views/friends-chat_view.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
 import 'package:openapi/openapi.dart';
 import 'package:web_socket_channel/io.dart';
@@ -64,52 +63,61 @@ class _NearByState extends State<NearBy> {
           automaticallyImplyLeading: false,
         ),
         body: FutureBuilder(
-          future: Openapi().getUsersApi().usersList(
-            limit: 10,
-          ),
-          builder: (context, AsyncSnapshot<Response<InlineResponse2003>> users)=> ListView.separated(
+          future: Openapi().getUsersApi().usersList(),
+          builder:
+              (context, AsyncSnapshot<Response<InlineResponse2003>> users) =>
+                  ListView.builder(
             padding: EdgeInsets.only(top: 10),
             itemCount: users.data?.data?.results?.length ?? 0,
             itemBuilder: (context, i) {
               User user = users.data?.data?.results?.elementAt(i);
-              return ListTile(
-                onTap: () async {
-                int chatId = (await Openapi().getChatsApi().chatsCreate(data: Chats((builder) {
-                    builder..user1 = AppData().getUserId();
-                    builder..user2 = user.id;
-                  }))).data.id;
-                  try{
-                    IOWebSocketChannel channel = IOWebSocketChannel.connect('ws://192.168.88.28:8000/ws/chat/$chatId');
-                 List<ChatMessages> messages = (await Openapi().getChatsApi().chatsMessagesList(id: chatId)).data.results.toList();
+              return user.id != AppData().getUserId()
+                  ? Column(
+                    children: [
+                      ListTile(
+                          onTap: () async {
+                            int chatId = (await Openapi().getChatsApi().chatsCreate(
+                                    data: Chats((builder) {
+                              builder..user1 = AppData().getUserId();
+                              builder..user2 = user.id;
+                            })))
+                                .data
+                                .id;
+                            try {
+                              IOWebSocketChannel channel =
+                                  IOWebSocketChannel.connect(
+                                      'ws://192.168.88.28:8000/ws/chat/$chatId');
+                              List<ChatMessages> messages = (await Openapi()
+                                      .getChatsApi()
+                                      .chatsGetMessagesRead(
+                                          chat: chatId.toString()))
+                                  .data
+                                  .toList();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ChatPage(
+                                      chatListModel: messages,
+                                      socket: channel,
+                                      chatId: chatId)));
+                            } catch (e) {
+                              print(e);
+                            }
 
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ChatPage(
-                          chatListModel: messages,
-                          socket: channel,
-                          chatId: chatId
-                        )));
-
-
-                  } catch(e){
-                    print(e);
-                  }
-
-
-                // channel.sink.add({"message":"Hello how are you?", "sender":"${AppData().getUserId()}", "chat": '19'});
-
-
-                },
-                // leading: CircleAvatar(
-                //   backgroundImage: NetworkImage(user.image ?? ''),
-                // ),
-                title: ShaderText(
-                  shaderText: user.firstName,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return Divider(height: 0,);
+                            // channel.sink.add({"message":"Hello how are you?", "sender":"${AppData().getUserId()}", "chat": '19'});
+                          },
+                          // leading: CircleAvatar(
+                          //   backgroundImage: NetworkImage(user.image ?? ''),
+                          // ),
+                          title: ShaderText(
+                            shaderText: user.firstName,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      Divider(
+                        height: 0,
+                      )
+                    ],
+                  )
+                  : SizedBox();
             },
           ),
         ));

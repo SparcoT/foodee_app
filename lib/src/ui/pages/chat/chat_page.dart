@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/data/data.dart';
-import 'package:foodee/src/ui/views/friends-chat_view.dart';
 import 'package:openapi/openapi.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -15,14 +14,16 @@ class ChatPage extends StatefulWidget {
   int chatId;
   final IOWebSocketChannel socket;
   List<ChatMessages> chatListModel;
-  ChatPage({this.chatListModel,this.socket,this.chatId});
+
+  ChatPage({this.chatListModel, this.socket, this.chatId});
+
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
   StreamSubscription subscription;
-  TextEditingController controller=TextEditingController() ;
+  TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
@@ -35,15 +36,15 @@ class _ChatPageState extends State<ChatPage> {
     subscription.cancel();
   }
 
-  listenForNewMessages(){
+  listenForNewMessages() {
     subscription = widget.socket.stream.listen((event) {
       print("printing both");
-      var dataa = json.decode(event);
+      var data = json.decode(event);
       print('decode json');
-      print(dataa);
-      widget.chatListModel.add(ChatMessages((b){
-        b.data = dataa['message'].toString();
-        b.sender= int.parse(dataa['sender'].toString());
+      print(data);
+      widget.chatListModel.insert(0, ChatMessages((b) {
+        b.data = data['message'].toString();
+        b.sender = int.parse(data['sender'].toString());
         b.chat = widget.chatId;
       }));
       setState(() {});
@@ -89,11 +90,12 @@ class _ChatPageState extends State<ChatPage> {
         clipper: ClipperCustom(MediaQuery.of(context).padding.top, 40),
         child: Container(
           child: ListView.builder(
-                itemCount: widget.chatListModel.length,
-                itemBuilder: (context, i) {
-                  ChatMessages msg = widget.chatListModel[i];
-                  return msg.sender == AppData().getUserId()
-                      ? container(
+            itemCount: widget.chatListModel.length,
+            reverse: true,
+            itemBuilder: (context, i) {
+              ChatMessages msg = widget.chatListModel[i];
+              return msg.sender == AppData().getUserId()
+                  ? container(
                       message: msg.data,
                       mainAxisAlignment: MainAxisAlignment.end,
                       bottomRight: 0,
@@ -102,9 +104,11 @@ class _ChatPageState extends State<ChatPage> {
                       icon: true,
                       leftPadding: 70,
                       rightPadding: 15,
-                      color: AppTheme.primaryColor.withOpacity(0.8))
-                      : container(
-                    message: msg.data,
+                      color: AppTheme.primaryColor.withOpacity(0.8),
+                      boxAlignment: CrossAxisAlignment.end,
+                    )
+                  : container(
+                      message: msg.data,
                       mainAxisAlignment: MainAxisAlignment.start,
                       bottomRight: 20,
                       bottomLeft: 0,
@@ -112,27 +116,29 @@ class _ChatPageState extends State<ChatPage> {
                       icon: false,
                       leftPadding: 15,
                       rightPadding: 70,
-                      color:
-                      Color(0xffe9ebe6),
+                      color: Color(0xffe9ebe6),
                       //    Color(0xfff3f4f0),
-                      textColor: Colors.black);
-                }, padding: EdgeInsets.fromLTRB(0, 85, 0, 55),
-              ),
-  width: MediaQuery.of(context).size.width,
-  height: MediaQuery.of(context).size.height,
-  color: Colors.white,
+                      textColor: Colors.black,
+                      boxAlignment: CrossAxisAlignment.start,
+                    );
+            },
+            padding: EdgeInsets.fromLTRB(0, 85, 0, 55),
           ),
-
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          color: Colors.white,
+        ),
       ),
       bottomSheet: Container(
         color: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
         child: Row(
           children: [
             Expanded(
               child: SizedBox(
                 height: 40,
-                child: TextFormField(controller: controller,
+                child: TextFormField(
+                  controller: controller,
                   decoration: InputDecoration(
                     hintText: 'Type here something...',
                     hintStyle: TextStyle(
@@ -154,8 +160,9 @@ class _ChatPageState extends State<ChatPage> {
               height: 40,
               child: TextButton(
                 onPressed: () {
-                  String test = '{"message": "${controller.text}", "sender": ${AppData().getUserId()}, "chat": ${widget.chatId}}';
-                 print(json.decode(test));
+                  String test =
+                      '{"message": "${controller.text}", "sender": ${AppData().getUserId()}, "chat": ${widget.chatId}}';
+                  print(json.decode(test));
                   widget.socket.sink.add(test);
                   controller.clear();
                 },
@@ -181,35 +188,35 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget popMenuButton(){return  PopupMenuButton(
+  Widget popMenuButton() {
+    return PopupMenuButton(
       child: Icon(Icons.more_vert),
 
       //     key: _menuKey,
       itemBuilder: (_) => <PopupMenuItem>[
         PopupMenuItem(
-            child: GestureDetector(
-                onTap: () {},
-                child: Text('Block'))),
+            child: GestureDetector(onTap: () {}, child: Text('Block'))),
         PopupMenuItem<String>(
-          child: GestureDetector(
-              onTap: () {},
-              child: Text('Close')),
+          child: GestureDetector(onTap: () {}, child: Text('Close')),
         ),
-
       ],
-      onSelected: (_) {});}
-  Widget container(
-      {
-        String message,
-        MainAxisAlignment mainAxisAlignment,
-      Alignment alignment,
-      double leftPadding,
-      double rightPadding,
-      double bottomLeft,
-      double bottomRight,
-      bool icon,
-      Color color,
-        Color textColor}) {
+      onSelected: (_) {},
+    );
+  }
+
+  Widget container({
+    String message,
+    MainAxisAlignment mainAxisAlignment,
+    Alignment alignment,
+    double leftPadding,
+    double rightPadding,
+    double bottomLeft,
+    double bottomRight,
+    bool icon,
+    Color color,
+    Color textColor,
+    CrossAxisAlignment boxAlignment,
+  }) {
     return Padding(
       padding: EdgeInsets.fromLTRB(
         leftPadding,
@@ -218,21 +225,16 @@ class _ChatPageState extends State<ChatPage> {
         5,
       ),
       child: Align(
-
-        alignment
-            : alignment,
-
+        alignment: alignment,
         child: Column(
-
+          crossAxisAlignment: boxAlignment,
           children: [
-
             Container(
-
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-
-              child:
-              Text(
-                message,style: TextStyle(color:textColor??Colors.white),),
+              child: Text(
+                message,
+                style: TextStyle(color: textColor ?? Colors.white),
+              ),
               decoration: BoxDecoration(
                   color: color,
                   borderRadius: BorderRadius.only(

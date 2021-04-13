@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodee/src/ui/pages/chat/chat_page.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
 
 class FriendsChatView extends StatefulWidget {
@@ -15,22 +14,27 @@ class _FriendsChatViewState extends State<FriendsChatView> {
         elevation: 1,
         titleSpacing: 10,
         centerTitle: true,
-        title:          ShaderText(shaderText: "Chat",style: TextStyle(fontWeight: FontWeight.bold),)
-        ,
+        title: ShaderText(
+          shaderText: "Chat",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Color(0xfff3f4f7),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(60.0),
           child: Container(
             decoration: BoxDecoration(
-                color: Color(0xfff3f4f7),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30))),
+              color: Color(0xfff3f4f7),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
             padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
             child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(60)),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(60),
+                ),
                 child: Center(
                   child: TextField(
                     decoration: InputDecoration(
@@ -53,9 +57,12 @@ class _FriendsChatViewState extends State<FriendsChatView> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: ListView.separated( separatorBuilder: (BuildContext context, int index) {
-        return Divider(height: 0,);
-      },
+      body: ListView.separated(
+        separatorBuilder: (BuildContext context, int index) {
+          return Divider(
+            height: 0,
+          );
+        },
         itemCount: chatListModel.length,
         itemBuilder: (context, i) {
           return chatListModel.isEmpty
@@ -82,7 +89,7 @@ class _FriendsChatViewState extends State<FriendsChatView> {
                         content: Text("${chatListModel[i].name} is Deleted")));
                   },
                   key: UniqueKey(),
-                  child:ListTile(
+                  child: ListTile(
                     onTap: () {
                       // AppNavigation.to(context, ChatPage());
                       // Navigator.of(context).push(MaterialPageRoute(
@@ -104,14 +111,14 @@ class _FriendsChatViewState extends State<FriendsChatView> {
                       children: [
                         chatListModel[i].unReadMessage.isNotEmpty
                             ? CircleAvatar(
-                          child: Text(
-                            chatListModel[i].unReadMessage,
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 11),
-                            textAlign: TextAlign.center,
-                          ),
-                          radius: 11,
-                        )
+                                child: Text(
+                                  chatListModel[i].unReadMessage,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 11),
+                                  textAlign: TextAlign.center,
+                                ),
+                                radius: 11,
+                              )
                             : SizedBox(),
                         SizedBox(
                           height: 5,
@@ -130,26 +137,13 @@ class _FriendsChatViewState extends State<FriendsChatView> {
   }
 }
 
-
 class ChatListModel {
+  String name;
+  String message;
+  DateTime dateTime;
+  String unReadMessage;
 
-  String
-   name;
-  String
-  message;
-  DateTime
-  dateTime;
-  String
-  unReadMessage;
-  ChatListModel
-      (
-      {
-        this.dateTime,
-        this.name,
-        this.message,
-        this.unReadMessage
-      }
-      );
+  ChatListModel({this.dateTime, this.name, this.message, this.unReadMessage});
 }
 
 List<ChatListModel> chatListModel = [
