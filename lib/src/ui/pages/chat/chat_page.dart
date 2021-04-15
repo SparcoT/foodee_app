@@ -45,7 +45,7 @@ class _ChatPageState extends State<ChatPage> {
       widget.chatListModel.insert(0, ChatMessages((b) {
         b.data = data['message'].toString();
         b.sender = int.parse(data['sender'].toString());
-        b.chat = widget.chatId;
+        // b.chat = widget.chatId;
       }));
       setState(() {});
     });

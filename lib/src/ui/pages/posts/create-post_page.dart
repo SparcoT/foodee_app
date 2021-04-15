@@ -1,14 +1,15 @@
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/data/data.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:foodee/src/services/lazy-task_service.dart';
+import 'package:foodee/src/ui/modals/information_dialog.dart';
 import 'package:foodee/src/ui/views/image-picker_widget.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
-import 'package:foodee/src/utils/lazy_task.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:openapi/openapi.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class CreatePostPage extends StatefulWidget {
 }
 
 class _CreatePostPageState extends State<CreatePostPage> {
-  TextEditingController controller = TextEditingController();
+  final _textController = TextEditingController();
 
   Widget head() {
     return Row(
@@ -34,12 +35,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Widget textFieldContainer({String hint}) {
     return Container(
       child: TextField(
-        controller: controller,
+        controller: _textController,
         maxLines: null,
         decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: hint,
-            hintStyle: TextStyle(fontSize: 20)),
+          border: InputBorder.none,
+          hintText: hint,
+          hintStyle: TextStyle(fontSize: 20),
+        ),
       ),
     );
   }
@@ -128,49 +130,85 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   _addPost() async {
-    final result = await performLazyTask(context, () {
-      FeedWrite createPost = FeedWrite((feed) async {
-        print('=============UsrId[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]///////');
+    final _result = await LazyTaskService.execute<Response<FeedWrite>>(
+      context,
+      () async {
+        print('RRRRRRRRRRRRRRRRR User Id RRRRRRRRRRRRRRRR');
         print(AppData().getUserId());
-        feed
-          ..user = AppData().getUserId()
-          ..description = controller.text
-          ..commentsCount = 0
-          ..likesCount = 0;
-      });
-      return Openapi().getFeedsApi().feedsCreate(data: createPost).catchError((e) {
-        print('===================');
-        print(e);
-        print('===================');
-      });
+        final createPost = FeedWrite(
+          (feed) {
+            feed
+              ..user = AppData().getUserId()
+              ..description = 'Zain testing'
+              ..commentsCount = 0
+              ..tags = SetBuilder([])
+              ..likesCount = 0;
+          },
+        );
+        print(createPost.description);
+        final result =
+            await Openapi().getFeedsApi().feedsCreate(data: createPost);
+        if (result.statusCode == 201) {
+          _images.forEach((image) async {
+            final uIntBytes = await image.readAsBytes();
+            print(uIntBytes.length);
+            await Dio().post(
+              '${Openapi.basePath}/feeds/images',
+              data: FormData.fromMap(
+                {
+                  'path': await MultipartFile.fromFile(image.path),
+                  'post': result.data.id,
+                },
+              ),
+              options: Options(
+                headers: {'content-type': 'multipart/form-data'},
+              ),
+            );
+          });
+        }
+        return result;
+      },
+      throwError: true,
+    ).catchError((e) {
+      print('eeeeeeeeeeeeeeeee');
+      print(e);
+      var errorMessage = 'No Internet Connection';
+      if (e?.response?.data != null) errorMessage = e.response.data['message'];
+      openInfoDialog(
+        context: context,
+        title: 'Warning',
+        content: errorMessage ?? 'error',
+      );
     });
-    return;
-    if (result.statusCode == 200) {
-      print(result.statusMessage);
-      int postId = result.data.id;
-      if (_images.isNotEmpty) {
-        _images.forEach((image) async {
-          final uIntBytes = await _readFileByte(image);
-          await Openapi().getFeedsApi().feedsImagesCreate(
-                path: uIntBytes,
-                post: postId,
-              );
-        });
+    if (_result != null) {
+      print('===Message===');
+      print(_result);
+      print(_result.statusCode);
+      if (_result.statusCode == 201) {
+        if (_images.isNotEmpty) {
+          await LazyTaskService.execute(
+            context,
+            () async {},
+            throwError: true,
+          ).catchError((e) {
+            print(e);
+          });
+        }
       }
     }
   }
 
-  Future<Uint8List> _readFileByte(File file) async {
-    Uint8List bytes;
-    await file.readAsBytes().then((value) {
-      bytes = Uint8List.fromList(value);
-      print('reading of bytes is completed');
-    }).catchError((onError) {
-      print('Exception Error while reading audio from path:' +
-          onError.toString());
-    });
-    return bytes;
-  }
+// Future<Uint8List> _readFileByte(File file) async {
+//   Uint8List bytes;
+//   await file.readAsBytes().then((value) {
+//     bytes = Uint8List.fromList(value);
+//     print('reading of bytes is completed');
+//   }).catchError((onError) {
+//     print('Exception Error while reading audio from path:' +
+//         onError.toString());
+//   });
+//   return bytes;
+// }
 }
 
 class TaggedUser extends StatelessWidget {

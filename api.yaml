@@ -79,18 +79,16 @@ paths:
       tags:
         - chats
     parameters: []
-  /chats/get_chats/{user}:
+  /chats/get_detailed_chats/{user}:
     get:
-      operationId: chats_get_chats_read
+      operationId: chats_get_detailed_chats_read
       description: ''
       parameters: []
       responses:
         '200':
           description: ''
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Chats'
+            $ref: '#/definitions/ChatsDetailList'
       tags:
         - chats
     parameters:
@@ -1139,6 +1137,33 @@ definitions:
       user2:
         title: User2
         type: integer
+  ChatsDetailList:
+    required:
+      - message_list
+      - updated_date
+      - count_list
+      - chats
+    type: object
+    properties:
+      message_list:
+        type: array
+        items:
+          type: string
+          x-nullable: true
+      updated_date:
+        type: array
+        items:
+          type: string
+          x-nullable: true
+      count_list:
+        type: array
+        items:
+          type: string
+          x-nullable: true
+      chats:
+        type: array
+        items:
+          $ref: '#/definitions/Chats'
   ChatMessages:
     required:
       - data
