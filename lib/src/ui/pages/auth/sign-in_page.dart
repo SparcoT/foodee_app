@@ -25,7 +25,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  //final _data = AuthRequest();
   final _key = GlobalKey<FormState>();
   var _autoValidateMode = AutovalidateMode.disabled;
   String _userName, _password;
@@ -175,7 +174,15 @@ class _SignInPageState extends State<SignInPage> {
         print('===Message===');
         print(_result);
         if (_result.statusCode == 200) {
+          final _profile =
+              await LazyTaskService.execute<Response<User>>(context, () {
+            return Openapi().getUsersApi().usersRead(id: _result.data.userId);
+          });
           AppData().setToken(_result.data.token);
+          AppData().setUserId(_result.data.userId);
+          AppData().setEmail(_profile.data.email);
+          AppData().setName(_profile.data.firstName);
+          AppData().setImage(_profile.data.image);
           AppData().setUserId(_result.data.userId);
           return AppNavigation.to(context, HomePage());
         }

@@ -368,7 +368,7 @@ class _ProfileViewState extends State<ProfileView>
             return Hero(
               tag: kPostTag,
               child: PostWidget(
-                url: imageModel[index].url,
+                // url: imageModel[index].url,
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

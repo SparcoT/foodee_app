@@ -8,9 +8,11 @@ import 'package:foodee/src/ui/pages/near-by/near-by_model.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 
 class PostDetailPage extends StatefulWidget {
-  NearByModel nearByModel;
-  String url;
-  PostDetailPage({this.url,this.nearByModel});
+  final NearByModel nearByModel;
+  final String url;
+
+  PostDetailPage({this.url, this.nearByModel});
+
   @override
   _PostDetailPageState createState() => _PostDetailPageState();
 }
@@ -26,7 +28,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
           SliverToBoxAdapter(
             child: Hero(
               tag: kPostTag,
-              child: PostWidget(isDetail: true,url:widget.url ,),
+              child: PostWidget(
+                isDetail: true,
+              ),
             ),
           ),
           SliverToBoxAdapter(

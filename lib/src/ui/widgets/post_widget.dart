@@ -7,11 +7,17 @@ import 'package:openapi/openapi.dart';
 // ignore: must_be_immutable
 class PostWidget extends StatelessWidget {
   final bool isDetail;
-  String url;
+
+  // String url;
   Function onTap;
   Feed feed;
 
-  PostWidget({this.isDetail = false, this.url, this.onTap,this.feed});
+  PostWidget({
+    this.isDetail = false,
+    // this.url,
+    this.onTap,
+    this.feed,
+  });
 
   var _isFavourite = false;
   BuildContext _context;
@@ -22,7 +28,7 @@ class PostWidget extends StatelessWidget {
 //    final url =
     //       'https://images.pexels.com/photos/3236736/pexels-photo-3236736.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
     return SizedBox(
-      height: 369,
+      height: feed?.images?.isNotEmpty ?? false ? 369 : 130,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -37,9 +43,11 @@ class PostWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(80),
                   image: DecorationImage(
-                    image: NetworkImage(
-                      url,
-                    ),
+                    image: feed.user?.image?.isNotEmpty ?? false
+                        ? NetworkImage(
+                            feed.user.image,
+                          )
+                        : AssetImage(AppAssets.user),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -71,20 +79,21 @@ class PostWidget extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            height: 200,
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15.0),
-              image: DecorationImage(
-                image: NetworkImage(
-                  url,
+          if (feed?.images?.isNotEmpty ?? false)
+            Container(
+              height: 200,
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15.0),
+                image: DecorationImage(
+                  image: NetworkImage(
+                    feed.images.first,
+                  ),
+                  fit: BoxFit.cover,
                 ),
-                fit: BoxFit.cover,
               ),
             ),
-          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(30, 5, 5, 5),
             child: Row(
@@ -100,7 +109,8 @@ class PostWidget extends StatelessWidget {
                     onTap: isDetail ? null : _onNextPage,
                     child: Icon(
                       CupertinoIcons.chat_bubble,
-                      size: 25,color: Colors.grey,
+                      size: 25,
+                      color: Colors.grey,
                     ),
                   ),
                 ),

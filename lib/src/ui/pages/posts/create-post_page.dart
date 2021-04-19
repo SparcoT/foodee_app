@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/data/data.dart';
 import 'package:built_collection/built_collection.dart';
@@ -24,10 +24,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Row(
       children: <Widget>[
         CircleAvatar(
-            backgroundColor: AppTheme.primaryColor,
-            backgroundImage: NetworkImage(
-                "https://scontent.fmux2-1.fna.fbcdn.net/v/t31.0-8/20369872_845956172224685_1100074056007641237_o.jpg?_nc_cat=105&ccb=1-3&_nc_sid=8bfeb9&_nc_ohc=SRnYtPW-3fwAX8-Zhx7&_nc_ht=scontent.fmux2-1.fna&oh=3016c3eb46786a39855a44468e26a1cc&oe=60816634")),
-        postTitleContainer(title: "Osama"),
+          backgroundColor: AppTheme.primaryColor,
+          backgroundImage: AppData().getImage().isEmpty
+              ? AssetImage(AppAssets.user)
+              : NetworkImage(AppData().getImage()),
+        ),
+        postTitleContainer(title: AppData().getName()),
       ],
     );
   }
@@ -130,16 +132,37 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   _addPost() async {
+    if (_textController.text?.isEmpty ?? true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter description'),
+        ),
+      );
+      return;
+    }
     final _result = await LazyTaskService.execute<Response<FeedWrite>>(
       context,
       () async {
-        print('RRRRRRRRRRRRRRRRR User Id RRRRRRRRRRRRRRRR');
         print(AppData().getUserId());
+        var imagesUrl = [];
+        _images.forEach((image) async {
+          final response = await Dio().post(
+            '${Openapi.basePath}/feeds/images',
+            data: FormData.fromMap(
+              {
+                'path': await MultipartFile.fromFile(image.path),
+              },
+            ),
+            options: Options(
+              headers: {'content-type': 'multipart/form-data'},
+            ),
+          );
+        });
         final createPost = FeedWrite(
           (feed) {
             feed
               ..user = AppData().getUserId()
-              ..description = 'Zain testing'
+              ..description = _textController.text
               ..commentsCount = 0
               ..tags = SetBuilder([])
               ..likesCount = 0;
@@ -148,24 +171,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
         print(createPost.description);
         final result =
             await Openapi().getFeedsApi().feedsCreate(data: createPost);
-        if (result.statusCode == 201) {
-          _images.forEach((image) async {
-            final uIntBytes = await image.readAsBytes();
-            print(uIntBytes.length);
-            await Dio().post(
-              '${Openapi.basePath}/feeds/images',
-              data: FormData.fromMap(
-                {
-                  'path': await MultipartFile.fromFile(image.path),
-                  'post': result.data.id,
-                },
-              ),
-              options: Options(
-                headers: {'content-type': 'multipart/form-data'},
-              ),
-            );
-          });
-        }
+        if (result.statusCode == 201) {}
         return result;
       },
       throwError: true,

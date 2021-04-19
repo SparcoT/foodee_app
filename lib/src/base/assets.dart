@@ -1,6 +1,7 @@
 abstract class AppAssets {
   static const _iconsDir = 'assets/icons';
-  // static const _imagesDir = 'assets/images';
+  static const _imagesDir = 'assets/images';
+
   // static const _fontDir = 'assets/fonts';
 
   static const favoriteEmpty = '$_iconsDir/favourite-empty.png';
@@ -16,4 +17,6 @@ abstract class AppAssets {
   static const doubleArrow = '$_iconsDir/arrow_up.png';
   static const chatLight = '$_iconsDir/chatLight.svg';
   static const chatDark = '$_iconsDir/chatDark.svg';
+
+  static const user = '$_imagesDir/user.png';
 }

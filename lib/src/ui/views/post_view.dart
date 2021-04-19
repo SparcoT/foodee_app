@@ -47,7 +47,6 @@ class PostView extends StatelessWidget {
                     return Hero(
                       tag: kPostTag,
                       child: PostWidget(
-                        url: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.thespruce.com%2Fportable-generator-dos-and-donts-1152600&psig=AOvVaw3Q81P_2t6uBxvC0myhKvvJ&ust=1617278070515000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCIiFvLm82u8CFQAAAAAdAAAAABAD",
                         feed: post.data.data.results[i],
                       ),
                     );
@@ -87,7 +86,7 @@ class PostView extends StatelessWidget {
         return Hero(
             tag: kPostTag,
             child: PostWidget(
-              url: imageModel[i].url,
+              // url: imageModel[i].url,
             ));
       }),
     );
