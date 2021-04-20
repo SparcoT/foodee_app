@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/data/data.dart';
 import 'package:foodee/src/ui/views/friends-chat_view.dart';
 import 'package:foodee/src/ui/views/post_view.dart';
 import 'package:foodee/src/ui/views/profile_view.dart';

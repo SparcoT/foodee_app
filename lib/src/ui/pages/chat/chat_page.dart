@@ -14,12 +14,14 @@ class ChatPage extends StatefulWidget {
   final IOWebSocketChannel socket;
   final List<ChatMessages> chatListModel;
   final String name;
+  final bool seenRequest;
 
   ChatPage({
     this.chatListModel,
     this.socket,
     this.chatId,
     this.name,
+    this.seenRequest,
   });
 
   @override
@@ -28,12 +30,22 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   StreamSubscription subscription;
-  TextEditingController controller = TextEditingController();
+  final controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _seenMessages();
     listenForNewMessages();
+  }
+
+  _seenMessages() async {
+    if (widget.seenRequest) {
+      await Openapi().getChatsApi().chatsSeenPartialUpdate(
+            chat: widget.chatId.toString(),
+            user: AppData().getUserId().toString(),
+          );
+    }
   }
 
   dispose() {

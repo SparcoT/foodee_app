@@ -90,12 +90,6 @@ class _FriendsChatViewState extends State<FriendsChatView> {
               ListTile(
                 onTap: () async {
                   try {
-                    if (_chatListDetails.countList.elementAt(i) != '0') {
-                      await Openapi().getChatsApi().chatsSeenPartialUpdate(
-                            chat: _chat.id.toString(),
-                            user: AppData().getUserId().toString(),
-                          );
-                    }
                     IOWebSocketChannel channel = IOWebSocketChannel.connect(
                         'ws://192.168.88.28:8000/ws/chat/${_chat.id}');
                     List<ChatMessages> messages = (await Openapi()
@@ -110,6 +104,8 @@ class _FriendsChatViewState extends State<FriendsChatView> {
                         socket: channel,
                         chatId: _chat.id,
                         name: _chatListDetails.namesList.elementAt(i),
+                        seenRequest:
+                            _chatListDetails.countList.elementAt(i) != '0',
                       ),
                     );
                     _fetchData();

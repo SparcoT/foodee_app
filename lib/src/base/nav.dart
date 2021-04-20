@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foodee/src/data/data.dart';
-import 'package:foodee/src/data/local_data.dart';
 import 'package:foodee/src/ui/pages/auth/sign-in_page.dart';
 import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:foodee/src/ui/pages/posts/create-post_page.dart';

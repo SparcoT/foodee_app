@@ -25,7 +25,6 @@ class _ProfileViewState extends State<ProfileView>
 
   PageController pageController;
   TabController _tabController;
-  OverlayEntry _overlayEntry;
 
   // final _scrollController = ScrollController();
   // final _layerLink = LayerLink();

@@ -20,11 +20,9 @@ class PostWidget extends StatelessWidget {
   });
 
   var _isFavourite = false;
-  BuildContext _context;
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
 //    final url =
     //       'https://images.pexels.com/photos/3236736/pexels-photo-3236736.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
     return SizedBox(

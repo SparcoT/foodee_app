@@ -5,7 +5,6 @@ import 'package:foodee/src/base/constants.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
 import 'package:openapi/openapi.dart';
-import 'package:openapi/src/model/inline_response2002.dart';
 
 class PostView extends StatelessWidget {
   Future _getData() async => await _fetchData();
@@ -61,39 +60,6 @@ class PostView extends StatelessWidget {
           ),
         ),
       ],
-    );
-    Scaffold(
-      appBar: AppBar(
-        bottom: PreferredSize(
-          child: Container(
-            child: ListTile(
-              title: Padding(
-                  padding: EdgeInsets.only(left: 7),
-                  child: ShaderText(
-                    shaderText: "Foodee",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  )),
-              trailing: IconButton(
-                icon: Icon(
-                  CupertinoIcons.bell,
-                  color: Colors.purple,
-                ),
-                onPressed: () {},
-              ),
-            ),
-          ),
-          preferredSize: Size.fromHeight(10.0),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
-      body: ListView.builder(itemBuilder: (context, i) {
-        return Hero(
-            tag: kPostTag,
-            child: PostWidget(
-                // url: imageModel[i].url,
-                ));
-      }),
     );
   }
 }
