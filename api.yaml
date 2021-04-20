@@ -115,6 +115,25 @@ paths:
         in: path
         required: true
         type: string
+  /chats/seen/{chat}/{user}:
+    patch:
+      operationId: chats_seen_partial_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: Request completed successfully
+      tags:
+        - chats
+    parameters:
+      - name: chat
+        in: path
+        required: true
+        type: string
+      - name: user
+        in: path
+        required: true
+        type: string
   /chats/{id}/messages:
     get:
       operationId: chats_messages_list

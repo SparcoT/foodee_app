@@ -90,14 +90,20 @@ class _FriendsChatViewState extends State<FriendsChatView> {
               ListTile(
                 onTap: () async {
                   try {
+                    if (_chatListDetails.countList.elementAt(i) != '0') {
+                      await Openapi().getChatsApi().chatsSeenPartialUpdate(
+                            chat: _chat.id.toString(),
+                            user: AppData().getUserId().toString(),
+                          );
+                    }
                     IOWebSocketChannel channel = IOWebSocketChannel.connect(
                         'ws://192.168.88.28:8000/ws/chat/${_chat.id}');
                     List<ChatMessages> messages = (await Openapi()
-                        .getChatsApi()
-                        .chatsGetMessagesRead(chat: _chat.id.toString()))
+                            .getChatsApi()
+                            .chatsGetMessagesRead(chat: _chat.id.toString()))
                         .data
                         .toList();
-                    AppNavigation.to(
+                    await AppNavigation.to(
                       context,
                       ChatPage(
                         chatListModel: messages,
@@ -106,6 +112,7 @@ class _FriendsChatViewState extends State<FriendsChatView> {
                         name: _chatListDetails.namesList.elementAt(i),
                       ),
                     );
+                    _fetchData();
                   } catch (e) {
                     print(e);
                   }
@@ -124,16 +131,16 @@ class _FriendsChatViewState extends State<FriendsChatView> {
                   children: [
                     _chatListDetails.countList.elementAt(i) != '0'
                         ? CircleAvatar(
-                      child: Text(
-                        _chatListDetails.countList.elementAt(i),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      radius: 11,
-                    )
+                            child: Text(
+                              _chatListDetails.countList.elementAt(i),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            radius: 11,
+                          )
                         : SizedBox(),
                     SizedBox(
                       height: 5,
