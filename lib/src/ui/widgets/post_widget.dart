@@ -88,7 +88,7 @@ class PostWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
                   image: NetworkImage(
-                    feed.images.first,
+                    'https://www.google.com/url?sa=i&url=https%3A%2F%2Ftimesofindia.indiatimes.com%2Ftopic%2Framzan&psig=AOvVaw3315KlPMVtJYN_MJxdf3f5&ust=1618884122414000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKD5_7qbifACFQAAAAAdAAAAABAD',
                   ),
                   fit: BoxFit.cover,
                 ),

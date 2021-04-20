@@ -34,20 +34,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
     );
   }
 
-  Widget textFieldContainer({String hint}) {
-    return Container(
-      child: TextField(
-        controller: _textController,
-        maxLines: null,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hint,
-          hintStyle: TextStyle(fontSize: 20),
-        ),
-      ),
-    );
-  }
-
   Widget postTitleContainer({String title}) {
     return Container(
       margin: EdgeInsets.only(left: 10),
@@ -94,6 +80,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
             children: [
               head(),
               TextFormField(
+                controller: _textController,
                 maxLines: null,
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -144,20 +131,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       context,
       () async {
         print(AppData().getUserId());
-        var imagesUrl = [];
-        _images.forEach((image) async {
-          final response = await Dio().post(
-            '${Openapi.basePath}/feeds/images',
-            data: FormData.fromMap(
-              {
-                'path': await MultipartFile.fromFile(image.path),
-              },
-            ),
-            options: Options(
-              headers: {'content-type': 'multipart/form-data'},
-            ),
-          );
-        });
+//        var imagesUrl = [];
         final createPost = FeedWrite(
           (feed) {
             feed
@@ -171,7 +145,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
         print(createPost.description);
         final result =
             await Openapi().getFeedsApi().feedsCreate(data: createPost);
-        if (result.statusCode == 201) {}
+        // if (result.statusCode == 201) {}
         return result;
       },
       throwError: true,
@@ -192,13 +166,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
       print(_result.statusCode);
       if (_result.statusCode == 201) {
         if (_images.isNotEmpty) {
-          await LazyTaskService.execute(
+          final imageRes = await LazyTaskService.execute<String>(
             context,
-            () async {},
+            () async {
+              _images.forEach((image) async {
+                print(_result.data.id);
+                final response = await Dio().post(
+                  '${Openapi.basePath}/feeds/images',
+                  data: FormData.fromMap(
+                    {
+                      'path': await MultipartFile.fromFile(image.path),
+                      'post': _result.data.id,
+                    },
+                  ),
+                  options: Options(
+                    headers: {'content-type': 'multipart/form-data'},
+                  ),
+                );
+                print(response.data);
+              });
+              return 'Success';
+            },
             throwError: true,
           ).catchError((e) {
             print(e);
           });
+          print(imageRes);
         }
       }
     }

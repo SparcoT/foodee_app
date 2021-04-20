@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/ui/pages/auth/changePassword.dart';
 
 class SettingPage extends StatefulWidget {
   @override

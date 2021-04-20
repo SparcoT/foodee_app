@@ -9,13 +9,18 @@ import 'package:foodee/src/data/data.dart';
 import 'package:openapi/openapi.dart';
 import 'package:web_socket_channel/io.dart';
 
-// ignore: must_be_immutable
 class ChatPage extends StatefulWidget {
-  int chatId;
+  final int chatId;
   final IOWebSocketChannel socket;
-  List<ChatMessages> chatListModel;
+  final List<ChatMessages> chatListModel;
+  final String name;
 
-  ChatPage({this.chatListModel, this.socket, this.chatId});
+  ChatPage({
+    this.chatListModel,
+    this.socket,
+    this.chatId,
+    this.name,
+  });
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -45,7 +50,7 @@ class _ChatPageState extends State<ChatPage> {
       widget.chatListModel.insert(0, ChatMessages((b) {
         b.data = data['message'].toString();
         b.sender = int.parse(data['sender'].toString());
-        // b.chat = widget.chatId;
+        b.chat = widget.chatId;
       }));
       setState(() {});
     });
@@ -76,7 +81,7 @@ class _ChatPageState extends State<ChatPage> {
               width: 8,
             ),
             Text(
-              "Name 1",
+              widget.name,
               style: TextStyle(color: Colors.white, fontSize: 18),
             )
           ],

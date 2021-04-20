@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foodee/src/base/nav.dart';
+import 'package:foodee/src/data/data.dart';
+import 'package:foodee/src/ui/pages/chat/chat_page.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
+import 'package:intl/intl.dart';
+import 'package:openapi/openapi.dart';
+import 'package:web_socket_channel/io.dart';
 
 class FriendsChatView extends StatefulWidget {
   @override
@@ -7,6 +13,22 @@ class FriendsChatView extends StatefulWidget {
 }
 
 class _FriendsChatViewState extends State<FriendsChatView> {
+  var _chatListDetails = ChatsDetailList();
+
+  _fetchData() async {
+    final result = await Openapi()
+        .getChatsApi()
+        .chatsGetDetailedChatsRead(user: AppData().getUserId().toString());
+    _chatListDetails = result.data;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,23 +53,24 @@ class _FriendsChatViewState extends State<FriendsChatView> {
             ),
             padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
             child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(60),
-                ),
-                child: Center(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search",
-                      hintStyle: TextStyle(color: Colors.black26),
-                      icon: Padding(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Icon(Icons.search, color: Colors.black26),
-                      ),
-                      border: InputBorder.none,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(60),
+              ),
+              child: Center(
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    hintStyle: TextStyle(color: Colors.black26),
+                    icon: Padding(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Icon(Icons.search, color: Colors.black26),
                     ),
+                    border: InputBorder.none,
                   ),
-                )),
+                ),
+              ),
+            ),
           ),
         ),
         shape: RoundedRectangleBorder(
@@ -57,244 +80,83 @@ class _FriendsChatViewState extends State<FriendsChatView> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: ListView.separated(
-        separatorBuilder: (BuildContext context, int index) {
-          return Divider(
-            height: 0,
-          );
-        },
-        itemCount: chatListModel.length,
+      body: ListView.builder(
+        padding: EdgeInsets.only(top: 10),
+        itemCount: _chatListDetails?.chats?.length ?? 0,
         itemBuilder: (context, i) {
-          return chatListModel.isEmpty
-              ? Center(
-                  child: Text("NO Data"),
-                )
-              : Dismissible(
-                  background: Container(
-                      padding: EdgeInsets.only(right: 20),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                          size: 35,
-                        ),
+          final _chat = _chatListDetails.chats.elementAt(i);
+          return Column(
+            children: [
+              ListTile(
+                onTap: () async {
+                  try {
+                    IOWebSocketChannel channel = IOWebSocketChannel.connect(
+                        'ws://192.168.88.28:8000/ws/chat/${_chat.id}');
+                    List<ChatMessages> messages = (await Openapi()
+                        .getChatsApi()
+                        .chatsGetMessagesRead(chat: _chat.id.toString()))
+                        .data
+                        .toList();
+                    AppNavigation.to(
+                      context,
+                      ChatPage(
+                        chatListModel: messages,
+                        socket: channel,
+                        chatId: _chat.id,
+                        name: _chatListDetails.namesList.elementAt(i),
                       ),
-                      color: Colors.red),
-                  onDismissed: (direction) {
-                    setState(() {
-                      chatListModel.removeAt(i);
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("${chatListModel[i].name} is Deleted")));
-                  },
-                  key: UniqueKey(),
-                  child: ListTile(
-                    onTap: () {
-                      // AppNavigation.to(context, ChatPage());
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) => ChatPage(
-                      //       chatListModel: chatListModel[i],
-                      //     )));
-                    },
-                    leading: CircleAvatar(
-                      child: Text(chatListModel[i].name[0]),
-                    ),
-                    title: Text(chatListModel[i].name),
-                    subtitle: Text(
-                      chatListModel[i].message,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        chatListModel[i].unReadMessage.isNotEmpty
-                            ? CircleAvatar(
-                                child: Text(
-                                  chatListModel[i].unReadMessage,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 11),
-                                  textAlign: TextAlign.center,
-                                ),
-                                radius: 11,
-                              )
-                            : SizedBox(),
-                        SizedBox(
-                          height: 5,
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+                leading: CircleAvatar(
+                  child: Text(_chatListDetails.namesList.elementAt(i)[0]),
+                ),
+                title: Text(_chatListDetails.namesList.elementAt(i)),
+                subtitle: Text(
+                  _chatListDetails.messageList.elementAt(i),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _chatListDetails.countList.elementAt(i) != '0'
+                        ? CircleAvatar(
+                      child: Text(
+                        _chatListDetails.countList.elementAt(i),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
                         ),
-                        Text(
-                          "${chatListModel[i].dateTime.hour.toString()}:${chatListModel[i].dateTime.minute.toString()} pm  ",
-                          style: TextStyle(color: Colors.blueGrey),
-                        ),
-                      ],
+                        textAlign: TextAlign.center,
+                      ),
+                      radius: 11,
+                    )
+                        : SizedBox(),
+                    SizedBox(
+                      height: 5,
                     ),
-                  ),
-                );
+                    Text(
+                      _formatDate(_chatListDetails.updatedDate.elementAt(i)),
+                      style: TextStyle(color: Colors.blueGrey),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 0,
+              )
+            ],
+          );
         },
       ),
     );
   }
+
+  String _formatDate(String date) {
+    final _date = DateTime.parse(date);
+    return DateFormat('MMMMEEEEd').format(_date);
+  }
 }
-
-class ChatListModel {
-  String name;
-  String message;
-  DateTime dateTime;
-  String unReadMessage;
-
-  ChatListModel({this.dateTime, this.name, this.message, this.unReadMessage});
-}
-
-List<ChatListModel> chatListModel = [
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "2"),
-  ChatListModel(
-      name: "Ali",
-      message:
-          "j askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "22"),
-  ChatListModel(
-      name: "Ahmad",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "9"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: ""),
-  ChatListModel(
-      name: "Qasim",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "26"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "2"),
-  ChatListModel(
-      name: "Ali",
-      message:
-          "j askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "22"),
-  ChatListModel(
-      name: "Ahmad",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "9"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: ""),
-  ChatListModel(
-      name: "Qasim",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "26"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "2"),
-  ChatListModel(
-      name: "Ali",
-      message:
-          "j askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "22"),
-  ChatListModel(
-      name: "Ahmad",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "9"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: ""),
-  ChatListModel(
-      name: "Qasim",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "26"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "2"),
-  ChatListModel(
-      name: "Ali",
-      message:
-          "j askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "22"),
-  ChatListModel(
-      name: "Ahmad",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "9"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: ""),
-  ChatListModel(
-      name: "Qasim",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "26"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "2"),
-  ChatListModel(
-      name: "Ali",
-      message:
-          "j askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "122"),
-  ChatListModel(
-      name: "Ahmad",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "9"),
-  ChatListModel(
-      name: "Usman",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: ""),
-  ChatListModel(
-      name: "Qasim",
-      message:
-          "fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk,fasfa kj askj dkas dkj asdk sakj dkjas dkj askjd sakjd skja dkjsa dk",
-      dateTime: DateTime.now(),
-      unReadMessage: "26"),
-];

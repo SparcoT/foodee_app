@@ -15,6 +15,7 @@ void main() {
     ],
     runInShell: true,
   );
+  print(firstCommand.stderr);
   print(firstCommand.stdout);
   final secondResult = Process.runSync(
     'flutter',
@@ -25,6 +26,7 @@ void main() {
     workingDirectory: 'api',
     runInShell: true,
   );
+  print(secondResult.stderr);
   print(secondResult.stdout);
   final thirdResult = Process.runSync(
     'flutter',
@@ -37,5 +39,6 @@ void main() {
     workingDirectory: 'api',
     runInShell: true,
   );
+  print(thirdResult.stderr);
   print(thirdResult.stdout);
 }

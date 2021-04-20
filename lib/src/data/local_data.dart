@@ -27,7 +27,7 @@ mixin LocalData {
   String getEmail() => _sharedPreferences.getString(_email) ?? '';
 
   Future<void> setImage(String image) async =>
-      await _sharedPreferences.setString(_image, image);
+      await _sharedPreferences.setString(_image, image ?? '');
 
   String getImage() => _sharedPreferences.getString(_image) ?? '';
 

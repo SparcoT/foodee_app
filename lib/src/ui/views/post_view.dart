@@ -2,13 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
-import 'package:foodee/src/ui/pages/image-models.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
 import 'package:openapi/openapi.dart';
 import 'package:openapi/src/model/inline_response2002.dart';
 
 class PostView extends StatelessWidget {
+  Future _getData() async => await _fetchData();
+
+  Future<Response<InlineResponse2002>> _fetchData() async =>
+      Openapi().getFeedsApi().feedsList(limit: 10);
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -31,28 +35,29 @@ class PostView extends StatelessWidget {
           ],
         ),
         SliverFillRemaining(
-          child: FutureBuilder(
-            future: Openapi().getFeedsApi().feedsList(
-                  limit: 10,
-                ),
-            builder: (ctx, AsyncSnapshot<Response<InlineResponse2002>> post) {
-              if (post.data == null)
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              else
-                return ListView.builder(
-                  itemCount: post.data.data.results.length,
-                  itemBuilder: (context, i) {
-                    return Hero(
-                      tag: kPostTag,
-                      child: PostWidget(
-                        feed: post.data.data.results[i],
-                      ),
-                    );
-                  },
-                );
-            },
+          child: RefreshIndicator(
+            onRefresh: _getData,
+            child: FutureBuilder(
+              future: _fetchData(),
+              builder: (ctx, AsyncSnapshot<Response<InlineResponse2002>> post) {
+                if (post.data == null)
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                else
+                  return ListView.builder(
+                    itemCount: post.data.data.results.length,
+                    itemBuilder: (context, i) {
+                      return Hero(
+                        tag: kPostTag,
+                        child: PostWidget(
+                          feed: post.data.data.results[i],
+                        ),
+                      );
+                    },
+                  );
+              },
+            ),
           ),
         ),
       ],
@@ -86,8 +91,8 @@ class PostView extends StatelessWidget {
         return Hero(
             tag: kPostTag,
             child: PostWidget(
-              // url: imageModel[i].url,
-            ));
+                // url: imageModel[i].url,
+                ));
       }),
     );
   }

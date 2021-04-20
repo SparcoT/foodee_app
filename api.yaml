@@ -1142,6 +1142,7 @@ definitions:
       - message_list
       - updated_date
       - count_list
+      - names_list
       - chats
     type: object
     properties:
@@ -1156,6 +1157,11 @@ definitions:
           type: string
           x-nullable: true
       count_list:
+        type: array
+        items:
+          type: string
+          x-nullable: true
+      names_list:
         type: array
         items:
           type: string
