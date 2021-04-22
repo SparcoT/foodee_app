@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 import 'mixins/notifications_service_mixin.dart';
 
-class AppServices with NotificationsServiceMixin
-{
+class AppServices with NotificationsServiceMixin {
   static BuildContext _context;
+
   static BuildContext get context {
     if (_context == null) print('[AppServices] is not yet bound to UI');
     return _context;
@@ -28,7 +28,7 @@ class AppServices with NotificationsServiceMixin
       return;
     }
 
-  //  await Firebase.initializeApp();
+    //  await Firebase.initializeApp();
     NotificationsServiceMixin.initialize();
 
     _initialized = true;

@@ -59,7 +59,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Text(
                       "let's choose your match",
                       style: TextStyle(
-                        fontFamily: "QuickSand",
+                        fontFamily: 'QuickSand',
                         fontWeight: FontWeight.bold,
                       ),
                     ),

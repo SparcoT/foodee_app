@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:foodee/src/data/data.dart';
 import 'package:foodee/src/ui/pages/auth/sign-in_page.dart';
 import 'package:foodee/src/ui/pages/home_page.dart';
+import 'package:foodee/src/ui/pages/notifications-page.dart';
 import 'package:foodee/src/ui/pages/posts/create-post_page.dart';
 
 class AppPage {
@@ -13,6 +14,7 @@ class AppPage {
   static const signIn = AppPage._('/sign-in');
   static const signUp = AppPage._('/sign-up');
   static const createPost = AppPage._('/create-post');
+  static const notificationPage = AppPage._('/notification-page');
 }
 
 abstract class AppNavigation {
@@ -47,6 +49,7 @@ abstract class AppNavigation {
     //AppData.auth.isAuthenticated ? Container() : Transaction(),
 
     AppPage.createPost._name: (context) => CreatePostPage(),
+    AppPage.notificationPage._name: (context) => NotificationsPage(),
     // SignInPage()
   };
 }

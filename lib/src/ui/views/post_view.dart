@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
+import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
 import 'package:openapi/openapi.dart';
@@ -29,8 +30,9 @@ class PostView extends StatelessWidget {
                 CupertinoIcons.bell,
                 color: Colors.purple,
               ),
-              onPressed: () {},
-            )
+              onPressed: () =>
+                  AppNavigation.toPage(context, AppPage.notificationPage),
+            ),
           ],
         ),
         SliverFillRemaining(
