@@ -42,8 +42,9 @@ abstract class AppNavigation {
       .popUntil((route) => route.settings.name == AppPage.home._name);
 
   static final routes = <String, WidgetBuilder>{
-    AppPage.home._name: (context) =>
-        AppData().hasData() ? HomePage() : SignInPage(),
+    AppPage.home._name: (context) => SignInPage(),
+    // AppPage.home._name: (context) =>
+    //     AppData().hasData() ? HomePage() : SignInPage(),
     // AppPage.home._name: (context) =>
     //     AppData.auth.isAuthenticated ? Container() : SignInPage(),
     //AppData.auth.isAuthenticated ? Container() : Transaction(),

@@ -4,9 +4,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/app.dart';
 import 'package:foodee/src/base/keys.dart';
+import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/services/lazy-task_service.dart';
 import 'package:foodee/src/ui/modals/information_dialog.dart';
+import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:foodee/src/ui/views/localized_view.dart';
 import 'package:foodee/src/ui/widgets/text_field.dart';
 import 'package:foodee/src/utils/validators.dart';
@@ -119,7 +121,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: _signUp,
+                      onPressed: () => AppNavigation.to(context, HomePage()),
+                      // onPressed: _signUp,
                       child: Text(lang.signUpNow.toUpperCase()),
                       style: AppTheme.primaryButtonTheme,
                     ),

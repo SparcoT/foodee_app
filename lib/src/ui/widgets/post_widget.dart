@@ -26,7 +26,8 @@ class PostWidget extends StatelessWidget {
 //    final url =
     //       'https://images.pexels.com/photos/3236736/pexels-photo-3236736.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
     return SizedBox(
-      height: feed?.images?.isNotEmpty ?? false ? 369 : 130,
+      height: 329,
+      // height: feed?.images?.isNotEmpty ?? false ? 369 : 130,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,7 +42,7 @@ class PostWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(80),
                   image: DecorationImage(
-                    image: feed.user?.image?.isNotEmpty ?? false
+                    image: feed?.user?.image?.isNotEmpty ?? false
                         ? NetworkImage(
                             feed.user.image,
                           )
@@ -53,7 +54,8 @@ class PostWidget extends StatelessWidget {
               title: Padding(
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
-                  feed.user.firstName,
+                  // 'Name',
+                  feed?.user?.firstName ?? 'Name',
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'MazzardHBold',
@@ -77,21 +79,21 @@ class PostWidget extends StatelessWidget {
               ),
             ),
           ),
-          if (feed?.images?.isNotEmpty ?? false)
-            Container(
-              height: 200,
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15.0),
-                image: DecorationImage(
-                  image: NetworkImage(
-                    'https://www.google.com/url?sa=i&url=https%3A%2F%2Ftimesofindia.indiatimes.com%2Ftopic%2Framzan&psig=AOvVaw3315KlPMVtJYN_MJxdf3f5&ust=1618884122414000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKD5_7qbifACFQAAAAAdAAAAABAD',
-                  ),
-                  fit: BoxFit.cover,
+          // if (feed?.images?.isNotEmpty ?? false)
+          Container(
+            height: 200,
+            margin: EdgeInsets.symmetric(horizontal: 20.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15.0),
+              image: DecorationImage(
+                image: NetworkImage(
+                  'https://images.unsplash.com/photo-1619023634328-d429c22a4957?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
                 ),
+                fit: BoxFit.cover,
               ),
             ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(30, 5, 5, 5),
             child: Row(
