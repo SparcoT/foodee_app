@@ -322,7 +322,7 @@ class _ProfileViewState extends State<ProfileView>
 
       controller: _tabController,
       children: [
-PostView(),
+        PersonPostsView(),
         SettingPage(),
         EditProfile(),
         EditProfile(),
@@ -347,6 +347,39 @@ PostView(),
               index == currentIndex ? AppTheme.primaryColor : Colors.grey,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+    );
+  }
+}
+
+class PersonPostsView extends StatefulWidget {
+  @override
+  _PersonPostsViewState createState() => _PersonPostsViewState();
+}
+
+class _PersonPostsViewState extends State<PersonPostsView> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, i) {
+        var u = FeedUserBuilder();
+        u..firstName = 'Clark';
+        u..lastName='Last';
+        u..image='https://images.unsplash.com/photo-1586923109404-7bd976ed3e52?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80';
+        return Hero(
+          tag: kPostTag,
+          child: PostWidget(
+            feed: Feed((b) {
+              b..description = 'Get out there and live a little';
+              b..id = 1;
+              b..user = u;
+              b..likesCount = 1;
+              b..commentsCount = 2;
+              // b..images=[];
+            }),
+          ),
+        );
+      },
     );
   }
 }
