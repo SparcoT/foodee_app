@@ -12,29 +12,32 @@ class PostView extends StatelessWidget {
   //
   // Future<Response<InlineResponse2002>> _fetchData() async =>
   //     Openapi().getFeedsApi().feedsList(limit: 10);
-
+Widget widget;
+PostView({this.widget});
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverAppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          title: ShaderText(
-            shaderText: "Foodee",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                CupertinoIcons.bell,
-                color: Colors.purple,
-              ),
-              onPressed: () =>
-                  AppNavigation.toPage(context, AppPage.notificationPage),
+
+           SliverAppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            title: ShaderText(
+              shaderText: "Foodee",
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
-          ],
-        ),
+            actions: [
+              IconButton(
+                icon: Icon(
+                  CupertinoIcons.bell,
+                  color: Colors.purple,
+                ),
+                onPressed: () =>
+                    AppNavigation.toPage(context, AppPage.notificationPage),
+              ),
+            ],
+          ),
+
         SliverFillRemaining(
           child: ListView.builder(
             itemCount: 10,

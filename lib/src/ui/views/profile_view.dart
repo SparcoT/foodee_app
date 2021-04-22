@@ -11,6 +11,7 @@ import 'package:foodee/src/ui/modals/information_dialog.dart';
 import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
 import 'package:foodee/src/ui/pages/image-models.dart';
 import 'package:foodee/src/ui/pages/posts/post-detail_page.dart';
+import 'package:foodee/src/ui/views/post_view.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 import 'package:openapi/openapi.dart';
 
@@ -26,55 +27,17 @@ class _ProfileViewState extends State<ProfileView>
   PageController pageController;
   TabController _tabController;
 
-  // final _scrollController = ScrollController();
-  // final _layerLink = LayerLink();
-  // final _overlayWidget = SizedBox(
-  //   width: 80,
-  //   height: 80,
-  //   child: CircleAvatar(
-  //     backgroundImage: NetworkImage(
-  //       'https://static.toiimg.com/photo/msid-71581763/71581763.jpg?259859',
-  //     ),
-  //   ),
-  // );
-
   @override
   void initState() {
     super.initState();
     pageController = PageController(initialPage: 0);
     _tabController = TabController(length: 4, vsync: this);
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   _scrollController.addListener(() {
-    //     this._overlayEntry = _createOverlayEntry();
-    //     Overlay.of(context).insert(_overlayEntry);
-    // });
-    // });
   }
-
-  // OverlayEntry _createOverlayEntry() {
-  //   RenderBox renderBox = context.findRenderObject();
-  //   // var size = renderBox.size;
-  //   return OverlayEntry(
-  //     builder: (ctx) {
-  //       return Positioned(
-  //         child: CompositedTransformFollower(
-  //           link: _layerLink,
-  //           showWhenUnlinked: false,
-  //           offset: Offset(0.0, 0.0 + 5.0),
-  //           // link: this._,
-  //           child: _overlayWidget,
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   @override
   void dispose() {
     super.dispose();
     _tabController.dispose();
-    // _scrollController.dispose();
-    // this._overlayEntry.remove();
   }
 
   @override
@@ -90,19 +53,19 @@ class _ProfileViewState extends State<ProfileView>
             expandedHeight: 230,
             title: Row(children: [
               Spacer(),
-              Container(
-                width: 45,
-                height: 45,
-                clipBehavior: Clip.hardEdge,
-                child: BackdropFilter(
-                  child: Icon(Icons.settings),
-                  filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.black54, width: 2),
-                ),
-              ),
+              // Container(
+              //   width: 45,
+              //   height: 45,
+              //   clipBehavior: Clip.hardEdge,
+              //   child: BackdropFilter(
+              //     child: Icon(Icons.settings),
+              //     filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              //   ),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(10),
+              //     border: Border.all(color: Colors.black54, width: 2),
+              //   ),
+              // ),
             ]),
             flexibleSpace: FlexibleSpaceBar(
               stretchModes: [
@@ -157,14 +120,7 @@ class _ProfileViewState extends State<ProfileView>
           ),
           // child:
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(15, 25, 15, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [],
-          ),
-        )
-      ],
+             ],
     );
   }
 
@@ -270,11 +226,12 @@ class _ProfileViewState extends State<ProfileView>
               setState(() {
                 currentIndex = 0;
               });
-              pageController.animateToPage(
-                0,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.bounceIn,
-              );
+         _tabController.animateTo(0);
+              // pageController.animateToPage(
+              //   0,
+              //   duration: Duration(milliseconds: 200),
+              //   curve: Curves.bounceIn,
+              // );
             },
           ),
           textButton(
@@ -284,11 +241,12 @@ class _ProfileViewState extends State<ProfileView>
               setState(() {
                 currentIndex = 1;
               });
-              pageController.animateToPage(
-                1,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.bounceIn,
-              );
+              _tabController.animateTo(1);
+              // _tabController.animateToPage(
+              //   1,
+              //   duration: Duration(milliseconds: 200),
+              //   curve: Curves.bounceIn,
+              // );
             },
           ),
           textButton(
@@ -298,15 +256,17 @@ class _ProfileViewState extends State<ProfileView>
               setState(() {
                 currentIndex = 2;
               });
-              pageController.animateToPage(
-                2,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.bounceIn,
-              );
+              _tabController.animateTo(2);
+              // pageController.animateToPage(
+              //
+              //   2,
+              //   duration: Duration(milliseconds: 200),
+              //   curve: Curves.bounceIn,
+              // );
             },
           ),
           textButton(
-            index: 2,
+            index: 3,
             icon: Icons.exit_to_app,
             onPressed: () async {
               final _result =
@@ -358,31 +318,13 @@ class _ProfileViewState extends State<ProfileView>
   }
 
   Widget pageViews() {
-    return PageView(
-      controller: pageController,
-      ///controller: _tabController,
+    return TabBarView(
+
+      controller: _tabController,
       children: [
-        ListView.builder(
-          itemBuilder: (ctx, index) {
-            return Hero(
-              tag: kPostTag,
-              child: PostWidget(
-                // url: imageModel[index].url,
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (builder) => PostDetailPage(
-                        url: imageModel[index].url,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-          itemCount: imageModel.length,
-        ),
+PostView(),
         SettingPage(),
+        EditProfile(),
         EditProfile(),
         // NotificationsPage(),
       ],

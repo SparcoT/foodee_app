@@ -1,72 +1,16 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foodee/src/base/assets.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/data/data.dart';
-import 'package:openapi/openapi.dart';
-import 'package:web_socket_channel/io.dart';
 
 class ChatPage extends StatefulWidget {
-  final int chatId;
-  final IOWebSocketChannel socket;
-  final List<ChatMessages> chatListModel;
-  final String name;
-  final bool seenRequest;
-
-  ChatPage({
-    this.chatListModel,
-    this.socket,
-    this.chatId,
-    this.name,
-    this.seenRequest,
-  });
-
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  StreamSubscription subscription;
-  final controller = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _seenMessages();
-    listenForNewMessages();
-  }
-
-  _seenMessages() async {
-    if (widget.seenRequest) {
-      await Openapi().getChatsApi().chatsSeenPartialUpdate(
-            chat: widget.chatId.toString(),
-            user: AppData().getUserId().toString(),
-          );
-    }
-  }
-
-  dispose() {
-    super.dispose();
-    subscription.cancel();
-  }
-
-  listenForNewMessages() {
-    subscription = widget.socket.stream.listen((event) {
-      print("printing both");
-      var data = json.decode(event);
-      print('decode json');
-      print(data);
-      widget.chatListModel.insert(0, ChatMessages((b) {
-        b.data = data['message'].toString();
-        b.sender = int.parse(data['sender'].toString());
-        b.chat = widget.chatId;
-      }));
-      setState(() {});
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +37,7 @@ class _ChatPageState extends State<ChatPage> {
               width: 8,
             ),
             Text(
-              widget.name,
+              "Osama Sandhu",
               style: TextStyle(color: Colors.white, fontSize: 18),
             )
           ],
@@ -107,37 +51,36 @@ class _ChatPageState extends State<ChatPage> {
         clipper: ClipperCustom(MediaQuery.of(context).padding.top, 40),
         child: Container(
           child: ListView.builder(
-            itemCount: widget.chatListModel.length,
+            itemCount: 30,
             reverse: true,
             itemBuilder: (context, i) {
-              ChatMessages msg = widget.chatListModel[i];
-              return msg.sender == AppData().getUserId()
+              return i%2==0
                   ? container(
-                      message: msg.data,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      bottomRight: 0,
-                      bottomLeft: 20,
-                      alignment: Alignment.topRight,
-                      icon: true,
-                      leftPadding: 70,
-                      rightPadding: 15,
-                      color: AppTheme.primaryColor.withOpacity(0.8),
-                      boxAlignment: CrossAxisAlignment.end,
-                    )
+                message: "How are you?",
+                mainAxisAlignment: MainAxisAlignment.end,
+                bottomRight: 0,
+                bottomLeft: 20,
+                alignment: Alignment.topRight,
+                icon: true,
+                leftPadding: 70,
+                rightPadding: 15,
+                color: AppTheme.primaryColor.withOpacity(0.8),
+                boxAlignment: CrossAxisAlignment.end,
+              )
                   : container(
-                      message: msg.data,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      bottomRight: 20,
-                      bottomLeft: 0,
-                      alignment: Alignment.topLeft,
-                      icon: false,
-                      leftPadding: 15,
-                      rightPadding: 70,
-                      color: Color(0xffe9ebe6),
-                      //    Color(0xfff3f4f0),
-                      textColor: Colors.black,
-                      boxAlignment: CrossAxisAlignment.start,
-                    );
+                message:" I'm good",
+                mainAxisAlignment: MainAxisAlignment.start,
+                bottomRight: 20,
+                bottomLeft: 0,
+                alignment: Alignment.topLeft,
+                icon: false,
+                leftPadding: 15,
+                rightPadding: 70,
+                color: Color(0xffe9ebe6),
+                //    Color(0xfff3f4f0),
+                textColor: Colors.black,
+                boxAlignment: CrossAxisAlignment.start,
+              );
             },
             padding: EdgeInsets.fromLTRB(0, 85, 0, 55),
           ),
@@ -155,7 +98,7 @@ class _ChatPageState extends State<ChatPage> {
               child: SizedBox(
                 height: 40,
                 child: TextFormField(
-                  controller: controller,
+                 // controller: controller,
                   decoration: InputDecoration(
                     hintText: 'Type here something...',
                     hintStyle: TextStyle(
@@ -176,13 +119,13 @@ class _ChatPageState extends State<ChatPage> {
               width: 40,
               height: 40,
               child: TextButton(
-                onPressed: () {
-                  String test =
-                      '{"message": "${controller.text}", "sender": ${AppData().getUserId()}, "chat": ${widget.chatId}}';
-                  print(json.decode(test));
-                  widget.socket.sink.add(test);
-                  controller.clear();
-                },
+                // onPressed: () {
+                //   String test =
+                //       '{"message": "${controller.text}", "sender": ${AppData().getUserId()}, "chat": ${widget.chatId}}';
+                //   print(json.decode(test));
+                //   widget.socket.sink.add(test);
+                //   controller.clear();
+                // },
                 child: SvgPicture.asset(
                   AppAssets.send,
                   color: Colors.white,
@@ -204,6 +147,217 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
+
+//
+//
+//   import 'dart:async';
+// import 'dart:convert';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_svg/svg.dart';
+// import 'package:foodee/src/base/assets.dart';
+// import 'package:foodee/src/base/theme.dart';
+// import 'package:foodee/src/data/data.dart';
+// import 'package:openapi/openapi.dart';
+// import 'package:web_socket_channel/io.dart';
+//
+// class ChatPage extends StatefulWidget {
+//   final int chatId;
+//   final IOWebSocketChannel socket;
+//   final List<ChatMessages> chatListModel;
+//   final String name;
+//   final bool seenRequest;
+//
+//   ChatPage({
+//     this.chatListModel,
+//     this.socket,
+//     this.chatId,
+//     this.name,
+//     this.seenRequest,
+//   });
+//
+//   @override
+//   _ChatPageState createState() => _ChatPageState();
+// }
+//
+// class _ChatPageState extends State<ChatPage> {
+//   StreamSubscription subscription;
+//   final controller = TextEditingController();
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _seenMessages();
+//     listenForNewMessages();
+//   }
+//
+//   _seenMessages() async {
+//     if (widget.seenRequest) {
+//       await Openapi().getChatsApi().chatsSeenPartialUpdate(
+//             chat: widget.chatId.toString(),
+//             user: AppData().getUserId().toString(),
+//           );
+//     }
+//   }
+//
+//   dispose() {
+//     super.dispose();
+//     subscription.cancel();
+//   }
+//
+//   listenForNewMessages() {
+//     subscription = widget.socket.stream.listen((event) {
+//       print("printing both");
+//       var data = json.decode(event);
+//       print('decode json');
+//       print(data);
+//       widget.chatListModel.insert(0, ChatMessages((b) {
+//         b.data = data['message'].toString();
+//         b.sender = int.parse(data['sender'].toString());
+//         b.chat = widget.chatId;
+//       }));
+//       setState(() {});
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: AppTheme.primaryColor,
+//       extendBodyBehindAppBar: true,
+//       appBar: AppBar(
+//         automaticallyImplyLeading: false,
+//         titleSpacing: 5,
+//         actions: [
+//           Padding(
+//             padding: const EdgeInsets.only(right: 10),
+//             child: popMenuButton(),
+//           )
+//         ],
+//         title: Row(
+//           children: [
+//             IconButton(
+//               icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+//               onPressed: () => Navigator.of(context).pop(),
+//             ),
+//             CircleAvatar(radius: 16, backgroundColor: Colors.white),
+//             SizedBox(
+//               width: 8,
+//             ),
+//             Text(
+//               widget.name,
+//               style: TextStyle(color: Colors.white, fontSize: 18),
+//             )
+//           ],
+//         ),
+//         elevation: 0,
+//         backgroundColor: AppTheme.primaryColor,
+//         shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(35))),
+//       ),
+//       body: ClipPath(
+//         clipper: ClipperCustom(MediaQuery.of(context).padding.top, 40),
+//         child: Container(
+//           child: ListView.builder(
+//             itemCount: widget.chatListModel.length,
+//             reverse: true,
+//             itemBuilder: (context, i) {
+//               ChatMessages msg = widget.chatListModel[i];
+//               return msg.sender == AppData().getUserId()
+//                   ? container(
+//                       message: msg.data,
+//                       mainAxisAlignment: MainAxisAlignment.end,
+//                       bottomRight: 0,
+//                       bottomLeft: 20,
+//                       alignment: Alignment.topRight,
+//                       icon: true,
+//                       leftPadding: 70,
+//                       rightPadding: 15,
+//                       color: AppTheme.primaryColor.withOpacity(0.8),
+//                       boxAlignment: CrossAxisAlignment.end,
+//                     )
+//                   : container(
+//                       message: msg.data,
+//                       mainAxisAlignment: MainAxisAlignment.start,
+//                       bottomRight: 20,
+//                       bottomLeft: 0,
+//                       alignment: Alignment.topLeft,
+//                       icon: false,
+//                       leftPadding: 15,
+//                       rightPadding: 70,
+//                       color: Color(0xffe9ebe6),
+//                       //    Color(0xfff3f4f0),
+//                       textColor: Colors.black,
+//                       boxAlignment: CrossAxisAlignment.start,
+//                     );
+//             },
+//             padding: EdgeInsets.fromLTRB(0, 85, 0, 55),
+//           ),
+//           width: MediaQuery.of(context).size.width,
+//           height: MediaQuery.of(context).size.height,
+//           color: Colors.white,
+//         ),
+//       ),
+//       bottomSheet: Container(
+//         color: Colors.white,
+//         padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+//         child: Row(
+//           children: [
+//             Expanded(
+//               child: SizedBox(
+//                 height: 40,
+//                 child: TextFormField(
+//                   controller: controller,
+//                   decoration: InputDecoration(
+//                     hintText: 'Type here something...',
+//                     hintStyle: TextStyle(
+//                       fontSize: 13,
+//                     ),
+//                     contentPadding: EdgeInsets.symmetric(horizontal: 20),
+//                     border: OutlineInputBorder(
+//                       borderRadius: BorderRadius.all(
+//                         Radius.circular(25.0),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(width: 15),
+//             SizedBox(
+//               width: 40,
+//               height: 40,
+//               child: TextButton(
+//                 onPressed: () {
+//                   String test =
+//                       '{"message": "${controller.text}", "sender": ${AppData().getUserId()}, "chat": ${widget.chatId}}';
+//                   print(json.decode(test));
+//                   widget.socket.sink.add(test);
+//                   controller.clear();
+//                 },
+//                 child: SvgPicture.asset(
+//                   AppAssets.send,
+//                   color: Colors.white,
+//                   width: 23,
+//                 ),
+//                 // child: Icon(
+//                 //   CupertinoIcons.search,
+//                 //   color: Colors.white,
+//                 // ),
+//                 style: TextButton.styleFrom(
+//                   shape: CircleBorder(),
+//                   padding: EdgeInsets.zero,
+//                   backgroundColor: AppTheme.primaryColor,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+
 
   Widget popMenuButton() {
     return PopupMenuButton(

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/data/data.dart';
 import 'package:foodee/src/ui/pages/chat/chat_page.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
@@ -66,66 +67,76 @@ class _NearByState extends State<NearBy> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: FutureBuilder(
-        future: Openapi().getUsersApi().usersList(),
-        builder: (context, AsyncSnapshot<Response<InlineResponse2003>> users) =>
-            ListView.builder(
-          padding: EdgeInsets.only(top: 10),
-          itemCount: users.data?.data?.results?.length ?? 0,
-          itemBuilder: (context, i) {
-            User user = users.data?.data?.results?.elementAt(i);
-            return user.id != AppData().getUserId()
-                ? Column(
-                    children: [
-                      ListTile(
-                        onTap: () async {
-                          int chatId = (await Openapi()
-                                  .getChatsApi()
-                                  .chatsCreate(data: Chats((builder) {
-                            builder..user1 = AppData().getUserId();
-                            builder..user2 = user.id;
-                          })))
-                              .data
-                              .id;
-                          try {
-                            IOWebSocketChannel channel =
-                                IOWebSocketChannel.connect(
-                                    'ws://192.168.88.28:8000/ws/chat/$chatId');
-                            List<ChatMessages> messages = (await Openapi()
-                                    .getChatsApi()
-                                    .chatsGetMessagesRead(
-                                        chat: chatId.toString()))
-                                .data
-                                .toList();
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ChatPage(
-                                  chatListModel: messages,
-                                  socket: channel,
-                                  chatId: chatId,
-                                  name: user.firstName,
-                                ),
-                              ),
-                            );
-                          } catch (e) {
-                            print(e);
-                          }
-                          // channel.sink.add({"message":"Hello how are you?", "sender":"${AppData().getUserId()}", "chat": '19'});
-                        },
-                        title: ShaderText(
-                          shaderText: user.firstName,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Divider(
-                        height: 0,
-                      )
-                    ],
-                  )
-                : SizedBox();
-          },
-        ),
-      ),
+      body:  ListView.builder(itemBuilder: (context,i){
+        return ListTile(   leading: CircleAvatar(
+          backgroundColor: i % 2 == 0
+              ? AppTheme.secondaryColor
+              : AppTheme.primaryColor,
+          child: Text("O",style: TextStyle(color: Colors.white),),              ),
+          title: Text("Osama Sandhu"),);
+      },
+          //separatorBuilder: (c,i){return SizedBox(height: 10,);},
+          itemCount: 50)
+      // FutureBuilder(
+      //   future: Openapi().getUsersApi().usersList(),
+      //   builder: (context, AsyncSnapshot<Response<InlineResponse2003>> users) =>
+      //       ListView.builder(
+      //     padding: EdgeInsets.only(top: 10),
+      //     itemCount: users.data?.data?.results?.length ?? 0,
+      //     itemBuilder: (context, i) {
+      //       User user = users.data?.data?.results?.elementAt(i);
+      //       return user.id != AppData().getUserId()
+      //           ? Column(
+      //               children: [
+      //                 ListTile(
+      //                   onTap: () async {
+      //                     int chatId = (await Openapi()
+      //                             .getChatsApi()
+      //                             .chatsCreate(data: Chats((builder) {
+      //                       builder..user1 = AppData().getUserId();
+      //                       builder..user2 = user.id;
+      //                     })))
+      //                         .data
+      //                         .id;
+      //                     try {
+      //                       IOWebSocketChannel channel =
+      //                           IOWebSocketChannel.connect(
+      //                               'ws://192.168.88.28:8000/ws/chat/$chatId');
+      //                       List<ChatMessages> messages = (await Openapi()
+      //                               .getChatsApi()
+      //                               .chatsGetMessagesRead(
+      //                                   chat: chatId.toString()))
+      //                           .data
+      //                           .toList();
+      //                       Navigator.of(context).push(
+      //                         MaterialPageRoute(
+      //                           builder: (context) => ChatPage(
+      //                             chatListModel: messages,
+      //                             socket: channel,
+      //                             chatId: chatId,
+      //                             name: user.firstName,
+      //                           ),
+      //                         ),
+      //                       );
+      //                     } catch (e) {
+      //                       print(e);
+      //                     }
+      //                     // channel.sink.add({"message":"Hello how are you?", "sender":"${AppData().getUserId()}", "chat": '19'});
+      //                   },
+      //                   title: ShaderText(
+      //                     shaderText: user.firstName,
+      //                     style: TextStyle(fontWeight: FontWeight.bold),
+      //                   ),
+      //                 ),
+      //                 Divider(
+      //                   height: 0,
+      //                 )
+      //               ],
+      //             )
+      //           : SizedBox();
+      //     },
+      //   ),
+      // ),
     );
   }
 }

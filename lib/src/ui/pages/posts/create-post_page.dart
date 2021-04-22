@@ -59,17 +59,19 @@ class _CreatePostPageState extends State<CreatePostPage> {
         trailing: Padding(
           padding: EdgeInsets.only(right: 8),
           child: TextButton(
-            child: Text(
-              "Post",
-              style: TextStyle(color: Colors.white),
-            ),
-            style: TextButton.styleFrom(
-              backgroundColor: AppTheme.primaryColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-            ),
-            onPressed: _addPost,
-          ),
+              child: Text(
+                "Post",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: TextButton.styleFrom(
+                backgroundColor: AppTheme.primaryColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                //a_addPost,
+              }),
         ),
       ),
       body: SingleChildScrollView(
