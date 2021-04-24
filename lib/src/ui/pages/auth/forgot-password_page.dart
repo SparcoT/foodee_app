@@ -43,7 +43,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   children: [
                     // logo(imgPath: "assets/images/couple4.png"),
                     Text(
-                      App.name,
+                      "Foodee",
+                      //App.name,
                       style: GoogleFonts.pacifico(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,

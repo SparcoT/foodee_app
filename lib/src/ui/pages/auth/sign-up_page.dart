@@ -52,7 +52,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Foodee",
+                      App.name,
                       style: GoogleFonts.pacifico(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,

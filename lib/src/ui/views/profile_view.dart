@@ -1,17 +1,9 @@
 import 'dart:ui';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
-import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/data/data.dart';
-import 'package:foodee/src/services/lazy-task_service.dart';
 import 'package:foodee/src/settingPage.dart';
-import 'package:foodee/src/ui/modals/information_dialog.dart';
 import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
-import 'package:foodee/src/ui/pages/image-models.dart';
-import 'package:foodee/src/ui/pages/posts/post-detail_page.dart';
-import 'package:foodee/src/ui/views/post_view.dart';
 import 'package:foodee/src/ui/widgets/post_widget.dart';
 import 'package:openapi/openapi.dart';
 
@@ -51,32 +43,14 @@ class _ProfileViewState extends State<ProfileView>
             stretch: true,
             pinned: true,
             expandedHeight: 230,
-            title: Row(children: [
-              Spacer(),
-              // Container(
-              //   width: 45,
-              //   height: 45,
-              //   clipBehavior: Clip.hardEdge,
-              //   child: BackdropFilter(
-              //     child: Icon(Icons.settings),
-              //     filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-              //   ),
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(10),
-              //     border: Border.all(color: Colors.black54, width: 2),
-              //   ),
-              // ),
-            ]),
             flexibleSpace: FlexibleSpaceBar(
               stretchModes: [
                 StretchMode.blurBackground,
                 StretchMode.zoomBackground,
               ],
-              background: Expanded(
-                child: Image.network(
-                  'https://static.toiimg.com/photo/msid-71581763/71581763.jpg?259859',
-                  fit: BoxFit.cover,
-                ),
+              background: Image.network(
+                'https://static.toiimg.com/photo/msid-71581763/71581763.jpg?259859',
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -97,7 +71,7 @@ class _ProfileViewState extends State<ProfileView>
             ),
           ),
           SliverToBoxAdapter(child: tabs()),
-          SliverFillRemaining(child: Expanded(child: pageViews()))
+          SliverFillRemaining(child: pageViews())
         ],
       ),
     );
@@ -268,36 +242,38 @@ class _ProfileViewState extends State<ProfileView>
           textButton(
             index: 3,
             icon: Icons.exit_to_app,
-            onPressed: () async {
-              final _result =
-                  await LazyTaskService.execute<Response<dynamic>>(
-                context,
-                () async {
-                  return Openapi().getUsersApi().usersLogoutCreate();
-                },
-                throwError: true,
-              ).catchError((e) {
-                print('=== === === === === === === === ===');
-                print(e);
-                var errorMessage = 'No Internet Connection';
-                if (e?.response?.data != null)
-                  errorMessage = e.response.data['message'];
-                openInfoDialog(
-                  context: context,
-                  title: 'Warning',
-                  content: errorMessage,
-                );
-              });
-              if (_result != null) {
-                print('===Message===');
-                print(_result);
-                if (_result.statusCode == 200) {
-                  await AppData().clearData();
-                  Navigator.of(context).pop();
-                  AppNavigation.toPage(context, AppPage.home);
-                }
-              }
-            },
+            onPressed:(){}
+            //     () async {
+            //   final _result =
+            //       await LazyTaskService.execute<Response<dynamic>>(
+            //     context,
+            //     () async {
+            //       return Openapi().getUsersApi().usersLogoutCreate();
+            //     },
+            //     throwError: true,
+            //   ).catchError((e) {
+            //     print('=== === === === === === === === ===');
+            //     print(e);
+            //     var errorMessage = 'No Internet Connection';
+            //     if (e?.response?.data != null)
+            //       errorMessage = e.response.data['message'];
+            //     openInfoDialog(
+            //       context: context,
+            //       title: 'Warning',
+            //       content: errorMessage,
+            //     );
+            //   });
+            //   if (_result != null) {
+            //     print('===Message===');
+            //     print(_result);
+            //     if (_result.statusCode == 200) {
+            //       await AppData().clearData();
+            //       Navigator.of(context).pop();
+            //       AppNavigation.toPage(context, AppPage.home);
+            //     }
+            //   }
+            // },
+
           ),
           // textButton(
           //     index: 3,
@@ -325,7 +301,8 @@ class _ProfileViewState extends State<ProfileView>
         PersonPostsView(),
         SettingPage(),
         EditProfile(),
-        EditProfile(),
+Text("")
+//        EditProfile(),
         // NotificationsPage(),
       ],
     );

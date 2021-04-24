@@ -8,7 +8,6 @@ import 'package:foodee/src/ui/widgets/shader_Text.dart';
 import 'package:foodee/src/utils/lorem.dart';
 import 'package:intl/intl.dart';
 import 'package:openapi/openapi.dart';
-import 'package:web_socket_channel/io.dart';
 
 class FriendsChatView extends StatefulWidget {
   @override
@@ -16,20 +15,20 @@ class FriendsChatView extends StatefulWidget {
 }
 
 class _FriendsChatViewState extends State<FriendsChatView> {
-  var _chatListDetails = ChatsDetailList();
+  //var _chatListDetails = ChatsDetailList();
 
-  _fetchData() async {
-    final result = await Openapi()
-        .getChatsApi()
-        .chatsGetDetailedChatsRead(user: AppData().getUserId().toString());
-    _chatListDetails = result.data;
-    setState(() {});
-  }
+  // _fetchData() async {
+  //   final result = await Openapi()
+  //       .getChatsApi()
+  //       .chatsGetDetailedChatsRead(user: AppData().getUserId().toString());
+  //   _chatListDetails = result.data;
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    //_fetchData();
   }
 
   @override
