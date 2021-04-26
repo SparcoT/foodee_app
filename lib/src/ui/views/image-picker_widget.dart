@@ -22,7 +22,6 @@ class ImagePickerWidget extends StatefulWidget {
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
-  List<File> images;
 
   _modelSheet() {
     return showModalBottomSheet(
@@ -68,6 +67,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
           );
         });
   }
+  List<File> images;
 
   @override
   void initState() {

@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/theme.dart';
@@ -84,6 +85,74 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController addressController = TextEditingController();
   bool showAge = false;
 
+
+  _modelSheet() {
+    return showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return Container(
+            decoration: BoxDecoration(
+                color: AppTheme.secondaryColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                )),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text(
+                    "Camera",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  leading:
+                  Icon(CupertinoIcons.photo_camera, color: Colors.white),
+                  onTap: () {
+                    _imgFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  title: Text(
+                    "Gallery",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  leading: Icon(CupertinoIcons.photo, color: Colors.white),
+                  onTap: () {
+                    _imgFromGallery();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+  _imgFromCamera() async {
+    // ignore: invalid_use_of_visible_for_testing_member
+    final pickedImage = await ImagePicker.platform
+        .pickImage(source: ImageSource.camera, imageQuality: 50);
+    if (pickedImage != null)
+      setState(() {
+        images.add(File(pickedImage.path));
+        //widget.onChanged(images);
+      });
+  }
+  List<File> images;
+
+  _imgFromGallery() async {
+    final _result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: true,
+    );
+    setState(() {
+      images.addAll(_result.files.map((e) => File(e.path)));
+      //   widget.onChanged(images);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -142,7 +211,8 @@ class _EditProfileState extends State<EditProfile> {
                                   size: 16,
                                 ),
                                 onPressed: () {
-                                  showChoiceDialog(context);
+                _modelSheet();
+                                  //                  showChoiceDialog(context);
                                 }
                                 //       () async {
                                 //   PickedFile tempImage = await ImagePicker.platform.pickImage(source: ImageSource.gallery,maxHeight: 1000,maxWidth: 1000,imageQuality: 50);

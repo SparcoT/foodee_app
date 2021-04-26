@@ -42,106 +42,108 @@ class _SignUpPageState extends State<SignUpPage> {
         builder: (context, lang) {
           return Scaffold(
             backgroundColor: Colors.transparent,
-            body: Form(
-              autovalidateMode: _autoValidateMode,
-              key: _key,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      App.name,
-                      style: GoogleFonts.pacifico(
-                          fontSize: 30,
+            body: Center(
+              child: Form(
+                autovalidateMode: _autoValidateMode,
+                key: _key,
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(30, 60, 30, 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        App.name,
+                        style: GoogleFonts.pacifico(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xfffcc522)),
+                      ),
+                      Text(
+                        "let's choose your match",
+                        style: TextStyle(
+                          fontFamily: 'QuickSand',
                           fontWeight: FontWeight.bold,
-                          color: Color(0xfffcc522)),
-                    ),
-                    Text(
-                      "let's choose your match",
-                      style: TextStyle(
-                        fontFamily: 'QuickSand',
-                        fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 15),
-                    AppTextField(
-                      key: Keys.signUpFirstName,
-                      icon: UniconsLine.user,
-                      placeholder: 'First Name',
-                      keyboardType: TextInputType.name,
-                      onSaved: (value) => firstName = value,
-                      validator: Validators.required,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: AppTextField(
-                        key: Keys.signUpLastName,
+                      SizedBox(height: 15),
+                      AppTextField(
+                        key: Keys.signUpFirstName,
                         icon: UniconsLine.user,
-                        placeholder: 'Last Name',
+                        placeholder: 'First Name',
                         keyboardType: TextInputType.name,
-                        onSaved: (value) => lastName = value,
+                        onSaved: (value) => firstName = value,
                         validator: Validators.required,
                       ),
-                    ),
-                    AppTextField(
-                      key: Keys.signUpUserName,
-                      icon: UniconsLine.user,
-                      placeholder: 'Username',
-                      onSaved: (value) => userName = value,
-                      validator: Validators.required,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: AppTextField(
-                        key: Keys.signUpEmail,
-                        icon: Icons.email_outlined,
-                        placeholder: 'Email',
-                        onSaved: (value) => email = value,
-                        validator: Validators.requiredEmail,
-                        keyboardType: TextInputType.emailAddress,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: AppTextField(
+                          key: Keys.signUpLastName,
+                          icon: UniconsLine.user,
+                          placeholder: 'Last Name',
+                          keyboardType: TextInputType.name,
+                          onSaved: (value) => lastName = value,
+                          validator: Validators.required,
+                        ),
                       ),
-                    ),
-                    AppTextField.password(
-                      key: Keys.signUpPassword,
-                      icon: UniconsLine.lock_alt,
-                      placeholder: 'Password',
-                      onSaved: (value) => password = value,
-                      validator: Validators.required,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 40),
-                      child: AppTextField.password(
-                        key: Keys.signUpConfirmPassword,
+                      AppTextField(
+                        key: Keys.signUpUserName,
+                        icon: UniconsLine.user,
+                        placeholder: 'Username',
+                        onSaved: (value) => userName = value,
+                        validator: Validators.required,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: AppTextField(
+                          key: Keys.signUpEmail,
+                          icon: Icons.email_outlined,
+                          placeholder: 'Email',
+                          onSaved: (value) => email = value,
+                          validator: Validators.requiredEmail,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                      ),
+                      AppTextField.password(
+                        key: Keys.signUpPassword,
                         icon: UniconsLine.lock_alt,
-                        placeholder: 'Confirm Password',
-                        onSaved: (value) => confirmPassword = value,
+                        placeholder: 'Password',
+                        onSaved: (value) => password = value,
                         validator: Validators.required,
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () => AppNavigation.to(context, HomePage()),
-                      // onPressed: _signUp,
-                      child: Text(lang.signUpNow.toUpperCase()),
-                      style: AppTheme.primaryButtonTheme,
-                    ),
-                    SizedBox(height: 20),
-                    Text.rich(
-                      TextSpan(
-                        text: "Already have account?  ",
-                        children: [
-                          TextSpan(
-                            text: lang.signIn,
-                            style: TextStyle(fontWeight: FontWeight.w900),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.of(context).pop(),
-                          )
-                        ],
-                        style: GoogleFonts.quicksand(color: Colors.white),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 40),
+                        child: AppTextField.password(
+                          key: Keys.signUpConfirmPassword,
+                          icon: UniconsLine.lock_alt,
+                          placeholder: 'Confirm Password',
+                          onSaved: (value) => confirmPassword = value,
+                          validator: Validators.required,
+                        ),
                       ),
-                    ),
-                  ],
+                      TextButton(
+                        onPressed: () => AppNavigation.to(context, HomePage()),
+                        // onPressed: _signUp,
+                        child: Text(lang.signUpNow.toUpperCase()),
+                        style: AppTheme.primaryButtonTheme,
+                      ),
+                      SizedBox(height: 20),
+                      Text.rich(
+                        TextSpan(
+                          text: "Already have account?  ",
+                          children: [
+                            TextSpan(
+                              text: lang.signIn,
+                              style: TextStyle(fontWeight: FontWeight.w900),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => Navigator.of(context).pop(),
+                            )
+                          ],
+                          style: GoogleFonts.quicksand(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

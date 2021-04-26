@@ -78,16 +78,23 @@ class PostWidget extends StatelessWidget {
                   PopupMenuItem(
                       child: GestureDetector(
                           onTap: () {
-                            AppNavigation.to(context, CreatePostPage());
 
-                            Navigator.of(context).pop();},
+                  AppNavigation.to(context, CreatePostPage());
+                  print("Edit Pressed");
+
+                            Navigator.of(context).pop();
+                          },
                           child: Text('Edit'))),
                   PopupMenuItem(
-                    child: GestureDetector(onTap: () {}, child: Text('Delete')),
+                    child: GestureDetector(onTap: () {
+                      print("Delete Pressed");
+
+                    }, child: Text('Delete')),
                   ),
                 ],
                 onSelected: (_) {},
               ),
+
               // GestureDetector(
               //   child: Image.asset(
               //     AppAssets.more,
