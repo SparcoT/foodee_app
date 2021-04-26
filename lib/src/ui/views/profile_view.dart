@@ -40,7 +40,8 @@ class _ProfileViewState extends State<ProfileView>
       key: UniqueKey(),
       headerSliverBuilder: (BuildContext context, bool isBox) {
         return [
-          SliverAppBar(backgroundColor: AppTheme.secondaryColor,
+          SliverAppBar(
+            backgroundColor: AppTheme.secondaryColor,
             stretch: true,
             pinned: true,
             expandedHeight: 230,
@@ -74,7 +75,7 @@ class _ProfileViewState extends State<ProfileView>
               ),
             ),
             actions: [
-              appBarIconButton(
+              appBarIconButtonElevated(
                   icon: Icons.settings,
                   function: () {
                     AppNavigation.to(context, SettingPage());
@@ -82,7 +83,7 @@ class _ProfileViewState extends State<ProfileView>
               SizedBox(
                 width: 10,
               ),
-              appBarIconButton(
+              appBarIconButtonElevated(
                   icon: Icons.edit,
                   function: () {
                     AppNavigation.to(context, EditProfile());
@@ -106,7 +107,7 @@ class _ProfileViewState extends State<ProfileView>
             ),
           ),
           // SliverToBoxAdapter(child: tabs()),
-           SliverFillRemaining(child:PersonPostsView())
+          SliverFillRemaining(child: PersonPostsView())
         ],
       ),
     );
@@ -126,6 +127,21 @@ class _ProfileViewState extends State<ProfileView>
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppTheme.secondaryColor, width: 2),
+        ),
+      ),
+    );
+  }
+
+  Widget appBarIconButtonElevated({IconData icon, Function function})
+  {
+    return GestureDetector(
+      onTap: function,
+      child: Container(
+        width: 45,
+        child: Icon(icon),
+        decoration: BoxDecoration(color: Colors.white24,
+          // boxShadow: [ BoxShadow(blurRadius:1, spreadRadius: 4)],
+           borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
