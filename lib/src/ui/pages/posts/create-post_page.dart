@@ -23,16 +23,21 @@ class _CreatePostPageState extends State<CreatePostPage> {
   final _textController = TextEditingController();
 
   Widget head() {
-    return Row(
-      children: <Widget>[
-        CircleAvatar(
-          backgroundColor: AppTheme.primaryColor,
-          backgroundImage: AppData().getImage().isEmpty
-              ? AssetImage(AppAssets.user)
-              : NetworkImage(AppData().getImage()),
-        ),
-        postTitleContainer(title: AppData().getName()),
-      ],
+    return ListTile(
+      dense: true,
+      contentPadding: EdgeInsets.only(left: 0),
+      leading: CircleAvatar(
+        backgroundColor: AppTheme.primaryColor,
+        backgroundImage: AppData().getImage().isEmpty
+            ? AssetImage(AppAssets.user)
+            : NetworkImage(AppData().getImage()),
+      ),
+      title: postTitleContainer(title: "Osama Sandhu"
+          //  AppData().getName()
+          ),
+    );
+    Row(
+      children: <Widget>[],
     );
   }
 
@@ -77,7 +82,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
+   physics: BouncingScrollPhysics(),     child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +217,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
 //   });
 //   return bytes;
 // }
-
 
 }
 
