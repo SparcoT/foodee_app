@@ -40,7 +40,7 @@ class _ProfileViewState extends State<ProfileView>
       key: UniqueKey(),
       headerSliverBuilder: (BuildContext context, bool isBox) {
         return [
-          SliverAppBar(
+          SliverAppBar(backgroundColor: AppTheme.secondaryColor,
             stretch: true,
             pinned: true,
             expandedHeight: 230,
