@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/assets.dart';
@@ -11,7 +10,6 @@ import 'package:foodee/src/services/lazy-task_service.dart';
 import 'package:foodee/src/ui/modals/information_dialog.dart';
 import 'package:foodee/src/ui/views/image-picker_widget.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:openapi/openapi.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -36,9 +34,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           //  AppData().getName()
           ),
     );
-    Row(
-      children: <Widget>[],
-    );
+
   }
 
   Widget postTitleContainer({String title}) {
@@ -159,7 +155,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       },
       throwError: true,
     ).catchError((e) {
-      print('eeeeeeeeeeeeeeeee');
+      print('error');
       print(e);
       var errorMessage = 'No Internet Connection';
       if (e?.response?.data != null) errorMessage = e.response.data['message'];

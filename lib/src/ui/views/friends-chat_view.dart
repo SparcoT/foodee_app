@@ -1,13 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
-import 'package:foodee/src/data/data.dart';
 import 'package:foodee/src/ui/pages/chat/chat_page.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
 import 'package:foodee/src/utils/lorem.dart';
 import 'package:intl/intl.dart';
-import 'package:openapi/openapi.dart';
 
 class FriendsChatView extends StatefulWidget {
   @override
@@ -83,18 +80,39 @@ class _FriendsChatViewState extends State<FriendsChatView> {
           automaticallyImplyLeading: false,
         ),
         body: ListView.builder(
-          physics: BouncingScrollPhysics(),    itemBuilder: (context, i) {
-            return ListTile(onTap: (){AppNavigation.to(context,ChatPage());},
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (context, i) {
+            return ListTile(
+              onTap: () {
+                AppNavigation.to(context, ChatPage());
+              },
               leading: CircleAvatar(
                 backgroundColor: i % 2 == 0
                     ? AppTheme.primaryColor
                     : AppTheme.secondaryColor,
-child: Text("O",style: TextStyle(color: Colors.white),),              ),
+                child: Text(
+                  "O",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
               title: Text("Osama Sandhu"),
               subtitle: Text(
                 lorem,
                 overflow: TextOverflow.ellipsis,
               ),
+              trailing: i % 2 == 0
+                  ? CircleAvatar(
+                      child: Text(
+                        "$i",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      radius: 11,
+                    )
+                  : SizedBox(),
             );
           },
           // ListView.builder(physics: BouncingScrollPhysics(),
