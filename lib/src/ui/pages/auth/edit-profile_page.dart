@@ -75,26 +75,27 @@ class _EditProfileState extends State<EditProfile> {
     1: Text('Treat Me'),
   };
 
-  var formKey  = GlobalKey<FormState>();
+  var formKey = GlobalKey<FormState>();
 
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-   bool showAge = false;
+  bool showAge = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [AppTheme.primaryColor, AppTheme.primaryColor],
         ),
-      ), child: Scaffold(backgroundColor: Colors.transparent,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: Center(
           child: Form(
             key: formKey,
@@ -112,8 +113,9 @@ class _EditProfileState extends State<EditProfile> {
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                                 border: Border.all(
-                                    color: Theme.of(context).primaryColor, width: 3),
+                                border: Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 3),
                                 shape: BoxShape.circle),
                             child: CircleAvatar(
                                 backgroundColor: Colors.white,
@@ -121,15 +123,14 @@ class _EditProfileState extends State<EditProfile> {
                                 backgroundImage: (image.isNotEmpty)
                                     ? FileImage(File(image))
                                     : NetworkImage(
-                                  'https://static.toiimg.com/photo/msid-71581763/71581763.jpg?259859',
-                                )),
+                                        'https://static.toiimg.com/photo/msid-71581763/71581763.jpg?259859',
+                                      )),
                           ),
                           Positioned(
                             bottom: 8,
                             right: 0,
                             child: MaterialButton(
                                 minWidth: 30,
-
                                 shape: CircleBorder(),
                                 color: Colors.white,
                                 padding: EdgeInsets.all(0),
@@ -177,9 +178,9 @@ class _EditProfileState extends State<EditProfile> {
                       icon: Icons.phone,
                       placeholder: 'Phone',
                       keyboardType: TextInputType.phone,
-                     // onSaved: (phone) => user.phone = phone,
+                      // onSaved: (phone) => user.phone = phone,
                       validator: Validators.required,
- //                 autoValidateMode: AutovalidateMode.onUserInteraction,
+                      //                 autoValidateMode: AutovalidateMode.onUserInteraction,
 
                       //  controller: lastNameController,
                     ),
@@ -191,7 +192,7 @@ class _EditProfileState extends State<EditProfile> {
                       icon: Icons.date_range_outlined,
 
                       placeholder: 'Age',
-                    //  onSaved: (age) => user.age = int.parse(age),
+                      //  onSaved: (age) => user.age = int.parse(age),
                       validator: Validators.required,
                       //autoValidateMode: AutovalidateMode.onUserInteraction,
 
@@ -204,7 +205,7 @@ class _EditProfileState extends State<EditProfile> {
                       key: UniqueKey(),
                       icon: Icons.person_outline,
                       placeholder: 'Gender',
-                     // onSaved: (gender) => user.gender = gender,
+                      // onSaved: (gender) => user.gender = gender,
                       validator: Validators.required,
                       //autoValidateMode: AutovalidateMode.onUserInteraction,
                     ),
@@ -215,7 +216,7 @@ class _EditProfileState extends State<EditProfile> {
                       key: UniqueKey(),
                       icon: Icons.home_outlined,
                       placeholder: 'Address',
-                     // onSaved: (address) => user.address = address,
+                      // onSaved: (address) => user.address = address,
                       validator: Validators.required,
                       //autoValidateMode: AutovalidateMode.onUserInteraction,
                     ),
@@ -227,7 +228,7 @@ class _EditProfileState extends State<EditProfile> {
                           'Show age on your profile',
                           style: TextStyle(color: Colors.white),
                         ),
-                        value: showAge,
+                        value: showAge,checkColor: AppTheme.primaryColor,activeColor: Colors.white,
                         controlAffinity: ListTileControlAffinity.leading,
                         onChanged: (bool value) {
                           setState(() {
@@ -237,6 +238,7 @@ class _EditProfileState extends State<EditProfile> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       child: CupertinoSegmentedControl(
+                        //selectedColor: AppTheme.secondaryColor,
                         groupValue: twoGroupValue,
                         onValueChanged: (changeFromGroupValue) {
                           setState(() {
@@ -247,14 +249,14 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 15),
+                      padding: const EdgeInsets.only(top: 30, bottom: 5),
                       child: TextButton(
                         //  key: Keys.signInButton,
                         onPressed: () {
 //print(user);
                           if (formKey.currentState.validate()) {
                             formKey.currentState.save();
-                         //   print(user);
+                            //   print(user);
                           }
                           //AppNavigation.to(context, HomePage());
                         },

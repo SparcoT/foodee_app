@@ -28,12 +28,23 @@ class _SettingPageState extends State<SettingPage> {
           children: [
             ListTile(
               title: Text("About Us"),
-              //trailing: Icon(Icons.arrow_forward_ios),
             ),
             ListTile(
               title: Text("Contact Us"),
-              //trailing: Icon(Icons.arrow_forward_ios),
             ),
+            ListTile(
+              title: Text("Help"),
+            ),
+            CheckboxListTile(
+                title: Text("Push Notifications"),
+                activeColor: AppTheme.primaryColor,
+                value: isCheck,
+                onChanged: (newCheck) {
+                  setState(() {
+                    isCheck = newCheck;
+                  });
+                }),
+
             SwitchListTile(
                 title: Text("Notifications on"),
                 value: isSwitched,
@@ -43,19 +54,9 @@ class _SettingPageState extends State<SettingPage> {
                     isSwitched = val;
                   });
                 }),
-            // CheckboxListTile(
-            //     title: Text("Push Notifications"),
-            //     activeColor: AppTheme.primaryColor,
-            //     value: isCheck,
-            //     onChanged: (newCheck) {
-            //       setState(() {
-            //         isCheck = newCheck;
-            //       });
-            //     }),
 
             ListTile(
               title: Text("Logout"),
-              //trailing: Icon(Icons.logout),
               onTap: () {
                 Navigator.of(context).popUntil((route) => false);
               },
