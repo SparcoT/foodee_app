@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/constants.dart';
+import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/settingPage.dart';
 import 'package:foodee/src/ui/pages/auth/edit-profile_page.dart';
@@ -43,6 +44,25 @@ class _ProfileViewState extends State<ProfileView>
             stretch: true,
             pinned: true,
             expandedHeight: 230,
+            // title: Row(children: [
+            //   Spacer(),
+            //   Container(
+            //     width: 45,
+            //     height: 45,
+            //     clipBehavior: Clip.hardEdge,
+            //     child: BackdropFilter(
+            //       child: IconButton(
+            //         icon: Icon(Icons.settings),
+            //         onPressed: () {},
+            //       ),
+            //       filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            //     ),
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(10),
+            //       border: Border.all(color: Colors.black54, width: 2),
+            //     ),
+            //   ),
+            // ]),
             flexibleSpace: FlexibleSpaceBar(
               stretchModes: [
                 StretchMode.blurBackground,
@@ -53,6 +73,21 @@ class _ProfileViewState extends State<ProfileView>
                 fit: BoxFit.cover,
               ),
             ),
+            actions: [
+              appBarIconButton(
+                  icon: Icons.settings,
+                  function: () {
+                    AppNavigation.to(context, SettingPage());
+                  }),
+              SizedBox(
+                width: 10,
+              ),
+              appBarIconButton(
+                  icon: Icons.edit,
+                  function: () {
+                    AppNavigation.to(context, EditProfile());
+                  }),
+            ],
           ),
         ];
       },
@@ -70,9 +105,28 @@ class _ProfileViewState extends State<ProfileView>
               ],
             ),
           ),
-          SliverToBoxAdapter(child: tabs()),
-          SliverFillRemaining(child: pageViews())
+          // SliverToBoxAdapter(child: tabs()),
+           SliverFillRemaining(child:PersonPostsView())
         ],
+      ),
+    );
+  }
+
+  Widget appBarIconButton({IconData icon, Function function}) {
+    return GestureDetector(
+      onTap: function,
+      child: Container(
+        width: 45,
+        height: 45,
+        clipBehavior: Clip.hardEdge,
+        child: BackdropFilter(
+          child: Icon(icon),
+          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppTheme.secondaryColor, width: 2),
+        ),
       ),
     );
   }
@@ -94,7 +148,7 @@ class _ProfileViewState extends State<ProfileView>
           ),
           // child:
         ),
-             ],
+      ],
     );
   }
 
@@ -200,7 +254,7 @@ class _ProfileViewState extends State<ProfileView>
               setState(() {
                 currentIndex = 0;
               });
-         _tabController.animateTo(0);
+              _tabController.animateTo(0);
               // pageController.animateToPage(
               //   0,
               //   duration: Duration(milliseconds: 200),
@@ -239,42 +293,39 @@ class _ProfileViewState extends State<ProfileView>
               // );
             },
           ),
-          textButton(
-            index: 3,
-            icon: Icons.exit_to_app,
-            onPressed:(){}
-            //     () async {
-            //   final _result =
-            //       await LazyTaskService.execute<Response<dynamic>>(
-            //     context,
-            //     () async {
-            //       return Openapi().getUsersApi().usersLogoutCreate();
-            //     },
-            //     throwError: true,
-            //   ).catchError((e) {
-            //     print('=== === === === === === === === ===');
-            //     print(e);
-            //     var errorMessage = 'No Internet Connection';
-            //     if (e?.response?.data != null)
-            //       errorMessage = e.response.data['message'];
-            //     openInfoDialog(
-            //       context: context,
-            //       title: 'Warning',
-            //       content: errorMessage,
-            //     );
-            //   });
-            //   if (_result != null) {
-            //     print('===Message===');
-            //     print(_result);
-            //     if (_result.statusCode == 200) {
-            //       await AppData().clearData();
-            //       Navigator.of(context).pop();
-            //       AppNavigation.toPage(context, AppPage.home);
-            //     }
-            //   }
-            // },
+          textButton(index: 3, icon: Icons.exit_to_app, onPressed: () {}
+              //     () async {
+              //   final _result =
+              //       await LazyTaskService.execute<Response<dynamic>>(
+              //     context,
+              //     () async {
+              //       return Openapi().getUsersApi().usersLogoutCreate();
+              //     },
+              //     throwError: true,
+              //   ).catchError((e) {
+              //     print('=== === === === === === === === ===');
+              //     print(e);
+              //     var errorMessage = 'No Internet Connection';
+              //     if (e?.response?.data != null)
+              //       errorMessage = e.response.data['message'];
+              //     openInfoDialog(
+              //       context: context,
+              //       title: 'Warning',
+              //       content: errorMessage,
+              //     );
+              //   });
+              //   if (_result != null) {
+              //     print('===Message===');
+              //     print(_result);
+              //     if (_result.statusCode == 200) {
+              //       await AppData().clearData();
+              //       Navigator.of(context).pop();
+              //       AppNavigation.toPage(context, AppPage.home);
+              //     }
+              //   }
+              // },
 
-          ),
+              ),
           // textButton(
           //     index: 3,
           //     icon: Icons.notifications,
@@ -295,13 +346,12 @@ class _ProfileViewState extends State<ProfileView>
 
   Widget pageViews() {
     return TabBarView(
-
       controller: _tabController,
       children: [
         PersonPostsView(),
         SettingPage(),
         EditProfile(),
-Text("")
+        Text("")
 //        EditProfile(),
         // NotificationsPage(),
       ],
@@ -337,12 +387,15 @@ class _PersonPostsViewState extends State<PersonPostsView> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 10,
+      physics: BouncingScrollPhysics(),
+      itemCount: 100,
       itemBuilder: (context, i) {
         var u = FeedUserBuilder();
         u..firstName = 'Clark';
-        u..lastName='Last';
-        u..image='https://images.unsplash.com/photo-1586923109404-7bd976ed3e52?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80';
+        u..lastName = 'Last';
+        u
+          ..image =
+              'https://images.unsplash.com/photo-1586923109404-7bd976ed3e52?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80';
         return Hero(
           tag: kPostTag,
           child: PostWidget(

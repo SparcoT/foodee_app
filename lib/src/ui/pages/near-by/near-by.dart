@@ -67,7 +67,7 @@ class _NearByState extends State<NearBy> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body:  ListView.builder(itemBuilder: (context,i){
+      body:  ListView.builder(physics: BouncingScrollPhysics(), itemBuilder: (context,i){
         return ListTile(   leading: CircleAvatar(
           backgroundColor: i % 2 == 0
               ? AppTheme.secondaryColor
@@ -80,7 +80,7 @@ class _NearByState extends State<NearBy> {
       // FutureBuilder(
       //   future: Openapi().getUsersApi().usersList(),
       //   builder: (context, AsyncSnapshot<Response<InlineResponse2003>> users) =>
-      //       ListView.builder(
+      //       ListView.builder(physics: BouncingScrollPhysics(),
       //     padding: EdgeInsets.only(top: 10),
       //     itemCount: users.data?.data?.results?.length ?? 0,
       //     itemBuilder: (context, i) {

@@ -10,7 +10,13 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  TextEditingController controller;
 
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,36 +57,37 @@ class _ChatPageState extends State<ChatPage> {
         clipper: ClipperCustom(MediaQuery.of(context).padding.top, 40),
         child: Container(
           child: ListView.builder(
+            physics: BouncingScrollPhysics(),
             itemCount: 30,
             reverse: true,
             itemBuilder: (context, i) {
-              return i%2==0
+              return i % 2 == 0
                   ? container(
-                message: "How are you?",
-                mainAxisAlignment: MainAxisAlignment.end,
-                bottomRight: 0,
-                bottomLeft: 20,
-                alignment: Alignment.topRight,
-                icon: true,
-                leftPadding: 70,
-                rightPadding: 15,
-                color: AppTheme.primaryColor.withOpacity(0.8),
-                boxAlignment: CrossAxisAlignment.end,
-              )
+                      message: "How are you?",
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      bottomRight: 0,
+                      bottomLeft: 20,
+                      alignment: Alignment.topRight,
+                      icon: true,
+                      leftPadding: 70,
+                      rightPadding: 15,
+                      color: AppTheme.primaryColor.withOpacity(0.8),
+                      boxAlignment: CrossAxisAlignment.end,
+                    )
                   : container(
-                message:" I'm good",
-                mainAxisAlignment: MainAxisAlignment.start,
-                bottomRight: 20,
-                bottomLeft: 0,
-                alignment: Alignment.topLeft,
-                icon: false,
-                leftPadding: 15,
-                rightPadding: 70,
-                color: Color(0xffe9ebe6),
-                //    Color(0xfff3f4f0),
-                textColor: Colors.black,
-                boxAlignment: CrossAxisAlignment.start,
-              );
+                      message: " I'm good",
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      bottomRight: 20,
+                      bottomLeft: 0,
+                      alignment: Alignment.topLeft,
+                      icon: false,
+                      leftPadding: 15,
+                      rightPadding: 70,
+                      color: Color(0xffe9ebe6),
+                      //    Color(0xfff3f4f0),
+                      textColor: Colors.black,
+                      boxAlignment: CrossAxisAlignment.start,
+                    );
             },
             padding: EdgeInsets.fromLTRB(0, 85, 0, 55),
           ),
@@ -98,7 +105,8 @@ class _ChatPageState extends State<ChatPage> {
               child: SizedBox(
                 height: 40,
                 child: TextFormField(
-                 // controller: controller,
+                  controller: controller,
+                  // controller: controller,
                   decoration: InputDecoration(
                     hintText: 'Type here something...',
                     hintStyle: TextStyle(
@@ -119,6 +127,11 @@ class _ChatPageState extends State<ChatPage> {
               width: 40,
               height: 40,
               child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    controller.text;
+                  });
+                },
                 // onPressed: () {
                 //   String test =
                 //       '{"message": "${controller.text}", "sender": ${AppData().getUserId()}, "chat": ${widget.chatId}}';
@@ -258,7 +271,7 @@ class _ChatPageState extends State<ChatPage> {
 //       body: ClipPath(
 //         clipper: ClipperCustom(MediaQuery.of(context).padding.top, 40),
 //         child: Container(
-//           child: ListView.builder(
+//           child: ListView.builder(physics: BouncingScrollPhysics(),
 //             itemCount: widget.chatListModel.length,
 //             reverse: true,
 //             itemBuilder: (context, i) {
@@ -356,8 +369,6 @@ class _ChatPageState extends State<ChatPage> {
 //       ),
 //     );
 //   }
-
-
 
   Widget popMenuButton() {
     return PopupMenuButton(

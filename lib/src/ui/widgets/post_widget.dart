@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/assets.dart';
+import 'package:foodee/src/base/nav.dart';
+import 'package:foodee/src/ui/pages/posts/create-post_page.dart';
 import 'package:foodee/src/ui/widgets/like-button_widget.dart';
 import 'package:openapi/openapi.dart';
 
@@ -70,13 +72,29 @@ class PostWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              trailing: GestureDetector(
-                child: Image.asset(
-                  AppAssets.more,
-                  width: 22,
-                ),
-                onTap: () {},
+              trailing: PopupMenuButton(
+                child: Icon(Icons.more_vert),
+                itemBuilder: (_) => <PopupMenuItem>[
+                  PopupMenuItem(
+                      child: GestureDetector(
+                          onTap: () {
+                            AppNavigation.to(context, CreatePostPage());
+
+                            Navigator.of(context).pop();},
+                          child: Text('Edit'))),
+                  PopupMenuItem(
+                    child: GestureDetector(onTap: () {}, child: Text('Delete')),
+                  ),
+                ],
+                onSelected: (_) {},
               ),
+              // GestureDetector(
+              //   child: Image.asset(
+              //     AppAssets.more,
+              //     width: 22,
+              //   ),
+              //   onTap: () {},
+              // ),
             ),
           ),
           // if (feed?.images?.isNotEmpty ?? false)

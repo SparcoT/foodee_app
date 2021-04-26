@@ -83,7 +83,7 @@ class _FriendsChatViewState extends State<FriendsChatView> {
           automaticallyImplyLeading: false,
         ),
         body: ListView.builder(
-          itemBuilder: (context, i) {
+          physics: BouncingScrollPhysics(),    itemBuilder: (context, i) {
             return ListTile(onTap: (){AppNavigation.to(context,ChatPage());},
               leading: CircleAvatar(
                 backgroundColor: i % 2 == 0
@@ -97,7 +97,7 @@ child: Text("O",style: TextStyle(color: Colors.white),),              ),
               ),
             );
           },
-          // ListView.builder(
+          // ListView.builder(physics: BouncingScrollPhysics(),
           //     padding: EdgeInsets.only(top: 10),
           //     itemCount: _chatListDetails?.chats?.length ?? 0,
           //     itemBuilder: (context, i) {
