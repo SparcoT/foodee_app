@@ -93,8 +93,8 @@ class _SignInPageState extends State<SignInPage> {
                       padding: const EdgeInsets.only(top: 10, bottom: 15),
                       child: TextButton(
                         key: Keys.signInButton,
-                        onPressed: () => AppNavigation.to(context, HomePage()),
-                        // onPressed: _signIn,
+                        // onPressed: () => AppNavigation.to(context, HomePage()),
+                        onPressed: _signIn,
                         // onPressed:(){    AppNavigation.to(context, HomePage());},
                         style: AppTheme.primaryButtonTheme,
                         child: Text(lang.signIn.toUpperCase()),

@@ -4,11 +4,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/app.dart';
 import 'package:foodee/src/base/keys.dart';
-import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/services/lazy-task_service.dart';
 import 'package:foodee/src/ui/modals/information_dialog.dart';
-import 'package:foodee/src/ui/pages/home_page.dart';
 import 'package:foodee/src/ui/views/localized_view.dart';
 import 'package:foodee/src/ui/widgets/text_field.dart';
 import 'package:foodee/src/utils/validators.dart';
@@ -121,8 +119,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => AppNavigation.to(context, HomePage()),
-                      // onPressed: _signUp,
+                      // onPressed: () => AppNavigation.to(context, HomePage()),
+                      onPressed: _signUp,
                       child: Text(lang.signUpNow.toUpperCase()),
                       style: AppTheme.primaryButtonTheme,
                     ),
@@ -166,8 +164,8 @@ class _SignUpPageState extends State<SignUpPage> {
       var hasError = false;
       final result = await LazyTaskService.execute<Response<User>>(
         context,
-        () async {
-          return await Openapi().getUsersApi().usersCreate(
+        () {
+          return Openapi().getUsersApi().usersCreate(
                 password: password,
                 username: userName,
                 firstName: firstName,
@@ -177,6 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
         },
         throwError: true,
       ).catchError((e) {
+        print(e);
         hasError = true;
         var errorMessage = 'No Internet Connection';
         if (e?.response?.data != null)
