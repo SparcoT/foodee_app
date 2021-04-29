@@ -17,7 +17,7 @@ class App extends StatelessWidget {
     await AppServices.initialize();
     await AppData.initialize();
     // await AppData().clearData();
-    runApp(App());
+      runApp(App());
   }
 
   @override
@@ -31,6 +31,7 @@ class App extends StatelessWidget {
         title: name,
         routes: AppNavigation.routes,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
+        color: AppTheme.primaryColor,
       ),
     );
   }
