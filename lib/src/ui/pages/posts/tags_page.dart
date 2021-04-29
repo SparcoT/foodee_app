@@ -22,7 +22,6 @@ class TagsPage extends StatefulWidget {
 
 class _TagsPageState extends State<TagsPage> {
   List<User> _selectedUsers = [];
-  Widget _child;
 
   _addOrRemove(User user, bool add) {
     if (add)
@@ -33,96 +32,28 @@ class _TagsPageState extends State<TagsPage> {
     setState(() {});
   }
 
-  _getBuilder(ctx, user) {
-    var _isSelected = _selectedUsers.contains(user);
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () {
-              _addOrRemove(user, !_isSelected);
-            },
-            child: Row(
-              children: [
-                Container(
-                  height: 25,
-                  width: 25,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _isSelected ? AppTheme.primaryColor : Colors.white,
-                    border: Border.all(
-                      color: _isSelected ? AppTheme.primaryColor : Colors.black,
-                      width: 0.3,
-                    ),
-                  ),
-                  child: _isSelected
-                      ? Icon(
-                          Icons.check,
-                          size: 18.0,
-                          color: Colors.white,
-                        )
-                      : null,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 5, right: 10),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 22,
-                    backgroundImage: NetworkImage('${user.image}'),
-                  ),
-                ),
-                Text(user.firstName),
-              ],
-            ),
-          ),
-          Divider(),
-        ],
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
     _selectedUsers = widget.selectedUsers;
-    _child = PaginatedView(
-      restAction: (a, b) async {
-        var res = (await Openapi().getUsersApi().usersList(limit: a, offset: b))
-            .data
-            .results
-            .toList();
-        res = res
-            .where((element) => element.id != AppData().getUserId())
-            .toList();
-        return res;
-      },
-      builder: _getBuilder,
-    );
   }
 
   _searchUsers(String name) async {
     if (name.isNotEmpty) {
-      print('Clicked here');
-      _child = PaginatedView(
-        restAction: (a, b) async {
-          print(name);
-          var res = (await Openapi()
-                  .getUsersApi()
-                  .usersList(limit: a, offset: b, search: name))
-              .data
-              .results
-              .toList();
-          res = res
-              .where((element) => element.id != AppData().getUserId())
-              .toList();
-          return res;
-        },
-        builder: _getBuilder,
-      );
-      setState(() {});
+      controller.search = name;
     }
   }
+
+  final controller = PaginatedViewController<User>(restAction: (a, b, s) async {
+    return (await Openapi()
+            .getUsersApi()
+            .usersList(limit: a, offset: b, search: s))
+        .data
+        .results
+        .toList()
+        .where((element) => element.id != AppData().getUserId())
+        .toList();
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +105,62 @@ class _TagsPageState extends State<TagsPage> {
             ),
             Divider(),
             Expanded(
-              child: _child,
+              child: PaginatedView(
+                controller: controller,
+                builder: (ctx, user) {
+                  var _isSelected = _selectedUsers.contains(user);
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            _addOrRemove(user, !_isSelected);
+                          },
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: _isSelected
+                                      ? AppTheme.primaryColor
+                                      : Colors.white,
+                                  border: Border.all(
+                                    color: _isSelected
+                                        ? AppTheme.primaryColor
+                                        : Colors.black,
+                                    width: 0.3,
+                                  ),
+                                ),
+                                child: _isSelected
+                                    ? Icon(
+                                        Icons.check,
+                                        size: 18.0,
+                                        color: Colors.white,
+                                      )
+                                    : null,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 5, right: 10),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 22,
+                                  backgroundImage:
+                                      NetworkImage('${user.image}'),
+                                ),
+                              ),
+                              Text(user.firstName),
+                            ],
+                          ),
+                        ),
+                        Divider(),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

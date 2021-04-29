@@ -8,6 +8,14 @@ import 'package:foodee/src/ui/widgets/shader_Text.dart';
 import 'package:openapi/openapi.dart';
 
 class PostView extends StatelessWidget {
+  final controller =
+      PaginatedViewController<Feed>(restAction: (a, b, s) async {
+    return (await Openapi().getFeedsApi().feedsList(limit: a, offset: b))
+        .data
+        .results
+        .toList();
+  });
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -30,27 +38,24 @@ class PostView extends StatelessWidget {
             ),
           ],
         ),
+
+        /// onChanged((str) {
+        ///   controller.search = str;
+        /// });
+
         SliverFillRemaining(
           child: PaginatedView<Feed>(
-            restAction: (a, b) async {
-              // final result = await Openapi().getFeedsApi().feedsList(limit: 10);
-              // print(result.data);
-              // return [];
-              return (await Openapi().getFeedsApi().feedsList(limit: a, offset: b))
-                    .data
-                    .results
-                    .toList();
-            },
-            builder: (ctx, data) {
+            controller: controller,
+            builder: (context, feed) {
               return Hero(
-                tag: data.id,
+                tag: feed.id,
                 child: PostWidget(
-                  feed: data,
+                  feed: feed,
                   onTap: () {
                     AppNavigation.to(
                       context,
                       PostDetailPage(
-                        feed: data,
+                        feed: feed,
                       ),
                     );
                     print('Tap');

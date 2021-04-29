@@ -1,47 +1,63 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:reusables/reusables.dart';
 
-class PaginatedView<T> extends StatefulWidget {
-  final Future<List<T>> Function(int limit, int offSet) restAction;
-  final int limit;
-  final Function(BuildContext, T data) builder;
+class PaginatedViewController<T> extends ChangeNotifier {
+  PaginatedViewController({this.restAction});
 
-  PaginatedView({
-    @required this.restAction,
-    this.limit,
-    @required this.builder,
-  });
+  List<T> _data = [];
+
+  var _search = '';
+  var _isLoading = false;
+  var _limit = 10;
+  var _offset = 0;
+
+  final Future<List<T>> Function(int limit, int offSet, String search)
+      restAction;
+
+  Future<void> load({int limit, int offset}) async {
+    _isLoading = true;
+    notifyListeners();
+    final _result =
+        await restAction(limit ?? _limit, offset ?? _offset, search);
+    if (_result.isNotEmpty) {
+      if (search.isNotEmpty) {
+        _data = _result;
+      } else
+        _data.addAll(_result);
+      _offset += _limit;
+    } else {
+      if (search.isNotEmpty) _data = [];
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  String get search => _search;
+
+  set search(String value) {
+    _search = value;
+    load(limit: 10, offset: 0);
+  }
+}
+
+class PaginatedView<T> extends ControlledWidget<PaginatedViewController> {
+  final PaginatedViewController controller;
+  final Function(BuildContext context, T item) builder;
+
+  PaginatedView({this.controller, this.builder})
+      : assert(controller != null),
+        super(controller: controller);
 
   @override
   _PaginatedViewState createState() => _PaginatedViewState();
 }
 
-class _PaginatedViewState extends State<PaginatedView> {
-  var _isLoading = false;
-  List<dynamic> _data = [];
-  int _limit;
-  var _offset = 0;
-
+class _PaginatedViewState extends ControlledWidgetState<PaginatedView> {
   @override
   void initState() {
     super.initState();
-    _limit = widget.limit ?? 10;
-    _getData();
-  }
-
-  _getData() async {
-    final result = await widget.restAction(_limit, _offset);
-    if (result.isNotEmpty) {
-      _data.addAll(result);
-      _offset += _limit;
-    } else
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('No data'),
-        ),
-      );
-    _isLoading = false;
-    setState(() {});
+    widget.controller.load();
   }
 
   @override
@@ -51,26 +67,26 @@ class _PaginatedViewState extends State<PaginatedView> {
         Expanded(
           child: NotificationListener<ScrollNotification>(
             onNotification: (scrollInfo) {
-              if (!_isLoading &&
+              if (!widget.controller._isLoading &&
                   scrollInfo.metrics.pixels ==
                       scrollInfo.metrics.maxScrollExtent) {
-                setState(() => _isLoading = true);
-                _getData();
+                setState(() => widget.controller._isLoading = true);
+                widget.controller.load();
               }
               return true;
             },
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
-              itemCount: _data.length,
+              itemCount: widget.controller._data.length,
               itemBuilder: (context, index) => widget.builder(
                 context,
-                _data[index],
+                widget.controller._data[index],
               ),
             ),
           ),
         ),
         Container(
-          height: _isLoading ? 50.0 : 0,
+          height: widget.controller._isLoading ? 50.0 : 0,
           color: Colors.transparent,
           child: Center(
             child: CupertinoActivityIndicator(),
