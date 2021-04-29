@@ -75,26 +75,26 @@ class _EditProfileState extends State<EditProfile> {
     1: Text('Treat Me'),
   };
 
-  var formKey  = GlobalKey<FormState>();
+  var formKey = GlobalKey<FormState>();
 
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-   bool showAge = false;
+  bool showAge = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [AppTheme.primaryColor, AppTheme.primaryColor],
         ),
-      ), child: SingleChildScrollView(
+      ),
+      child: SingleChildScrollView(
         child: Form(
           key: formKey,
           child: Padding(
@@ -109,8 +109,9 @@ class _EditProfileState extends State<EditProfile> {
                     children: <Widget>[
                       Container(
                         decoration: BoxDecoration(
-                             border: Border.all(
-                                color: Theme.of(context).primaryColor, width: 3),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 3),
                             shape: BoxShape.circle),
                         child: CircleAvatar(
                             backgroundColor: Colors.white,
@@ -124,7 +125,6 @@ class _EditProfileState extends State<EditProfile> {
                         right: 0,
                         child: MaterialButton(
                             minWidth: 30,
-
                             shape: CircleBorder(),
                             color: Colors.white,
                             padding: EdgeInsets.all(0),
@@ -156,6 +156,7 @@ class _EditProfileState extends State<EditProfile> {
                   height: 20,
                 ),
                 AppTextField(
+                  onSaved: (value) {},
                   key: UniqueKey(),
                   icon: Icons.person,
                   keyboardType: TextInputType.name,
@@ -168,13 +169,14 @@ class _EditProfileState extends State<EditProfile> {
                   height: 10,
                 ),
                 AppTextField(
+                  onSaved: (value) {},
                   key: UniqueKey(),
                   icon: Icons.phone,
                   placeholder: 'Phone',
                   keyboardType: TextInputType.phone,
-                 // onSaved: (phone) => user.phone = phone,
+                  // onSaved: (phone) => user.phone = phone,
                   validator: Validators.required,
- //                 autoValidateMode: AutovalidateMode.onUserInteraction,
+                  //                 autoValidateMode: AutovalidateMode.onUserInteraction,
 
                   //  controller: lastNameController,
                 ),
@@ -182,11 +184,12 @@ class _EditProfileState extends State<EditProfile> {
                   height: 10,
                 ),
                 AppTextField(
+                  onSaved: (value) {},
                   key: UniqueKey(),
                   icon: Icons.date_range_outlined,
 
                   placeholder: 'Age',
-                //  onSaved: (age) => user.age = int.parse(age),
+                  //  onSaved: (age) => user.age = int.parse(age),
                   validator: Validators.required,
                   //autoValidateMode: AutovalidateMode.onUserInteraction,
 
@@ -196,10 +199,11 @@ class _EditProfileState extends State<EditProfile> {
                   height: 10,
                 ),
                 AppTextField(
+                  onSaved: (value) {},
                   key: UniqueKey(),
                   icon: Icons.person_outline,
                   placeholder: 'Gender',
-                 // onSaved: (gender) => user.gender = gender,
+                  // onSaved: (gender) => user.gender = gender,
                   validator: Validators.required,
                   //autoValidateMode: AutovalidateMode.onUserInteraction,
                 ),
@@ -207,10 +211,11 @@ class _EditProfileState extends State<EditProfile> {
                   height: 10,
                 ),
                 AppTextField(
+                  onSaved: (value) {},
                   key: UniqueKey(),
                   icon: Icons.home_outlined,
                   placeholder: 'Address',
-                 // onSaved: (address) => user.address = address,
+                  // onSaved: (address) => user.address = address,
                   validator: Validators.required,
                   //autoValidateMode: AutovalidateMode.onUserInteraction,
                 ),
@@ -249,7 +254,7 @@ class _EditProfileState extends State<EditProfile> {
 //print(user);
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
-                     //   print(user);
+                        //   print(user);
                       }
                       //AppNavigation.to(context, HomePage());
                     },
