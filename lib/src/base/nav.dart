@@ -18,7 +18,7 @@ class AppPage {
 }
 
 abstract class AppNavigation {
-  static Future<void> to(BuildContext context, Widget page,
+  static Future<dynamic> to(BuildContext context, Widget page,
       {bool replace = false}) {
     if (replace) {
       return Navigator.of(context).pushReplacement(CupertinoPageRoute(
@@ -42,9 +42,9 @@ abstract class AppNavigation {
       .popUntil((route) => route.settings.name == AppPage.home._name);
 
   static final routes = <String, WidgetBuilder>{
-    AppPage.home._name: (context) => SignInPage(),
-    // AppPage.home._name: (context) =>
-    //     AppData().hasData() ? HomePage() : SignInPage(),
+    // AppPage.home._name: (context) => SignInPage(),
+    AppPage.home._name: (context) =>
+        AppData().hasData() ? HomePage() : SignInPage(),
     // AppPage.home._name: (context) =>
     //     AppData.auth.isAuthenticated ? Container() : SignInPage(),
     //AppData.auth.isAuthenticated ? Container() : Transaction(),
