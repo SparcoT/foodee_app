@@ -312,6 +312,24 @@ paths:
         description: A unique integer value identifying this feed comment.
         required: true
         type: integer
+  /feeds/create/comments:
+    post:
+      operationId: feeds_create_comments_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FeedCommentWrite'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/FeedComment'
+      tags:
+        - feeds
+    parameters: []
   /feeds/images:
     post:
       operationId: feeds_images_create
@@ -323,7 +341,7 @@ paths:
           type: file
         - name: post
           in: formData
-          required: true
+          required: false
           type: integer
       responses:
         '201':
@@ -361,7 +379,7 @@ paths:
           type: file
         - name: post
           in: formData
-          required: true
+          required: false
           type: integer
       responses:
         '200':
@@ -383,7 +401,7 @@ paths:
           type: file
         - name: post
           in: formData
-          required: true
+          required: false
           type: integer
       responses:
         '200':
@@ -480,15 +498,10 @@ paths:
       responses:
         '200':
           description: ''
-      tags:
-        - feeds
-    post:
-      operationId: feeds_comments_create
-      description: ''
-      parameters: []
-      responses:
-        '201':
-          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/FeedComment'
       tags:
         - feeds
     parameters:
@@ -501,6 +514,11 @@ paths:
       operationId: users_list
       description: ''
       parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
         - name: limit
           in: query
           description: Number of results to return per page.
@@ -1220,23 +1238,6 @@ definitions:
       chat:
         title: Chat
         type: integer
-  FeedImage:
-    required:
-      - post
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      path:
-        title: Path
-        type: string
-        readOnly: true
-        format: uri
-      post:
-        title: Post
-        type: integer
   FeedUser:
     required:
       - first_name
@@ -1302,12 +1303,12 @@ definitions:
       tags:
         type: array
         items:
-          type: integer
-        uniqueItems: true
+          $ref: '#/definitions/FeedUser'
+        readOnly: true
       images:
         type: array
         items:
-          $ref: '#/definitions/FeedImage'
+          type: string
         readOnly: true
       user:
         $ref: '#/definitions/FeedUser'
@@ -1359,6 +1360,7 @@ definitions:
     required:
       - description
       - user
+      - post
     type: object
     properties:
       description:
@@ -1367,6 +1369,45 @@ definitions:
         minLength: 1
       user:
         title: User
+        type: integer
+      post:
+        title: Post
+        type: integer
+  FeedComment:
+    required:
+      - description
+      - user
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      description:
+        title: Description
+        type: string
+        minLength: 1
+      user:
+        $ref: '#/definitions/FeedUser'
+      created_at:
+        title: Created at
+        type: string
+        format: date-time
+        readOnly: true
+  FeedImage:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      path:
+        title: Path
+        type: string
+        readOnly: true
+        format: uri
+      post:
+        title: Post
         type: integer
   User:
     required:
