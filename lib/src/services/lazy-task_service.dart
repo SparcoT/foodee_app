@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 
 abstract class LazyTaskService {
   static Widget _dialog = Dialog(
-    child: Text('Loading'),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CupertinoActivityIndicator(),
+        Text('Loading'),
+      ],
+    ),
   );
 
   static set dialog(Widget dialog) => _dialog = dialog;

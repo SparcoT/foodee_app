@@ -34,7 +34,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     return PageView.builder(
       itemCount: images.length + 1,
       itemBuilder: (ctx, index) {
-        if (index != images.length)
+         if (index != images.length)
           return Stack(fit: StackFit.expand,
             children: [
               Image.file(images.elementAt(index),fit: BoxFit.cover,),
