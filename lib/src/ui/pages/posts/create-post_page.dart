@@ -1,15 +1,19 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodee/src/base/assets.dart';
+import 'package:foodee/src/base/nav.dart';
 import 'package:foodee/src/base/theme.dart';
 import 'package:foodee/src/data/data.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:foodee/src/services/lazy-task_service.dart';
+import 'package:foodee/src/ui/modals/confirmation_dialog.dart';
 import 'package:foodee/src/ui/modals/information_dialog.dart';
-import 'package:foodee/src/ui/views/image-picker_widget.dart';
+import 'package:foodee/src/ui/pages/posts/tags_page.dart';
 import 'package:foodee/src/ui/widgets/shader_Text.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:openapi/openapi.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -19,6 +23,9 @@ class CreatePostPage extends StatefulWidget {
 
 class _CreatePostPageState extends State<CreatePostPage> {
   final _textController = TextEditingController();
+  List<User> _selectedUsers = [];
+
+  // List<File> images;
 
   Widget head() {
     return Row(
@@ -29,7 +36,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ? AssetImage(AppAssets.user)
               : NetworkImage(AppData().getImage()),
         ),
-        postTitleContainer(title: AppData().getName()),
+        postTitleContainer(
+          title: AppData().getName(),
+        ),
       ],
     );
   }
@@ -37,9 +46,38 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Widget postTitleContainer({String title}) {
     return Container(
       margin: EdgeInsets.only(left: 10),
-      child: ShaderText(
-        shaderText: title,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      child: RichText(
+        text: TextSpan(
+          text: title,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.primaryColor,
+          ),
+          children: [
+            if (_selectedUsers.isNotEmpty) ...[
+              TextSpan(
+                text: ' is with',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                ),
+              ),
+              ..._selectedUsers
+                  .map<TextSpan>(
+                    (e) => TextSpan(
+                      text:
+                          ' ${e.firstName}${e != _selectedUsers.last ? ',' : ''}',
+                      style: TextStyle(
+                        // color: Colors.black,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ]
+          ],
+        ),
       ),
     );
   }
@@ -52,70 +90,184 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: CupertinoNavigationBar(
-        padding: EdgeInsetsDirectional.zero,
+        // padding: EdgeInsetsDirectional.zero,
         middle: ShaderText(
           shaderText: "Create Post",
         ),
-        trailing: Padding(
-          padding: EdgeInsets.only(right: 8),
-          child: TextButton(
-            child: Text(
-              "Post",
-              style: TextStyle(color: Colors.white),
-            ),
-            style: TextButton.styleFrom(
-              backgroundColor: AppTheme.primaryColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-            ),
-            onPressed: _addPost,
-          ),
+        trailing: GestureDetector(
+          child: Text('Post'),
+          onTap: _addPost,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              head(),
-              TextFormField(
-                controller: _textController,
-                maxLines: null,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Type something here....',
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            head(),
+            TextFormField(
+              controller: _textController,
+              maxLines: null,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Type something here....',
+              ),
+            ),
+            if (_images.isEmpty) ...[
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(CupertinoIcons.photo),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 3),
+                    ),
+                    Text(
+                      'No Images Selected',
+                      style: TextStyle(
+                        fontFamily: 'Quicksand',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Wrap(
-                spacing: 3,
-                runSpacing: 3,
-                children: [
-                  TaggedUser(name: 'Arish'),
-                  TaggedUser(name: 'Nabeel'),
-                  TaggedUser(name: 'Rashid'),
-                  TaggedUser(name: 'Usman'),
-                  TaggedUser(name: 'Zain'),
-                  TaggedUser(name: 'Osama'),
-                  TaggedUser(name: 'Haroon'),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                child: SizedBox(
-                  height: 300,
-                  width: MediaQuery.of(context).size.width,
-                  child: ImagePickerWidget(
-                    images: _images,
-                    onChanged: (value) => _images = value,
+            ] else ...[
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                  itemCount: _images.length,
+                  itemBuilder: (context, i) => GestureDetector(
+                    onLongPress: () async {
+                      if (await openConfirmationDialog(
+                        context: context,
+                        content: 'Are you sure you want to delete',
+                        title: 'Delete Image',
+                      )) {
+                        _images.removeAt(i);
+                        setState(() {});
+                      }
+                    },
+                    child: Container(
+                      height: 300,
+                      margin: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: FileImage(
+                            _images[i],
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ]
+          ],
+        ),
+      ),
+      bottomSheet: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 4,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
+        margin: EdgeInsets.all(20),
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: bottomNavButton(
+                CupertinoIcons.photo_camera,
+                'Camera',
+                _imgFromCamera,
+                Colors.blue,
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: bottomNavButton(
+                CupertinoIcons.photo,
+                'Gallery',
+                _imgFromGallery,
+                Colors.pink,
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: bottomNavButton(
+                CupertinoIcons.tag,
+                'Tags',
+                () {
+                  AppNavigation.to(
+                    context,
+                    TagsPage(
+                      selectedUsers: _selectedUsers,
+                      onChanged: (users) {
+                        _selectedUsers = users;
+                        setState(() {});
+                      },
+                    ),
+                  );
+                },
+                Colors.black,
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Widget bottomNavButton(
+      IconData icon, String text, Function onPressed, Color color) {
+    return TextButton.icon(
+      onPressed: onPressed,
+      icon: Icon(
+        icon,
+        color: Colors.white,
+        size: 17,
+      ),
+      label: Text(
+        text,
+        style: TextStyle(color: Colors.white),
+      ),
+      style: TextButton.styleFrom(
+        backgroundColor: color,
+        minimumSize: Size(17, 17),
+      ),
+    );
+  }
+
+  _imgFromCamera() async {
+    final pickedImage = await ImagePicker()
+        .getImage(source: ImageSource.camera, imageQuality: 50);
+    if (pickedImage != null)
+      setState(() {
+        _images.add(File(pickedImage.path));
+      });
+  }
+
+  _imgFromGallery() async {
+    final _result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: true,
+    );
+    setState(() {
+      _images.addAll(_result.files.map((e) => File(e.path)));
+    });
   }
 
   _addPost() async {
@@ -131,26 +283,22 @@ class _CreatePostPageState extends State<CreatePostPage> {
       context,
       () async {
         print(AppData().getUserId());
-//        var imagesUrl = [];
         final createPost = FeedWrite(
           (feed) {
             feed
               ..user = AppData().getUserId()
               ..description = _textController.text
               ..commentsCount = 0
-              ..tags = SetBuilder([])
+              ..tags = SetBuilder(_selectedUsers.isEmpty
+                  ? []
+                  : _selectedUsers.map((e) => e.id).toList())
               ..likesCount = 0;
           },
         );
-        print(createPost.description);
-        final result =
-            await Openapi().getFeedsApi().feedsCreate(data: createPost);
-        // if (result.statusCode == 201) {}
-        return result;
+        return Openapi().getFeedsApi().feedsCreate(data: createPost);
       },
       throwError: true,
     ).catchError((e) {
-      print('eeeeeeeeeeeeeeeee');
       print(e);
       var errorMessage = 'No Internet Connection';
       if (e?.response?.data != null) errorMessage = e.response.data['message'];
@@ -191,57 +339,20 @@ class _CreatePostPageState extends State<CreatePostPage> {
           ).catchError((e) {
             print(e);
           });
-          print(imageRes);
-        }
+          if (imageRes == 'Success') _pop();
+        } else
+          _pop();
       }
     }
   }
 
-// Future<Uint8List> _readFileByte(File file) async {
-//   Uint8List bytes;
-//   await file.readAsBytes().then((value) {
-//     bytes = Uint8List.fromList(value);
-//     print('reading of bytes is completed');
-//   }).catchError((onError) {
-//     print('Exception Error while reading audio from path:' +
-//         onError.toString());
-//   });
-//   return bytes;
-// }
-}
-
-class TaggedUser extends StatelessWidget {
-  final String name;
-
-  TaggedUser({this.name});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 3, 7, 3),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-        color: AppTheme.secondaryColor.withOpacity(0.8),
-        //      color: AppTheme.primaryColor,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            name,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12.0,
-            ),
-          ),
-          SizedBox(width: 7),
-          Icon(
-            CupertinoIcons.clear,
-            size: 10,
-            color: Colors.white,
-          ),
-        ],
+  _pop() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Post Created!'),
       ),
     );
+    await Future.delayed(Duration(seconds: 3));
+    Navigator.of(context).pop();
   }
 }
